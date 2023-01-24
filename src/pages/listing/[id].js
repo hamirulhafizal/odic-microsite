@@ -17,14 +17,18 @@ import FloatingCart from 'components/ui-component/cards/FloatingCart';
 import Chip from 'components/ui-component/extended/Chip';
 import { gridSpacing } from 'store/constant';
 import { useDispatch, useSelector } from 'store';
-import { getProductById } from 'store/slices/product';
+import { getProductById, getProducts, getProductsSuccess, setProductStore } from 'store/slices/product';
 import { resetCart } from 'store/slices/cart';
 import AppBar from 'components/ui-component/extended/AppBar';
 import { styled, useTheme } from '@mui/material/styles';
 import FooterPage from 'components/landingpage/Footer';
-const headerBackground = '/assets/images/landing/header-bg.jpg';
+import { getListingById } from 'contexts/ApiListing';
+import { wrapper } from 'store';
+import { setListing, setUser } from 'store/slices/user';
 
-// import MainLayout from 'layout/MainLayout';
+import { BACKEND_PATH } from 'config';
+
+const headerBackground = '/assets/images/landing/header-bg.jpg';
 
 const HeaderWrapper = styled('div')(({ theme }) => ({
   backgroundImage: `url(${headerBackground})`,
@@ -43,8 +47,8 @@ function TabPanel({ children, value, index, ...other }) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`product-details-tabpanel-${index}`}
-      aria-labelledby={`product-details-tab-${index}`}
+      id={`products-details-tabpanel-${index}`}
+      aria-labelledby={`products-details-tab-${index}`}
       {...other}
     >
       {value === index && <Box>{children}</Box>}
@@ -60,12 +64,35 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `product-details-tab-${index}`,
-    'aria-controls': `product-details-tabpanel-${index}`
+    id: `products-details-tab-${index}`,
+    'aria-controls': `products-details-tabpanel-${index}`
   };
 }
 
-const ProductDetails = () => {
+ProductDetails.getInitialProps = wrapper.getInitialPageProps((store) => async (context) => {
+  const id = context.query.id;
+
+  const userData = await fetch(`${BACKEND_PATH}/api/v1/inventory/${id}`)
+    .then((response) => response.json())
+    .then((json) => {
+      return json;
+    });
+
+  const userData1 = await fetch(`${BACKEND_PATH}/api/v1/profile/${userData?.user_name}`)
+    .then((response) => response.json())
+    .then((json) => {
+      return json;
+    });
+
+  store.dispatch(setUser({ userData: [userData1] }));
+  store.dispatch(setListing(userData));
+
+  return {
+    userData: userData
+  };
+});
+
+function ProductDetails({ userData }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -81,24 +108,15 @@ const ProductDetails = () => {
 
   const [product, setProduct] = useState(null);
   const productState = useSelector((state) => state.product);
-  const { relatedProducts } = useSelector((state) => state.product);
+
+  dispatch(getProductById(null, userData));
+
+  const { relatedProducts, products } = useSelector((state) => state.product);
 
   useEffect(() => {
-    setProduct(productState?.product);
-    if (productState?.product && productState?.product?.id) {
-      if (router.query.id === 'default') {
-        router.push(`/app/e-commerce/product-details/${productState.product.id}`);
-      }
-    }
-
+    setProduct(userData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productState]);
-
-  useEffect(() => {
-    dispatch(getProductById(router.query.id));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     // <MainLayout>
@@ -169,24 +187,13 @@ const ProductDetails = () => {
             )}
           </MainCard>
         </Grid>
-        {relatedProducts.length == 0 ? (
-          <>{''}</>
-        ) : (
-          <>
-            <Grid item xs={12} lg={10} sx={{ mt: 3, ml: 2 }}>
-              <Typography variant="h2">Similar Properties</Typography>
-            </Grid>
-            <Grid item xs={11} lg={10}>
-              <RelatedProducts id={product?.user_name} />
-            </Grid>
-          </>
-        )}
+        <RelatedProducts data={userData} />
       </Grid>
       <FooterPage />
     </>
 
     //  </MainLayout>
   );
-};
+}
 
 export default ProductDetails;

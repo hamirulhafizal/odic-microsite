@@ -49,7 +49,7 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function getEvents() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/calendar/events');
       dispatch(slice.actions.getEventsSuccess(response.data.events));
@@ -60,7 +60,7 @@ export function getEvents() {
 }
 
 export function addEvent(event) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/calendar/events/new', event);
       dispatch(slice.actions.addEventSuccess(response.data));
@@ -71,7 +71,7 @@ export function addEvent(event) {
 }
 
 export function updateEvent(event) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/calendar/events/update', event);
       dispatch(slice.actions.updateEventSuccess(response.data.events));
@@ -82,7 +82,7 @@ export function updateEvent(event) {
 }
 
 export function removeEvent(eventId) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/calendar/events/remove', { eventId });
       dispatch(slice.actions.removeEventSuccess(response.data));

@@ -97,8 +97,6 @@ export default function GalleryForm({ imageProperty, setPaymentData, handleNext,
     if (window.File && window.FileReader && window.FileList && window.Blob) {
       const files = e.target.files;
 
-      console.log('files', files);
-
       setEImgAlbum(files);
 
       const output = document.querySelector('#result');
@@ -108,8 +106,6 @@ export default function GalleryForm({ imageProperty, setPaymentData, handleNext,
         const picReader = new FileReader();
         picReader.addEventListener('load', function (event) {
           const picFile = event.target;
-
-          console.log('picFile', picFile);
 
           const div = document.createElement('div');
           div.innerHTML = ` <img style="width: 40vw;height: auto;"  src="${picFile.result}" title="${picFile.name}" /> `;

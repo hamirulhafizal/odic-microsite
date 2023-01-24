@@ -8,10 +8,13 @@ import useAuth from 'hooks/useAuth';
 import axios from '../../utils/axios';
 import { dispatch } from '../index';
 
+import { HYDRATE } from 'next-redux-wrapper';
+
 // ----------------------------------------------------------------------
 
 const initialState = {
   userData: null,
+  userListing: null,
   error: null,
   usersS1: [],
   usersS2: [],
@@ -29,6 +32,19 @@ const slice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    // GET USERS
+    setUser(state, action) {
+      state.userData = action.payload;
+    },
+    // GET USERS
+    setListing(state, action) {
+      state.userListing = action.payload;
+    },
+
+    setPost(state, action) {
+      state.posts = action.payload;
+    },
+
     // HAS ERROR
     hasError(state, action) {
       state.error = action.payload;
@@ -143,27 +159,44 @@ const slice = createSlice({
     filterProfileCardsSuccess(state, action) {
       state.profileCards = action.payload;
     }
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.user
+      };
+    }
   }
 });
 
 // Reducer
 export default slice.reducer;
 
+export const {
+  setUser,
+  setListing,
+  setPost,
+  hasError,
+  getUsersListStyle1Success,
+  getFollowersSuccess,
+  filterFollowersSuccess,
+  getFriendRequestsSuccess,
+  filterFriendRequestsSuccess,
+  getFriendsSuccess,
+  filterFriendsSuccess,
+  getGallerySuccess,
+  getPostsSuccess,
+  editCommentSuccess,
+  addCommentSuccess,
+  addReplySuccess,
+  likePostSuccess
+} = slice.actions;
+
 // ----------------------------------------------------------------------
 
-export function getUsersListStyle1() {
-  return async () => {
-    try {
-      const response = await axios.get('/api/user-list/s1/list');
-      dispatch(slice.actions.getUsersListStyle1Success(response.data.users_s1));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-
 export function getUsersListStyle2() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/user-list/s2/list');
       dispatch(slice.actions.getUsersListStyle2Success(response.data.users_s2));
@@ -174,7 +207,7 @@ export function getUsersListStyle2() {
 }
 
 export function getFollowers() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/followers/list');
       dispatch(slice.actions.getFollowersSuccess(response.data.followers));
@@ -185,7 +218,7 @@ export function getFollowers() {
 }
 
 export function filterFollowers(key) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/followers/filter', { key });
       dispatch(slice.actions.filterFollowersSuccess(response.data.results));
@@ -196,7 +229,7 @@ export function filterFollowers(key) {
 }
 
 export function getFriendRequests() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/friend-request/list');
       dispatch(slice.actions.getFriendRequestsSuccess(response.data.friends));
@@ -207,7 +240,7 @@ export function getFriendRequests() {
 }
 
 export function filterFriendRequests(key) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/friend-request/filter', { key });
       dispatch(slice.actions.filterFriendRequestsSuccess(response.data.results));
@@ -218,7 +251,7 @@ export function filterFriendRequests(key) {
 }
 
 export function getFriends() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/friends/list');
       dispatch(slice.actions.getFriendsSuccess(response.data.friends));
@@ -229,7 +262,7 @@ export function getFriends() {
 }
 
 export function filterFriends(key) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/friends/filter', { key });
       dispatch(slice.actions.filterFriendsSuccess(response.data.results));
@@ -240,7 +273,7 @@ export function filterFriends(key) {
 }
 
 export function getGallery() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/gallery/list');
       dispatch(slice.actions.getGallerySuccess(response.data.gallery));
@@ -251,7 +284,7 @@ export function getGallery() {
 }
 
 export function getPosts() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/posts/list');
       dispatch(slice.actions.getPostsSuccess(response.data.posts));
@@ -262,7 +295,7 @@ export function getPosts() {
 }
 
 export function editComment(key, id) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/posts/editComment', { key, id });
       dispatch(slice.actions.editCommentSuccess(response.data.posts));
@@ -273,7 +306,7 @@ export function editComment(key, id) {
 }
 
 export function addComment(postId, comment) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/comments/add', { postId, comment });
       dispatch(slice.actions.addCommentSuccess(response.data.posts));
@@ -284,7 +317,7 @@ export function addComment(postId, comment) {
 }
 
 export function addReply(postId, commentId, reply) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/replies/add', { postId, commentId, reply });
       dispatch(slice.actions.addReplySuccess(response.data.posts));
@@ -295,7 +328,7 @@ export function addReply(postId, commentId, reply) {
 }
 
 export function likePost(postId) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/posts/list/like', { postId });
       dispatch(slice.actions.likePostSuccess(response.data.posts));
@@ -306,7 +339,7 @@ export function likePost(postId) {
 }
 
 export function likeComment(postId, commentId) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/comments/list/like', { postId, commentId });
       dispatch(slice.actions.likeCommentSuccess(response.data.posts));
@@ -317,7 +350,7 @@ export function likeComment(postId, commentId) {
 }
 
 export function likeReply(postId, commentId, replayId) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/replies/list/like', { postId, commentId, replayId });
       dispatch(slice.actions.likeReplySuccess(response.data.posts));
@@ -328,7 +361,7 @@ export function likeReply(postId, commentId, replayId) {
 }
 
 export function getDetailCards() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/details-card/list');
       dispatch(slice.actions.getDetailCardsSuccess(response.data.users));
@@ -339,7 +372,7 @@ export function getDetailCards() {
 }
 
 export function filterDetailCards(key) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/details-card/filter', { key });
       dispatch(slice.actions.filterDetailCardsSuccess(response.data.results));
@@ -350,7 +383,7 @@ export function filterDetailCards(key) {
 }
 
 export function getSimpleCards() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/simple-card/list');
       dispatch(slice.actions.getSimpleCardsSuccess(response.data.users));
@@ -361,7 +394,7 @@ export function getSimpleCards() {
 }
 
 export function filterSimpleCards(key) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/simple-card/filter', { key });
       dispatch(slice.actions.filterSimpleCardsSuccess(response.data.results));
@@ -372,7 +405,7 @@ export function filterSimpleCards(key) {
 }
 
 export function getProfileCards() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/profile-card/list');
       dispatch(slice.actions.getProfileCardsSuccess(response.data.users));
@@ -383,7 +416,7 @@ export function getProfileCards() {
 }
 
 export function filterProfileCards(key) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/profile-card/filter', { key });
       dispatch(slice.actions.filterProfileCardsSuccess(response.data.results));

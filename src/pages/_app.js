@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
+import { Provider, useStore } from 'react-redux';
 
 // third-party
 import { PersistGate } from 'redux-persist/integration/react';
@@ -31,7 +31,11 @@ import { ConfigProvider } from 'contexts/ConfigContext';
 // import { AWSCognitoProvider as AuthProvider } from 'contexts/AWSCognitoContext';
 
 import { ApiProvider as AuthProvider } from 'contexts/ApiContext';
-import Head from 'next/head';
+import { wrapper } from 'store';
+import { useSelector } from 'store';
+import SeoMeta from 'components/SEO/SeoMeta';
+import SeoMetaMain from 'components/SEO/SeoMetaMain';
+import { useRouter } from 'next/router';
 
 const Noop = ({ children }) => <> {children} </>;
 
@@ -42,6 +46,12 @@ Noop.propTypes = {
 // ==============================|| APP ||============================== //
 
 function App({ Component, pageProps }) {
+  const router = useRouter();
+  const store = useStore(pageProps.initialReduxState);
+  const { userData } = useSelector((state) => state?.user);
+
+  const agent = userData?.userData[0];
+
   let Layout;
   switch (Component.Layout) {
     case 'authGuard':
@@ -55,34 +65,36 @@ function App({ Component, pageProps }) {
       break;
     default:
       Layout = Noop;
-  }         
+  }
 
   return (
-    <div>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-      </Head>
+    <>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persister}>
-          <ConfigProvider>
-            <ThemeCustomization>
-              <RTLLayout>
-                <Locales>
-                  <NavigationScroll>
-                    <AuthProvider>
-                      <Layout>
-                        <Component {...pageProps} />
-                        <Snackbar />
-                      </Layout>
-                    </AuthProvider>
-                  </NavigationScroll>
-                </Locales>
-              </RTLLayout>
-            </ThemeCustomization>
-          </ConfigProvider>
+        <PersistGate loading={null} persistor={store.__persistor}>
+          {() => (
+            <>
+              <ConfigProvider>
+                <ThemeCustomization>
+                  <RTLLayout>
+                    {router !== undefined ? <SeoMeta /> : <SeoMetaMain />}
+                    <Locales>
+                      <NavigationScroll>
+                        <AuthProvider>
+                          <Layout>
+                            <Component {...pageProps} />
+                            <Snackbar />
+                          </Layout>
+                        </AuthProvider>
+                      </NavigationScroll>
+                    </Locales>
+                  </RTLLayout>
+                </ThemeCustomization>
+              </ConfigProvider>
+            </>
+          )}
         </PersistGate>
       </Provider>
-    </div>
+    </>
   );
 }
 
@@ -91,4 +103,4 @@ App.propTypes = {
   pageProps: PropTypes.object
 };
 
-export default App;
+export default wrapper.withRedux(App);

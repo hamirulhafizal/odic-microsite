@@ -26,7 +26,7 @@ import useConfig from 'hooks/useConfig';
 // ==============================|| LOCALIZATION ||============================== //
 
 const LocalizationSection = () => {
-  const { borderRadius, locale, onChangeLocale } = useConfig();
+  const { borderRadius, locale } = useConfig();
 
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
@@ -37,7 +37,7 @@ const LocalizationSection = () => {
 
   const handleListItemClick = (event, lng) => {
     setLanguage(lng);
-    onChangeLocale(lng);
+    // onChangeLocale(lng);
     setOpen(false);
   };
 

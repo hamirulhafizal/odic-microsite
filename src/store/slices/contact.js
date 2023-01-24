@@ -39,7 +39,7 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function getContacts() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/contact/list');
       dispatch(slice.actions.getContactsSuccess(response.data.contacts));
@@ -50,7 +50,7 @@ export function getContacts() {
 }
 
 export function modifyContact(contact) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/contact/modify', contact);
       dispatch(slice.actions.modifyContactSuccess(response.data));

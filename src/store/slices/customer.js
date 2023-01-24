@@ -52,7 +52,7 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function getCustomers() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/customer/list');
       dispatch(slice.actions.getCustomersSuccess(response.data.customers));
@@ -63,7 +63,7 @@ export function getCustomers() {
 }
 
 export function getOrders() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/customer/order/list');
       dispatch(slice.actions.getOrdersSuccess(response.data.orders));
@@ -73,11 +73,11 @@ export function getOrders() {
   };
 }
 
-export function getProducts() {
-  return async () => {
+export function getProducts(data) {
+  return async (dispatch) => {
     try {
-      const response = await axios.get('/api/customer/product/list');
-      dispatch(slice.actions.getProductsSuccess(response.data.products));
+      // const response = await axios.get('/api/customer/product/list');
+      dispatch(slice.actions.getProductsSuccess(data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -85,7 +85,7 @@ export function getProducts() {
 }
 
 export function getProductReviews() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/customer/product/reviews');
       dispatch(slice.actions.getProductReviewsSuccess(response.data.productreviews));

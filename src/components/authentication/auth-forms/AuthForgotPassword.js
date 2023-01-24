@@ -1,7 +1,10 @@
+import { useState } from 'react';
+
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Box, Button, FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/material';
 import { useDispatch } from 'store';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // third party
 import * as Yup from 'yup';
@@ -20,40 +23,53 @@ const AuthForgotPassword = ({ ...others }) => {
   const scriptedRef = useScriptRef();
   const dispatch = useDispatch();
 
+  const [isLoading, setLoading] = useState(false);
+
   const { resetPassword } = useAuth();
 
   return (
     <Formik
       initialValues={{
-        email: '',
-        password: '',
+        username: '',
         submit: null
       }}
       validationSchema={Yup.object().shape({
-        email: Yup.string().email('Must be a valid email').max(255).required('Email is required')
+        username: Yup.string('Must be a valid username').max(255).required('Username is required')
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+        setLoading(true);
         try {
-          await resetPassword(values.email);
+          resetPassword(values?.username)
+            .then((res) => {
+              setLoading(false);
+              if (res?.detail == 'Not found.') {
+                setStatus({ success: false });
+                setErrors({ submit: 'Username not valid' });
+                setSubmitting(false);
+              }
 
-          if (scriptedRef.current) {
-            setStatus({ success: true });
-            setSubmitting(false);
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: 'Check mail for reset password link',
-                variant: 'alert',
-                alert: {
-                  color: 'success'
-                },
-                close: false
-              })
-            );
-            setTimeout(() => {
-              window.location.replace('/login');
-            }, 1500);
-          }
+              if (res?.status == 200) {
+                setStatus({ success: true });
+                setSubmitting(true);
+                dispatch(
+                  openSnackbar({
+                    open: true,
+                    message: `Check email ${res?.data?.email} for reset password link`,
+                    variant: 'alert',
+                    alert: {
+                      color: 'success'
+                    },
+                    close: false
+                  })
+                );
+              }
+            })
+            .catch((err) => {
+              setLoading(false);
+              setStatus({ success: false });
+              setErrors({ submit: err.message });
+              setSubmitting(false);
+            });
         } catch (err) {
           console.error(err);
           if (scriptedRef.current) {
@@ -64,23 +80,23 @@ const AuthForgotPassword = ({ ...others }) => {
         }
       }}
     >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+      {({ status, errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
         <form noValidate onSubmit={handleSubmit} {...others}>
-          <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-            <InputLabel htmlFor="outlined-adornment-email-forgot">Email Address / Username</InputLabel>
+          <FormControl fullWidth error={Boolean(touched.username && errors.username)} sx={{ ...theme.typography.customInput }}>
+            <InputLabel htmlFor="outlined-adornment-email-forgot">Username</InputLabel>
             <OutlinedInput
               id="outlined-adornment-email-forgot"
-              type="email"
-              value={values.email}
-              name="email"
+              type="text"
+              value={values.username}
+              name="username"
               onBlur={handleBlur}
               onChange={handleChange}
-              label="Email Address / Username"
+              label="Username"
               inputProps={{}}
             />
-            {touched.email && errors.email && (
+            {touched.username && errors.username && (
               <FormHelperText error id="standard-weight-helper-text-email-forgot">
-                {errors.email}
+                {errors.username}
               </FormHelperText>
             )}
           </FormControl>
@@ -93,8 +109,16 @@ const AuthForgotPassword = ({ ...others }) => {
 
           <Box sx={{ mt: 2 }}>
             <AnimateButton>
-              <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
-                Send Mail
+              <Button
+                disableElevation
+                disabled={isSubmitting}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color={`${status?.success ? 'success' : 'secondary'}`}
+              >
+                {!isLoading ? 'Send Mail' : <CircularProgress size={30} sx={{ color: 'white' }} />}
               </Button>
             </AnimateButton>
           </Box>

@@ -23,10 +23,19 @@ const setProduct = async (form_data) => {
   return response;
 };
 
-const getAllListing = async (user_name) => {
-  const respond = await axios.get(`${BACKEND_PATH}/api/v1/profile/${user_name}`).then((res) => {
-    return res.data;
-  });
+const getListsbyQuery = async (query, page) => {
+  const { username, title, location, category } = query;
+
+  const respond = await axios
+    .get(
+      `${BACKEND_PATH}/api/v1/inventory/?page=${page}${username != null ? `&username=${username}` : ''}${
+        title != null ? `&title=${title}` : ''
+      }${location != null ? `&location=${location}` : ''}${category != null ? `&category=${category}` : ''}`
+    )
+    .then((res) => {
+      return res?.data;
+    });
+
   return respond;
 };
 
@@ -133,7 +142,6 @@ const deleteListingById = async (id) => {
 
 export {
   setProduct,
-  getAllListing,
   getListingById,
   getLisitingAgentById,
   getProfileAgentById,
@@ -141,5 +149,6 @@ export {
   updateListingById,
   deletePhotoListingById,
   deleteListingById,
-  getAllProfileAgent
+  getAllProfileAgent,
+  getListsbyQuery
 };

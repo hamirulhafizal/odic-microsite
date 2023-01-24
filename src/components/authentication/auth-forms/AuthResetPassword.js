@@ -12,7 +12,8 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  Typography
+  Typography,
+  CircularProgress
 } from '@mui/material';
 
 // third party
@@ -20,7 +21,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project imports
-// import useAuth from 'hooks/useAuth';
+import useAuth from 'hooks/useAuth';
 import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
@@ -28,6 +29,11 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+import { useRouter } from 'next/router';
+import { useDispatch } from 'store';
+
+import { openSnackbar } from 'store/slices/snackbar';
 
 // ========================|| FIREBASE - RESET PASSWORD ||======================== //
 
@@ -37,8 +43,13 @@ const AuthResetPassword = ({ ...others }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [strength, setStrength] = React.useState(0);
   const [level, setLevel] = React.useState();
+  const [isLoading, setLoading] = React.useState(false);
 
-  // const { firebaseEmailPasswordSignIn } = useAuth();
+  const { setPassword } = useAuth();
+  const dispatch = useDispatch();
+
+  const router = useRouter();
+  const { tem, user } = router?.query;
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -49,9 +60,9 @@ const AuthResetPassword = ({ ...others }) => {
   };
 
   const changePassword = (value) => {
-    const temp = strengthIndicator(value);
-    setStrength(temp);
-    setLevel(strengthColor(temp));
+    const tempInd = strengthIndicator(value);
+    setStrength(tempInd);
+    setLevel(strengthColor(tempInd));
   };
 
   useEffect(() => {
@@ -61,9 +72,9 @@ const AuthResetPassword = ({ ...others }) => {
   return (
     <Formik
       initialValues={{
-        email: 'info@codedthemes.com',
-        password: '123456',
-        confirmPassword: '123456',
+        email: '',
+        password: '',
+        confirmPassword: '',
         submit: null
       }}
       validationSchema={Yup.object().shape({
@@ -75,7 +86,34 @@ const AuthResetPassword = ({ ...others }) => {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          // await firebaseEmailPasswordSignIn(values.email, values.password);
+          setLoading(true);
+          setPassword(user, tem, values?.password)
+            .then((res) => {
+              console.log('res-->', res);
+              if (res?.status == 201) {
+                setLoading(false);
+
+                dispatch(
+                  openSnackbar({
+                    open: true,
+                    message: ` New password created`,
+                    variant: 'alert',
+                    alert: {
+                      color: 'success'
+                    },
+                    close: false
+                  })
+                );
+              }
+              if (res == 'Wrong Services') {
+                setLoading(false);
+                setErrors({ submit: 'Invalid link' });
+              }
+            })
+            .catch((err) => {
+              // console.log('err', err);
+            });
+
           if (scriptedRef.current) {
             setStatus({ success: true });
             setSubmitting(false);
@@ -95,6 +133,7 @@ const AuthResetPassword = ({ ...others }) => {
           <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
             <InputLabel htmlFor="outlined-adornment-password-reset">Password</InputLabel>
             <OutlinedInput
+              autoComplete=""
               id="outlined-adornment-password-reset"
               type={showPassword ? 'text' : 'password'}
               value={values.password}
@@ -142,7 +181,7 @@ const AuthResetPassword = ({ ...others }) => {
                     />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle1" fontSize="0.75rem">
+                    <Typography color={theme.palette.secondary.main} variant="subtitle1" fontSize="0.75rem">
                       {level.label}
                     </Typography>
                   </Grid>
@@ -158,6 +197,7 @@ const AuthResetPassword = ({ ...others }) => {
           >
             <InputLabel htmlFor="outlined-adornment-confirm-password">Confirm Password</InputLabel>
             <OutlinedInput
+              autoComplete=""
               id="outlined-adornment-confirm-password"
               type="password"
               value={values.confirmPassword}
@@ -194,7 +234,7 @@ const AuthResetPassword = ({ ...others }) => {
           >
             <AnimateButton>
               <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
-                Reset Password
+                {isLoading ? <CircularProgress sx={{ color: 'white' }} size={20} /> : '  Reset Password'}
               </Button>
             </AnimateButton>
           </Box>

@@ -94,7 +94,7 @@ const MobileSection = () => {
                   >
                     <Toolbar sx={{ pt: 2.75, pb: 2.75 }}>
                       <Grid container justifyContent={matchMobile ? 'space-between' : 'flex-end'} alignItems="center">
-                        <LocalizationSection />
+                        {/* <LocalizationSection /> */}
                       </Grid>
                     </Toolbar>
                   </AppBar>

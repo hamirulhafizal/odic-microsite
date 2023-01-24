@@ -152,7 +152,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: -webkit-flex;
-  display: flex;
+  display: inline-flex;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;
@@ -188,8 +188,81 @@
   background-color: #b5a837 !important;
 }
 
+.postSwiper{
+  height: auto;
+  display: flex;
+  justify-content: center ;
+}
+
+.eachCardSwiper {
+  width: 350px !important;
+}
+
+@media only screen and (max-width: 425px) {
+  .eachCardSwiper {
+    width: 300px !important;
+  }
+}
+
 textarea:focus {
   outline: 1px solid #b5a837;
   border-color: #b5a837 !important;
   border: '5px solid  #b5a837';
+}
+
+textarea#note {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  max-width: 100%;
+  line-height: 1.5;
+  padding: 15px 15px 30px;
+  transition: box-shadow 0.5s ease;
+  text-align: center;
+  background-color: transparent;
+  color: white;
+  font-family: inherit;
+  resize: none;
+  border-color: transparent;
+  overflow: auto;
+  cursor: default;
+  opacity: 1;
+}
+
+textarea#note:disabled {
+  color: white !important;
+}
+
+.menuFilter {
+  background-color: transparent;
+  color: #b5a837 !important;
+}
+
+.menuFilter:active {
+  background-color: #fffce6;
+}
+
+.menuFilter:hover {
+  background-color: #fffce6;
+}
+
+.labelStatusSuccess {
+  background-color: #00c853;
+}
+
+.labelStatus:hover {
+  background-color: green;
+}
+
+.labelstatusunavailable {
+  background-color: #c80000;
+}
+
+.labelstatusunavailable:hover {
+  background-color: red;
+}
+
+.viewsChip:hover {
+  background-color: white;
+  color:black
 }

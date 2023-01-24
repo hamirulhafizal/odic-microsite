@@ -41,7 +41,7 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function getMails() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/mails/list');
       dispatch(slice.actions.getMailsSuccess(response.data));
@@ -52,7 +52,7 @@ export function getMails() {
 }
 
 export function filterMails(filter) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/mails/filter', { filter });
       dispatch(slice.actions.filterMailsSuccess(response.data));
@@ -63,7 +63,7 @@ export function filterMails(filter) {
 }
 
 export function setImportant(id) {
-  return async () => {
+  return async (dispatch) => {
     try {
       await axios.post('/api/mails/setImportant', { id });
     } catch (error) {
@@ -73,7 +73,7 @@ export function setImportant(id) {
 }
 
 export function setStarred(id) {
-  return async () => {
+  return async (dispatch) => {
     try {
       await axios.post('/api/mails/setStarred', { id });
     } catch (error) {
@@ -83,7 +83,7 @@ export function setStarred(id) {
 }
 
 export function setRead(id) {
-  return async () => {
+  return async (dispatch) => {
     try {
       await axios.post('/api/mails/setRead', { id });
     } catch (error) {

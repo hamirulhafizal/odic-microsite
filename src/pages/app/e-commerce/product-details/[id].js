@@ -50,7 +50,7 @@ function a11yProps(index) {
 const ProductDetails = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
+  // const { product } = useSelector((state) => state.product);
 
   // product description tabs
   const [value, setValue] = useState(0);
@@ -71,15 +71,9 @@ const ProductDetails = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productState]);
-
   useEffect(() => {
     // getProduct();
     dispatch(getProducts(String(router.query.id)));
-
-    // clear cart if complete order
-    if (cart.checkout.step > 2) {
-      dispatch(resetCart());
-    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

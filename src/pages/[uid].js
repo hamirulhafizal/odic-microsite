@@ -2,11 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, withRouter } from 'next/router';
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Card, CardContent, Grid, Stack, Typography, useMediaQuery, Badge, TextareaAutosize } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Grid,
+  Stack,
+  Typography,
+  useMediaQuery,
+  Badge,
+  TextareaAutosize,
+  Menu,
+  MenuItem,
+  Button,
+  Box,
+  ClickAwayListener
+} from '@mui/material';
 import Link from 'Link';
-// import { Html, Head, Main, NextScript } from 'next/document';
-
-import Head from 'next/head';
 
 // project imports
 import Avatar from 'components/ui-component/extended/Avatar';
@@ -21,20 +32,36 @@ import { motion } from 'framer-motion';
 // assets
 
 import { BACKEND_PATH } from 'config';
-import axios from 'axios';
 import { styled } from '@mui/system';
 
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TelegramIcon from '@mui/icons-material/Telegram';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import QrCode2Icon from '@mui/icons-material/QrCode2';
+import ShareIcon from '@mui/icons-material/Share';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import HomeWorkOutlinedIcon from '@mui/icons-material/HomeWorkOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+
+import { WhatsappShareButton, TelegramShareButton, FacebookShareButton } from 'next-share';
+
+import { QRCode } from 'react-qrcode-logo';
 
 import TypeTabs from 'components/ui-elements/basic/UITabs/TypeTabs';
+import { wrapper } from 'store';
+import { useSelector } from 'store';
 
+import { setUser } from 'store/slices/user';
+
+import autosize from 'autosize';
+import { useDispatch } from 'react-redux';
 const Cover = '/assets/images/profile/img-profile-bg.png';
 const images1 = '/assets/images/landing/living-room-with-yellow.png';
 const images2 = '/assets/images/landing/footerBg-1.png';
+
+var mainOrigin = typeof window !== 'undefined' ? window?.location?.origin : null;
 
 const HeaderWrapper = styled('div')(({ theme }) => ({
   paddingTop: 30,
@@ -47,68 +74,70 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
 const SecondWrapper = styled('div')(({ theme }) => ({
   backgroundImage: `url(${images2})`,
   backgroundSize: 'cover'
-  // background: '#00000057',
 }));
 
-function AgentProfile({ userData }) {
-  const theme = useTheme();
-  const [isLoading, setLoading] = useState(true);
-  const [agent, setAgent] = useState();
-  const [error, setError] = useState();
-  const router = useRouter();
+AgentProfile.getInitialProps = wrapper.getInitialPageProps((store) => async (context) => {
+  const uids = context.query.uid;
 
-  const defaultImage = 'https://onedream.dynamicdigital.guru/media/profile_photo/avatar.png';
+  const userData1 = await fetch(`${BACKEND_PATH}/api/v1/profile/${uids}`)
+    .then((response) => response.json())
+    .then((json) => {
+      return json;
+    });
+
+  store.dispatch(setUser({ userData: [userData1] }));
+
+  return {
+    userData: userData1
+  };
+});
+
+function AgentProfile() {
+  const { userData } = useSelector((state) => state.user);
+  const agent = userData?.userData[0];
+  const dispatch = useDispatch();
+
+  const { products } = useSelector((state) => state.product);
+
+  const theme = useTheme();
+  const router = useRouter();
+  const [error, setError] = useState(false);
+
+  const [isLoading, setLoading] = useState(true);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerEL, setDrawerEL] = useState(null);
+
+  const open = Boolean(anchorEl);
 
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
-  const getProfileAgentById = async (id) => {
-    await axios
-      .get(`${BACKEND_PATH}/api/v1/profile/${id}`)
-      .then((res) => {
-        setAgent(res?.data);
-        const agent = JSON.stringify(res?.data);
-        localStorage.setItem('agent', agent);
-        return res;
-      })
-      .catch((err) => {
-        const stringErr = JSON.stringify(err);
-        const error = JSON.parse(stringErr);
-        setError(error);
-      });
+  const defaultImage = 'https://onedream.dynamicdigital.guru/media/profile_photo/avatar.png';
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenDrawer = () => {
+    setDrawerEL(true);
   };
 
   useEffect(() => {
     setLoading(false);
 
-    if (userData !== undefined) {
-      if (agent == null) {
-        getProfileAgentById(userData?.user_name);
-      }
-    }
-  }, [agent, userData]);
+    if (agent?.detail == 'Not found.') setError(true);
+
+    const textares = document.getElementsByTagName('textarea');
+    autosize(document.getElementById('note'));
+    autosize.update(textares[0]?.value);
+  }, [agent]);
 
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-
-        <title>{`ONE DREAM LEGACY | List all type properties at One Dream Property`}</title>
-        <meta property="og:image" content={userData?.photo || Cover} />
-        <meta property="og:title" content={`${userData?.firstName} ${userData?.lastName}`} />
-
-        {/* <meta property="og:url" content={`${BASE_PATH}${uid}`} /> */}
-        <meta property="og:type" content="website" />
-        <meta property="fb:app_id" content="your fb id" />
-        <meta name="twitter:card" content="summary" />
-        <meta
-          property="og:description"
-          style={{ textTransform: 'capitalize' }}
-          content={`Properties For Rent & Sell by ${userData?.firstName} ${userData?.lastName}`}
-        />
-      </Head>
-
       <HeaderWrapper id="home">
         <AppBar />
         {error ? (
@@ -228,21 +257,21 @@ function AgentProfile({ userData }) {
                                       cursor: 'default',
                                       opacity: 1,
                                       resize: 'none',
-                                      overflow: 'unset',
-                                      height: '170px'
+                                      overflow: 'unset'
                                     }}
                                   />
                                 )}
 
-                                {userData['inventories']?.length == 0 ? null : (
-                                  <Typography variant="caption" sx={{ color: 'white' }}>
-                                    {userData['inventories']?.length} listing
+                                <Stack direction="row" sx={{ justifyContent: 'space-evenly', alignItems: 'center', py: 2 }}>
+                                  <Typography variant="caption" sx={{ color: 'white', display: 'flex', alignItems: 'center' }}>
+                                    <VisibilityOutlinedIcon sx={{ p: '5%' }} /> {agent?.view_count} views
                                   </Typography>
-                                )}
+                                </Stack>
 
                                 {agent?.instagram != null ||
                                 agent?.facebook != null ||
                                 agent?.linkedin != null ||
+                                agent?.user_name != null ||
                                 agent?.youtube != null ? (
                                   <Stack sx={{ pt: 2 }} justifyContent={'center'} direction="row">
                                     <Stack
@@ -261,7 +290,7 @@ function AgentProfile({ userData }) {
                                       )}
                                       {agent?.linkedin && (
                                         <Link href={`${agent?.linkedin}`} target="_blank" underline="hover">
-                                          <LinkedInIcon color="secondary" />
+                                          <TelegramIcon color="secondary" />
                                         </Link>
                                       )}
                                       {agent?.youtube && (
@@ -282,6 +311,168 @@ function AgentProfile({ userData }) {
                                             <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z" />
                                           </svg>
                                         </Link>
+                                      )}
+                                      {agent?.user_name && (
+                                        <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleClose}>
+                                          <>
+                                            <Button
+                                              variant="text"
+                                              id="basic-button"
+                                              aria-controls={open ? 'basic-menu' : undefined}
+                                              aria-haspopup="true"
+                                              aria-expanded={open ? 'true' : undefined}
+                                              onClick={handleClick}
+                                              sx={{
+                                                color: '#b5a837',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                minWidth: 0,
+                                                p: 0,
+                                                m: 0,
+                                                top: '-1px',
+                                                ':hover': {
+                                                  color: '#b5a837',
+                                                  backgroundColor: 'transparent'
+                                                },
+                                                '& .MuiButton-endIcon': {
+                                                  m: 0
+                                                }
+                                              }}
+                                              endIcon={<ShareIcon color="secondary" />}
+                                            ></Button>
+                                            <Menu
+                                              id="basic-menu"
+                                              anchorEl={anchorEl}
+                                              open={open}
+                                              onClose={handleClose}
+                                              MenuListProps={{
+                                                'aria-labelledby': 'basic-button'
+                                              }}
+                                              PaperProps={{
+                                                anchorEl: 'right',
+                                                elevation: 0,
+                                                sx: {
+                                                  color: 'white',
+                                                  backdropFilter: 'blur(29px)',
+                                                  backgroundColor: 'rgba(0, 0, 0, 0.51) ',
+                                                  boxShadow: '4px 10px 13px rgb(0 0 0 / 25%)',
+                                                  overflow: 'visible',
+                                                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                  WebkitBackdropFilter: 'blur(29px)',
+                                                  mt: 1.5,
+                                                  '& .MuiAvatar-root': {
+                                                    width: 32,
+                                                    height: 32,
+                                                    ml: -0.5,
+                                                    mr: 1
+                                                  },
+                                                  '&:before': {
+                                                    color: 'white',
+                                                    WebkitBackdropFilter: 'blur(29px)',
+                                                    backdropFilter: 'blur(29px)',
+                                                    backgroundColor: 'transparent',
+                                                    boxShadow: '4px 10px 13px rgb(0 0 0 / 25%)',
+                                                    content: '""',
+                                                    display: 'block',
+                                                    position: 'absolute',
+                                                    top: -5,
+                                                    right: 10,
+                                                    width: 0,
+                                                    height: 0,
+                                                    border: '5px solid transparent',
+                                                    borderTop: 0,
+                                                    borderBottom: '5px solid rgba(0, 0, 0, 0.51)',
+                                                    zIndex: 0
+                                                  }
+                                                }
+                                              }}
+                                              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                                            >
+                                              <MenuItem sx={{ backgroundColor: 'transparent', display: 'flex', flexDirection: 'column' }}>
+                                                <WhatsappShareButton
+                                                  sx={{
+                                                    color: 'white',
+                                                    backdropFilter: 'blur(29px)',
+                                                    boxShadow: '4px 10px 13px rgb(0 0 0 / 25%)',
+                                                    overflow: 'visible',
+                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))'
+                                                  }}
+                                                  url={`${mainOrigin}/${agent?.user_name}`}
+                                                  title={`${agent?.firstName} ${agent?.lastName}`}
+                                                >
+                                                  <Stack
+                                                    sx={{
+                                                      display: 'flex',
+                                                      justifyContent: 'center',
+                                                      alignItems: 'center',
+                                                      flexDirection: 'row'
+                                                    }}
+                                                  >
+                                                    <WhatsAppIcon sx={{ mr: 1 }} color="secondary" />
+                                                    {'WhatsApp'}
+                                                  </Stack>
+                                                </WhatsappShareButton>
+                                                <br />
+                                                <FacebookShareButton
+                                                  sx={{
+                                                    color: 'white',
+                                                    backdropFilter: 'blur(29px)',
+                                                    boxShadow: '4px 10px 13px rgb(0 0 0 / 25%)',
+                                                    overflow: 'visible',
+                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))'
+                                                  }}
+                                                  url={`${mainOrigin}/${agent?.user_name}`}
+                                                  title={`${agent?.firstName} ${agent?.lastName}`}
+                                                >
+                                                  <Stack
+                                                    sx={{
+                                                      display: 'flex',
+                                                      justifyContent: 'center',
+                                                      alignItems: 'center',
+                                                      flexDirection: 'row'
+                                                    }}
+                                                  >
+                                                    <FacebookIcon sx={{ mr: 1 }} color="secondary" />
+                                                    {'Facebook'}
+                                                  </Stack>
+                                                </FacebookShareButton>
+                                                <br />
+                                                <TelegramShareButton
+                                                  sx={{
+                                                    color: 'white',
+                                                    backdropFilter: 'blur(29px)',
+                                                    boxShadow: '4px 10px 13px rgb(0 0 0 / 25%)',
+                                                    overflow: 'visible',
+                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))'
+                                                  }}
+                                                  url={`${mainOrigin}/${agent?.user_name}`}
+                                                  title={`${agent?.firstName} ${agent?.lastName}`}
+                                                >
+                                                  <Stack
+                                                    sx={{
+                                                      display: 'flex',
+                                                      justifyContent: 'center',
+                                                      alignItems: 'center',
+                                                      flexDirection: 'row'
+                                                    }}
+                                                  >
+                                                    <TelegramIcon sx={{ mr: 1 }} color="secondary" />
+                                                    {'Telegram'}
+                                                  </Stack>
+                                                </TelegramShareButton>
+                                                {/* <br />
+                                                <QRCode
+                                                  eyeRadius="50px"
+                                                  removeQrCodeBehindLogo={true}
+                                                  logoImage={agent?.photo}
+                                                  value={`${mainOrigin}/${agent?.user_name}`}
+                                                /> */}
+                                              </MenuItem>
+                                            </Menu>
+                                          </>
+                                        </ClickAwayListener>
                                       )}
                                     </Stack>
                                   </Stack>
@@ -312,7 +503,7 @@ function AgentProfile({ userData }) {
                     damping: 30
                   }}
                 >
-                  {agent !== undefined && <TypeTabs agentData={agent} username={`${userData?.user_name}`} />}
+                  {agent?.detail !== 'Not found.' && <TypeTabs agentData={agent} username={`${agent?.user_name}`} />}
                 </motion.div>
               </Grid>
             </Grid>
@@ -326,19 +517,5 @@ function AgentProfile({ userData }) {
     </>
   );
 }
-
-AgentProfile.getInitialProps = async (context) => {
-  const uids = context.query.uid; // Get ID from slug `/book/1`
-
-  const userData1 = await fetch(`${BACKEND_PATH}/api/v1/profile/${uids}`)
-    .then((response) => response.json())
-    .then((json) => {
-      return json;
-    });
-
-  return {
-    userData: userData1
-  };
-};
 
 export default AgentProfile;

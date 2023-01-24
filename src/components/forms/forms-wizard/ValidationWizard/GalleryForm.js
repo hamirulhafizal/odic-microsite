@@ -109,8 +109,8 @@ export default function GalleryForm({ imageProperty, setPaymentData, handleNext,
   const preViewImageCover = async (e) => {
     const image = await resizeFile(e.target.files[0]);
 
-    if (image?.size >= 1000000) {
-      setMessage('File Size is too largess');
+    if (image?.size >= 2000000) {
+      setMessage('File Size is too large');
     } else {
       setMessage('');
       setEImg(image);

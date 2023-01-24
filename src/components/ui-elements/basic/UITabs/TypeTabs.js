@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
 import Link from 'Link';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import { Box, Chip, Stack, Tab, Tabs, Typography, Button } from '@mui/material';
+import { Box, Chip, Stack, Tab, Tabs, Typography, Button, Grid, useMediaQuery, CircularProgress } from '@mui/material';
+import { makeStyles, useTheme } from '@mui/styles';
 
 // assets
 import CardProperty from 'components/ui-component/cards/CardProperty';
@@ -16,14 +16,33 @@ import { useRouter } from 'next/router';
 import useAuth from 'hooks/useAuth';
 
 import FilterByState from '../../../../pages/listing/FilterByState';
+import { getListsbyQuery } from 'contexts/ApiListing';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import CircularLoader from 'components/ui-component/CircularLoader';
+import SkeletonCardProperty from 'components/ui-component/cards/SkeletonCardProperty';
+
+const useStyles = makeStyles({
+  pokemonCardsArea: {
+    justifyContent: 'space-evenly'
+  },
+  progress: {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    marginTop: '-100px',
+    marginLeft: '-100px'
+  }
+});
 // tab content customize
 
 function LinkTab(props) {
+  const { hashvalue } = props;
   return (
     <Tab
       component="a"
       onClick={(event) => {
         event.preventDefault();
+        hashvalue();
       }}
       {...props}
     />
@@ -68,27 +87,259 @@ const NavBarItem = {
 export default function TypeTabs({ username, agentData }) {
   const theme = useTheme();
   const router = useRouter();
-  const user = useAuth();
 
-  const [value, setValue] = React.useState(location.hash !== '' ? NavBarItem[location.hash] : 0);
+  const checkUrlsHash = location.hash == '' ? 0 : location.hash == '#sales' ? 2 : location.hash == '#rent' && 4;
+  const [value, setValue] = useState(location.hash !== '' ? NavBarItem[location.hash] : 0);
+
+  const [categoryState, setCategory] = useState(checkUrlsHash);
+  const [locationState, setLocation] = useState(null);
+  const [typeState, setType] = useState({ value: null, label: 'all' });
+  const [titleState, setTitle] = useState(null);
+
+  const [statePage, setPage] = useState(1);
+  const [scrollData, setScrollData] = useState();
+  const [hasMoreValue, setHasMoreValue] = useState(true);
+  const [pokemonData, setPokemonData] = useState();
+  const [isLoading, setLoading] = useState();
+  const [isTimer, setTimer] = useState(false);
+  const [isObjectFreeze, setObjectFreeze] = useState();
+
+  const [isMessage, setMessage] = useState(false);
 
   const handleChange = (event, newValue) => {
     let decoded = decodeURIComponent(Object.keys(NavBarItem)[newValue]);
     router.push(`${agentData?.user_name}/${decoded}`, undefined, { shallow: true });
 
     setValue(newValue);
+    setCategory(newValue);
   };
 
-  const filterByCategory = (param) => {
-    return agentData?.inventories?.reverse().filter((item) => {
-      return item.category == param;
-    });
+  const handleLocation = (value) => {
+    setLocation(value);
   };
+
+  const handleCategory = (value) => {
+    setCategory(value);
+  };
+
+  const handleType = (item) => {
+    setType(item);
+  };
+
+  const filterByCategory = (param, location, type, data) => {
+    const newArray = structuredClone(data);
+
+    if (param !== 0 && type !== null && location == null) {
+      return newArray?.filter((item) => {
+        return item.category == param && item.propertyType == type;
+      });
+    }
+    if (param !== 0 && location !== null && type == null) {
+      return newArray?.filter((item) => {
+        return item.category == param && item.location == location;
+      });
+    }
+    if (param !== 0 && location !== null && type !== null) {
+      return newArray?.filter((item) => {
+        return item.category == param && item.location == location && item.propertyType == type;
+      });
+    }
+    if (param == 0 && location == null && type == null) {
+      return newArray?.filter((item) => {
+        return item;
+      });
+    }
+    if (param == 0 && location !== null && type !== null) {
+      return newArray?.slice(0).filter((item) => {
+        return item?.location == location && item?.propertyType == type;
+      });
+    }
+    if (param == 0 && location == null && type !== null) {
+      return newArray?.slice(0).filter((item) => {
+        return item?.propertyType == type;
+      });
+    }
+    if (param == 0 && location !== null && type == null) {
+      return newArray?.slice(0).filter((item) => {
+        return item?.location == location;
+      });
+    }
+    if (param !== 0 && type == null && location == null) {
+      return newArray?.filter((item) => {
+        return item.category == param;
+      });
+    }
+  };
+
+  const loadScrollData = async () => {
+    try {
+      setScrollData(pokemonData.slice(0, scrollData.length + 8));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleOnRowsScrollEnd = () => {
+    if (scrollData.length < pokemonData.length) {
+      setHasMoreValue(true);
+      loadScrollData();
+    } else {
+      setHasMoreValue(false);
+    }
+  };
+
+  const fetchPrimaryPokemonData = async (categoryState, locationState, type, page) => {
+    try {
+      const querySet = { username: username, location: locationState, title: titleState };
+
+      await getListsbyQuery(querySet, page).then((response) => {
+        let data;
+        const dataFreeze = Object.freeze(response?.results);
+        setObjectFreeze(dataFreeze);
+
+        if (locationState == null && type == null && categoryState == 0) {
+          data = response.results;
+        } else {
+          data = filterByCategory(categoryState, locationState, type, response.results);
+        }
+
+        const newPokemonData = [];
+
+        if (data?.length != 0) {
+          data?.forEach((pokemon, index) => {
+            const {
+              id,
+              address,
+              amenities,
+              bathrooms,
+              bedrooms,
+              carpark,
+              category,
+              city,
+              description,
+              featureImage,
+              floorRange,
+              furnishing,
+              inventory_date,
+              lat,
+              location,
+              lon,
+              otherInfo,
+              phone_number,
+              photo_1,
+              photo_2,
+              photo_3,
+              photo_4,
+              photo_5,
+              photo_6,
+              photo_7,
+              photo_8,
+              photo_9,
+              photo_10,
+              price,
+              propertyTitle,
+              propertyType,
+              realtor,
+              rentalDeposit,
+              saleType,
+              size,
+              slug,
+              state,
+              tenure,
+              title,
+              user_name,
+              video,
+              view_count,
+              zipcode
+            } = pokemon;
+
+            newPokemonData.push({
+              id: id,
+              address: address,
+              amenities: amenities,
+              bathrooms: bathrooms,
+              bedrooms: bedrooms,
+              carpark: carpark,
+              category: category,
+              city: city,
+              description: description,
+              featureImage: featureImage,
+              floorRange: floorRange,
+              furnishing: furnishing,
+              inventory_date: inventory_date,
+              lat: lat,
+              location: location,
+              lon: lon,
+              otherInfo: otherInfo,
+              phone_number: phone_number,
+              photo_1: photo_1,
+              photo_2: photo_2,
+              photo_3: photo_3,
+              photo_4: photo_4,
+              photo_5: photo_5,
+              photo_6: photo_6,
+              photo_7: photo_7,
+              photo_8: photo_8,
+              photo_9: photo_9,
+              photo_10: photo_10,
+              price: price,
+              propertyTitle: propertyTitle,
+              propertyType: propertyType,
+              realtor: realtor,
+              rentalDeposit: rentalDeposit,
+              saleType: saleType,
+              size: size,
+              slug: slug,
+              state: state,
+              tenure: tenure,
+              title: title,
+              user_name: user_name,
+              video: video,
+              view_count: view_count,
+              zipcod: zipcode
+            });
+          });
+          setMessage(false);
+
+          setPokemonData(newPokemonData);
+
+          setScrollData(newPokemonData.slice(0, 8));
+        } else {
+          setMessage(true);
+        }
+
+        setLoading(false);
+      });
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+
+    fetchPrimaryPokemonData(categoryState, locationState, typeState.value, statePage);
+
+    // setTimeout(() => {
+    //   setTimer(true);
+    // }, 3000);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statePage, typeState.value, locationState, categoryState]);
+
+  const renderCards = (pokemonIndex) => {
+    return (
+      <>
+        <CardProperty agentData={agentData} itemData={pokemonData[pokemonIndex]} key={1} />
+      </>
+    );
+  };
+
   return (
     <>
       <Tabs
         value={value}
-        // variant="scrollable"
         onChange={handleChange}
         textColor="secondary"
         indicatorColor="secondary"
@@ -117,12 +368,15 @@ export default function TypeTabs({ username, agentData }) {
       >
         <LinkTab
           component={Link}
-          href={`/`}
+          href={`/${username}`}
+          hashvalue={() => {
+            handleCategory(0);
+          }}
           label={
             <>
               All{' '}
               <Chip
-                label={agentData?.inventories?.length}
+                label={isObjectFreeze?.length}
                 size="small"
                 sx={{ color: theme.palette.secondary.main, background: theme.palette.secondary.light, ml: 1.3 }}
               />
@@ -134,15 +388,28 @@ export default function TypeTabs({ username, agentData }) {
 
         <LinkTab
           component={Link}
+          hashvalue={() => {
+            handleCategory(2);
+          }}
           href="#sales"
           icon={<HomeTwoToneIcon sx={{ fontSize: '1.3rem' }} />}
           label={
             <>
               Sales{' '}
               <Chip
-                label={`${filterByCategory(2)?.length}`}
+                label={
+                  categoryState == 2 &&
+                  pokemonData &&
+                  pokemonData?.filter((item) => item.category == 2 || item.propTypes == typeState.value || item.location == locationState)
+                    .length
+                }
                 size="small"
-                sx={{ color: theme.palette.secondary.main, background: theme.palette.secondary.light, ml: 1.3 }}
+                sx={{
+                  color: theme.palette.secondary.main,
+                  background: theme.palette.secondary.light,
+                  ml: 1.3,
+                  display: categoryState == 2 ? 'inline-flex' : 'none'
+                }}
               />
             </>
           }
@@ -151,15 +418,28 @@ export default function TypeTabs({ username, agentData }) {
 
         <LinkTab
           component={Link}
+          hashvalue={() => {
+            handleCategory(4);
+          }}
           href="#rent"
           icon={<HotelTwoToneIcon sx={{ fontSize: '1.3rem' }} />}
           label={
             <>
               Rent{' '}
               <Chip
-                label={`${filterByCategory(4).length}`}
+                label={
+                  categoryState == 4 &&
+                  pokemonData &&
+                  pokemonData?.filter((item) => item.category == 4 || item.propTypes == typeState.value || item.location == locationState)
+                    .length
+                }
                 size="small"
-                sx={{ color: theme.palette.secondary.main, background: theme.palette.secondary.light, ml: 1.3 }}
+                sx={{
+                  color: theme.palette.secondary.main,
+                  background: theme.palette.secondary.light,
+                  ml: 1.3,
+                  display: categoryState == 4 ? 'inline-flex' : 'none'
+                }}
               />
             </>
           }
@@ -167,60 +447,102 @@ export default function TypeTabs({ username, agentData }) {
         />
       </Tabs>
       <Box textAlign="right" sx={{ mt: 3, mb: 4 }}>
-        <FilterByState />
+        <FilterByState handleLoc={handleLocation} handleType={handleType} />
       </Box>
       <TabPanel value={value} index={0}>
-        {agentData?.inventories
-          ?.slice(0)
-          .reverse()
-          .map((element, index) => {
-            return <CardProperty agentData={agentData} itemData={element} key={index} />;
-          })}
-        {agentData?.inventories?.length == 0 && (
+        {isMessage ? (
           <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
-            No Property Found
+            No Property Found in {locationState}
           </Typography>
+        ) : (
+          <>
+            {!isLoading && scrollData ? (
+              <>
+                <InfiniteScroll
+                  dataLength={scrollData.length}
+                  next={handleOnRowsScrollEnd}
+                  hasMore={hasMoreValue}
+                  scrollThreshold={1}
+                  loader={<CircularProgress />}
+                  style={{ overflow: 'unset', mt: 5 }}
+                  endMessage={
+                    <Stack sx={{ textAlign: 'center' }}>
+                      <Typography variant="caption">Comming Soon More List</Typography>
+                    </Stack>
+                  }
+                >
+                  {scrollData.map((pokemon, index) => renderCards(index))}
+                </InfiniteScroll>
+              </>
+            ) : (
+              <SkeletonCardProperty />
+            )}
+          </>
         )}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {filterByCategory(2).map((element, index) => {
-          return <CardProperty agentData={agentData} itemData={element} key={index} />;
-        })}
-        {filterByCategory(2).length == 0 && (
+        {isMessage ? (
           <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
-            No Property Found
+            No Property Found in {locationState}
           </Typography>
+        ) : (
+          <>
+            {!isLoading && scrollData ? (
+              <>
+                <InfiniteScroll
+                  dataLength={scrollData.length}
+                  next={handleOnRowsScrollEnd}
+                  hasMore={hasMoreValue}
+                  scrollThreshold={1}
+                  loader={<CircularProgress />}
+                  endMessage={
+                    <Stack sx={{ textAlign: 'center' }}>
+                      <Typography variant="caption">Comming Soon More List</Typography>
+                    </Stack>
+                  }
+                  style={{ overflow: 'unset', mt: 5 }}
+                >
+                  {scrollData.map((pokemon, index) => renderCards(index))}
+                </InfiniteScroll>
+              </>
+            ) : (
+              <SkeletonCardProperty />
+            )}
+          </>
         )}
       </TabPanel>
+
       <TabPanel value={value} index={2}>
-        {filterByCategory(4).map((element, index) => {
-          return <CardProperty agentData={agentData} itemData={element} key={index} />;
-        })}
-
-        {filterByCategory(4).length == 0 && (
+        {isMessage ? (
           <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
-            No Property Found
+            No Property Found in {locationState}
           </Typography>
+        ) : (
+          <>
+            {!isLoading && scrollData ? (
+              <>
+                <InfiniteScroll
+                  dataLength={scrollData.length}
+                  next={handleOnRowsScrollEnd}
+                  hasMore={hasMoreValue}
+                  scrollThreshold={1}
+                  loader={<CircularProgress />}
+                  endMessage={
+                    <Stack sx={{ textAlign: 'center' }}>
+                      <Typography variant="caption">Comming Soon More List</Typography>
+                    </Stack>
+                  }
+                  style={{ overflow: 'unset', mt: 5 }}
+                >
+                  {scrollData.map((pokemon, index) => renderCards(index))}
+                </InfiniteScroll>
+              </>
+            ) : (
+              <SkeletonCardProperty />
+            )}
+          </>
         )}
       </TabPanel>
-
-      {/*  {(user.isLoggedIn && filterByCategory(2).length == 0) ||
-        (filterByCategory(4).length == 0 && (
-          <Stack sx={{ p: 2, alignItems: 'center' }}>
-            <Button
-              onClick={() => {
-                router.push('/listing/create');
-              }}
-              variant="contained"
-              color="secondary"
-              sx={{ color: 'white' }}
-              size="small"
-              startIcon={<AddLocationAltOutlinedIcon sx={{ color: 'white' }} fontSize="small" />}
-            >
-              Create New List
-            </Button>
-          </Stack>
-        ))} */}
     </>
   );
 }

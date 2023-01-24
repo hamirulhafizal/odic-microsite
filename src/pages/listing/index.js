@@ -28,7 +28,8 @@ import {
   Tab,
   Tabs,
   Box,
-  useMediaQuery
+  useMediaQuery,
+  CircularProgress
 } from '@mui/material';
 import AddLocationAltOutlinedIcon from '@mui/icons-material/AddLocationAltOutlined';
 
@@ -54,9 +55,10 @@ import ListingUpdate from './ListingUpdate';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { deleteListingById } from 'contexts/ApiListing';
-import { dispatch } from 'store';
+import { deleteListingById, getListsbyQuery } from 'contexts/ApiListing';
+import { dispatch } from '../../store/index';
 import { openSnackbar } from 'store/slices/snackbar';
+import { numberWithCommas } from 'utils/helper';
 
 const prodImage = '/assets/images/e-commerce';
 
@@ -296,6 +298,8 @@ const Listing = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const router = useRouter();
+  const { user } = useAuth();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -305,22 +309,24 @@ const Listing = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [search, setSearch] = React.useState('');
   const [rows, setRows] = React.useState([]);
-  const { products } = useSelector((state) => state.product);
+  const { products, product } = useSelector((state) => state.product);
+
+  const [categoryState, setCategory] = React.useState(0);
+  const [locationState, setLocation] = React.useState(null);
+  const [typeState, setType] = React.useState({ value: null, label: 'all' });
+  const [titleState, setTitle] = React.useState(null);
 
   const [value, setValue] = React.useState(0);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [productEditId, setProductEditId] = React.useState(null);
+  // open dialog to edit review
+  const [open, setOpen] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(false);
+  const [isMessage, setMessage] = React.useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  const { user } = useAuth();
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const [productEditId, setProductEditId] = React.useState(null);
-
-  // open dialog to edit review
-  const [open, setOpen] = React.useState(false);
 
   const handleDialog = (index) => {
     setProductEditId(index);
@@ -330,9 +336,8 @@ const Listing = () => {
   const handleCloseDialog = () => {
     setProductEditId();
     setOpen(false);
+    dispatch(getProducts(user?.user_name));
   };
-
-  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -341,15 +346,6 @@ const Listing = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  React.useEffect(() => {
-    setRows(products.inventories);
-  }, [products]);
-
-  React.useEffect(() => {
-    dispatch(getProducts(user?.user_name));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paging]);
 
   const filterByCategory = (param) => {
     return rows
@@ -443,10 +439,37 @@ const Listing = () => {
   const isSelected = (name) => selected.indexOf(name) !== -1;
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows?.length) : 0;
 
+  const fetchPrimaryPokemonData = async (categoryState, locationState, type, page) => {
+    try {
+      const querySet = { username: user?.user_name };
+      setLoading(true);
+      await getListsbyQuery(querySet, page).then((response) => {
+        let data = response.results;
+        setRows(data);
+        setLoading(false);
+      });
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      setMessage(true);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchPrimaryPokemonData(categoryState, locationState, typeState.value, 1);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    dispatch(getProducts(user?.user_name));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paging]);
+
   return (
     <>
       <MainCard title="Property List" content={false} contentSX={{ p: 0 }}>
-        {products?.inventories?.length != 0 && (
+        {products?.length != 0 && (
           <CardContent>
             <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -485,27 +508,7 @@ const Listing = () => {
           </CardContent>
         )}
 
-        {products?.inventories?.length == 0 ? (
-          <>
-            <Stack sx={{ p: 2, alignItems: 'center' }}>
-              <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
-                No Property Found
-              </Typography>
-              <Button
-                onClick={() => {
-                  router.push('/listing/create');
-                }}
-                variant="contained"
-                color="secondary"
-                sx={{ color: 'white' }}
-                size="small"
-                startIcon={<AddLocationAltOutlinedIcon sx={{ color: 'white' }} fontSize="small" />}
-              >
-                Create New List
-              </Button>
-            </Stack>
-          </>
-        ) : (
+        {products?.length != 0 ? (
           <>
             <Box sx={{ width: '100%' }}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -517,111 +520,143 @@ const Listing = () => {
               </Box>
               <TabPanel value={value} index={0}>
                 {filterByCategory(2)?.length != 0 ? (
-                  <TableContainer>
-                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                      <EnhancedTableHead
-                        numSelected={selected.length}
-                        order={order}
-                        orderBy={orderBy}
-                        onSelectAllClick={handleSelectAllClick}
-                        onRequestSort={handleRequestSort}
-                        rowCount={rows?.length}
-                        theme={theme}
-                        selected={selected}
-                      />
-                      <TableBody>
-                        {filterByCategory(2)?.map((row, index) => {
-                          if (typeof row === 'number') return null;
-                          const isItemSelected = isSelected(index);
-                          const labelId = `enhanced-table-checkbox-${index}`;
+                  <>
+                    {isLoading ? (
+                      <Stack direction="row" sx={{ justifyContent: 'center', p: 5 }}>
+                        <CircularProgress size={100} />
+                      </Stack>
+                    ) : (
+                      <>
+                        <TableContainer>
+                          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                            <EnhancedTableHead
+                              numSelected={selected.length}
+                              order={order}
+                              orderBy={orderBy}
+                              onSelectAllClick={handleSelectAllClick}
+                              onRequestSort={handleRequestSort}
+                              rowCount={rows?.length}
+                              theme={theme}
+                              selected={selected}
+                            />
+                            <TableBody>
+                              {filterByCategory(2)?.map((row, index) => {
+                                if (typeof row === 'number') return null;
+                                const isItemSelected = isSelected(index);
+                                const labelId = `enhanced-table-checkbox-${index}`;
 
-                          return (
-                            <TableRow
-                              id={`row-${row?.id}`}
-                              hover
-                              role="checkbox"
-                              aria-checked={isItemSelected}
-                              tabIndex={-1}
-                              key={index}
-                              selected={isItemSelected}
-                            >
-                              <TableCell align="center" component="th" id={labelId} scope="row" sx={{ cursor: 'pointer' }}>
-                                <Avatar
-                                  component={Link}
-                                  href={`/listing/${row?.id}`}
-                                  src={row?.photo_1 && `${row?.featureImage}`}
-                                  size="md"
-                                  variant="rounded"
-                                />
-                              </TableCell>
-                              <TableCell component="th" id={labelId} scope="row" sx={{ cursor: 'pointer' }}>
-                                <Typography
-                                  component={Link}
-                                  href={`/listing/${row?.id}`}
-                                  variant="span"
-                                  sx={{
-                                    color: theme.palette.mode === 'dark' ? theme.palette.grey[600] : 'grey.900',
-                                    textDecoration: 'none'
-                                  }}
-                                >
-                                  {row?.title}
-                                </Typography>
-                              </TableCell>
-                              <TableCell align="center">RM {row?.price}</TableCell>
-                              <TableCell align="center">{row?.location}</TableCell>
+                                return (
+                                  <TableRow
+                                    id={`row-${row?.id}`}
+                                    hover
+                                    role="checkbox"
+                                    aria-checked={isItemSelected}
+                                    tabIndex={-1}
+                                    key={index}
+                                    selected={isItemSelected}
+                                  >
+                                    <TableCell align="center" component="th" id={labelId} scope="row" sx={{ cursor: 'pointer' }}>
+                                      <Avatar
+                                        component={Link}
+                                        href={`/listing/${row?.id}`}
+                                        src={row?.photo_1 && `${row?.featureImage}`}
+                                        size="md"
+                                        variant="rounded"
+                                      />
+                                    </TableCell>
+                                    <TableCell component="th" id={labelId} scope="row" sx={{ cursor: 'pointer' }}>
+                                      <Typography
+                                        component={Link}
+                                        href={`/listing/${row?.id}`}
+                                        variant="span"
+                                        sx={{
+                                          color: theme.palette.mode === 'dark' ? theme.palette.grey[600] : 'grey.900',
+                                          textDecoration: 'none'
+                                        }}
+                                      >
+                                        {row?.title}
+                                      </Typography>
+                                    </TableCell>
+                                    <TableCell align="center">RM {numberWithCommas(row?.price)} </TableCell>
+                                    <TableCell align="center">{row?.location}</TableCell>
 
-                              <TableCell align="center">{propertyTypeData(row?.propertyType)}</TableCell>
-                              <TableCell align="center">{parseInt(row?.bathrooms)}</TableCell>
-                              <TableCell align="center">{row?.bedrooms}</TableCell>
+                                    <TableCell align="center">{propertyTypeData(row?.propertyType)}</TableCell>
+                                    <TableCell align="center">{parseInt(row?.bathrooms)}</TableCell>
+                                    <TableCell align="center">{row?.bedrooms}</TableCell>
 
-                              <TableCell align="center">
-                                <Chip
-                                  size="small"
-                                  label={row?.status ? 'Active' : 'Active'}
-                                  chipcolor={row?.status ? 'success' : 'success'}
-                                  sx={{ borderRadius: '4px', textTransform: 'capitalize' }}
-                                />
-                              </TableCell>
-                              <TableCell align="center" sx={{ pr: 3 }}>
-                                <IconButton
-                                  onClick={() => {
-                                    router.push(`listing/${row?.id}`);
-                                  }}
-                                  color="primary"
-                                  size="large"
-                                >
-                                  <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                </IconButton>
-                                <IconButton
-                                  color="secondary"
-                                  onClick={() => {
-                                    handleDialog(row?.id);
-                                  }}
-                                  size="large"
-                                >
-                                  <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                </IconButton>
-                                <IconButton
-                                  color="secondary"
-                                  onClick={() => {
-                                    handleDelete(row?.id);
-                                  }}
-                                  size="large"
-                                >
-                                  <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                                </IconButton>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                                    <TableCell align="center">
+                                      <Chip
+                                        size="small"
+                                        className={
+                                          row?.state == 'Available' || row?.state == '-' || row?.state == null
+                                            ? 'labelStatusSuccess'
+                                            : 'labelstatusunavailable'
+                                        }
+                                        label={
+                                          row?.state == 'Available' || row?.state == '-' || row?.state == null ? 'Available' : row?.state
+                                        }
+                                        chipcolor={row?.state == 'Available' || row?.state == null ? 'success' : 'fail'}
+                                        sx={{
+                                          borderRadius: '4px',
+                                          textTransform: 'capitalize',
+                                          backgroundColor:
+                                            row?.state == 'Available' || row?.state == '-' || row?.state == null ? '#00c853' : '#00c853',
+                                          color: 'white'
+                                        }}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ pr: 3 }}>
+                                      <IconButton
+                                        onClick={() => {
+                                          router.push(`listing/${row?.id}`);
+                                        }}
+                                        color="primary"
+                                        size="large"
+                                      >
+                                        <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                      </IconButton>
+                                      <IconButton
+                                        color="secondary"
+                                        onClick={() => {
+                                          handleDialog(row?.id);
+                                        }}
+                                        size="large"
+                                      >
+                                        <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                      </IconButton>
+                                      <IconButton
+                                        color="secondary"
+                                        onClick={() => {
+                                          handleDelete(row?.id);
+                                        }}
+                                        size="large"
+                                      >
+                                        <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                                      </IconButton>
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </>
+                    )}
+                  </>
                 ) : (
                   <Stack sx={{ p: 2, alignItems: 'center' }}>
-                    <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
-                      No Property Found
-                    </Typography>
+                    {isLoading && (
+                      <Stack direction="row" sx={{ justifyContent: 'center', p: 5 }}>
+                        <CircularProgress size={100} />
+                      </Stack>
+                    )}
+
+                    {isMessage && (
+                      <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
+                        No Property Found
+                      </Typography>
+                    )}
+
                     <Button
                       onClick={() => {
                         router.push('/listing/create');
@@ -689,7 +724,7 @@ const Listing = () => {
                                   {row?.title}
                                 </Typography>
                               </TableCell>
-                              <TableCell align="center">RM {row?.price} / month</TableCell>
+                              <TableCell align="center">RM {numberWithCommas(row?.price)} / month</TableCell>
                               <TableCell align="center">{row?.location}</TableCell>
 
                               <TableCell align="center">{propertyTypeData(row?.propertyType)}</TableCell>
@@ -741,6 +776,11 @@ const Listing = () => {
                   </TableContainer>
                 ) : (
                   <Stack sx={{ p: 2, alignItems: 'center' }}>
+                    {isLoading && (
+                      <Stack direction="row" sx={{ justifyContent: 'center', p: 5 }}>
+                        <CircularProgress size={100} />
+                      </Stack>
+                    )}
                     <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
                       No Property Found
                     </Typography>
@@ -760,16 +800,35 @@ const Listing = () => {
                 )}
               </TabPanel>
             </Box>
-
-            {/* <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rows?.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            /> */}
+          </>
+        ) : (
+          <>
+            <Stack sx={{ p: 2, alignItems: 'center' }}>
+              {isLoading && (
+                <Stack direction="row" sx={{ justifyContent: 'center', p: 5 }}>
+                  <CircularProgress size={100} />
+                </Stack>
+              )}
+              {isMessage && (
+                <>
+                  <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
+                    No Property Found
+                  </Typography>
+                  <Button
+                    onClick={() => {
+                      router.push('/listing/create');
+                    }}
+                    variant="contained"
+                    color="secondary"
+                    sx={{ color: 'white' }}
+                    size="small"
+                    startIcon={<AddLocationAltOutlinedIcon sx={{ color: 'white' }} fontSize="small" />}
+                  >
+                    Create New List
+                  </Button>
+                </>
+              )}
+            </Stack>
           </>
         )}
       </MainCard>

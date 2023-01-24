@@ -27,6 +27,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TelegramIcon from '@mui/icons-material/Telegram';
 
 // ==============================|| PROFILE 3 - PROFILE ||============================== //
 
@@ -52,8 +53,11 @@ const Profile = ({ ...others }) => {
         description:
           user?.description ||
           `Nama saya ${user?.firstName} ${user?.lastName}.
+
           Saya merupakan agent sah aktif One Dream Property.
+
           Saya sudah bantu lebih 500 orang pembeli dan pelabur hartanah.
+
           Ingin saya bantu anda? Hubungi saya untuk bimbingan.`,
         facebook: user?.facebook || '',
         instagram: user?.instagram || '',
@@ -185,6 +189,17 @@ const Profile = ({ ...others }) => {
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        disabled
+                        type="text"
+                        value={user?.user_name}
+                        name="user_name"
+                        id="filled-disabled"
+                        label="Username"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
                       <TextField fullWidth disabled type="email" value={values.email} name="email" id="filled-disabled" label="Email" />
                     </Grid>
                     <Grid item xs={12}>
@@ -270,13 +285,13 @@ const Profile = ({ ...others }) => {
                     <Grid item xs={12}>
                       <Grid container alignItems="center" spacing={gridSpacing} sx={{ mb: 1.25 }}>
                         <Grid item>
-                          <LinkedInIcon />
+                          <TelegramIcon />
                         </Grid>
                         <Grid item xs zeroMinWidth>
                           <TextField
                             fullWidth
                             id="outlined-basic4"
-                            label="Linkedin Profile Url"
+                            label="Telegram Url"
                             name="linkedin"
                             type="text"
                             value={values.linkedin}

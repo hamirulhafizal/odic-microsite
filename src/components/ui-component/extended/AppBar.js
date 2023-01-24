@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import AddLocationAltOutlinedIcon from '@mui/icons-material/AddLocationAltOutlined';
+import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 
 // project imports
 import Logo from '../Logo';
@@ -101,6 +102,10 @@ const AppBar = ({ ...others }) => {
               <LogoSection />
             </Typography>
             <Stack direction="row" sx={{ display: { xs: 'none', sm: 'block' } }} spacing={2}>
+              <Button sx={{ color: 'white' }} component={Link} href="/posts">
+                {'Post'}
+              </Button>
+
               <Button sx={{ color: 'white' }} component={Link} onClick={user ? handleLogout : handleLogin}>
                 {user ? 'Logout' : 'Login'}
               </Button>
@@ -146,6 +151,12 @@ const AppBar = ({ ...others }) => {
                         <ListItemButton component="a" onClick={user ? handleListing : ''}>
                           <ListItemIcon>{user ? <GridViewOutlinedIcon /> : ''}</ListItemIcon>
                           <ListItemText primary={user ? 'Listing' : ''} />
+                        </ListItemButton>
+                      </Link>
+                      <Link style={{ textDecoration: 'none' }}>
+                        <ListItemButton component="a" href="/posts">
+                          <ListItemIcon>{<BookOutlinedIcon />}</ListItemIcon>
+                          <ListItemText primary={'Post'} />
                         </ListItemButton>
                       </Link>
                       <Link style={{ textDecoration: 'none' }}>

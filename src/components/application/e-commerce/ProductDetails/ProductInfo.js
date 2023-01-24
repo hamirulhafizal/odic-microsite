@@ -45,6 +45,8 @@ import moment from 'moment';
 import { getRelatedProducts } from 'store/slices/product';
 import { numberWithCommas } from 'utils/helper';
 
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+
 const defaultImage = 'https://onedream.dynamicdigital.guru/media/profile_photo/avatar.png';
 
 const validationSchema = yup.object({
@@ -61,18 +63,16 @@ const ProductInfo = ({ product }) => {
   const [agentData, setAgentData] = useState();
 
   const cart = useSelector((state) => state.cart);
+  const userData = useSelector((state) => state.user);
 
-  const agetData = (user_name) => {
-    getProfileAgentById(user_name).then((res) => {
-      setAgentData(res?.data);
-
-      dispatch(getRelatedProducts(router.query.id, res?.data?.inventories));
-    });
+  const agetData = () => {
+    setAgentData(userData?.userData?.userData[0]);
+    dispatch(getRelatedProducts(router.query.id, userData?.userData?.userData[0]?.inventories));
   };
 
   useEffect(() => {
     if (agentData == null) {
-      agetData(product?.user_name);
+      agetData();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,12 +115,61 @@ const ProductInfo = ({ product }) => {
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Chip
-                size="small"
-                label={product.category == 4 ? 'For Rent' : 'For Sale'}
-                chipcolor={product.isStock ? 'success' : 'success'}
-                sx={{ borderRadius: '4px', textTransform: 'capitalize' }}
-              />
+              <Stack direction={'row'} sx={{ width: 'max-content' }}>
+                <Chip
+                  size="small"
+                  className={
+                    product?.state == 'Available' || product?.state == '-' || product?.state == null
+                      ? 'labelStatusSuccess'
+                      : 'labelstatusunavailable'
+                  }
+                  label={product?.state == 'Available' || product?.state == '-' || product?.state == null ? 'Available' : product?.state}
+                  chipcolor={product?.state == 'Available' || product?.state == '-' || product?.state == null ? 'success' : 'fail'}
+                  sx={{
+                    borderRadius: '4px',
+                    textTransform: 'capitalize',
+                    backgroundColor:
+                      product?.state == 'Available' || product?.state == '-' || product?.state == null ? '#00c853' : '#00c853',
+                    color: 'white'
+                  }}
+                />
+                <Chip
+                  size="small"
+                  className={'viewsChip'}
+                  label={
+                    <>
+                      {' '}
+                      <VisibilityOutlinedIcon sx={{ p: '5%', color: 'black' }} />
+                      <Typography variant="span" component={'span'}>
+                        views {product?.view_count}{' '}
+                      </Typography>
+                    </>
+                  }
+                  // chipcolor={product?.state == 'Available' || product?.state == null ? 'success' : 'fail'}
+                  sx={{
+                    borderRadius: '4px',
+                    textTransform: 'capitalize',
+                    backgroundColor: 'white',
+                    color: 'black',
+                    position: 'relative',
+                    left: '10px',
+                    width: 'max-content',
+                    '.MuiChip-label': {
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      alignContent: 'center',
+                      p: 0
+                    },
+
+                    '& .MuiChip-root': {
+                      '&:hover': {
+                        backgroundColor: 'transparent'
+                      }
+                    }
+                  }}
+                />
+              </Stack>
             </Grid>
           </Grid>
         </Stack>

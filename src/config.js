@@ -35,6 +35,14 @@ export const GOOLE_API_MAP = 'AIzaSyCw3wsa90tFvFey2uNhqaA3iIn_eLCFTv8';
 export const BACKEND_PATH = 'https://onedream.dynamicdigital.guru';
 //export const BACKEND_PATH = 'http://127.0.0.1:8000';
 
+export const BACKEND_WP_PATH = 'https://onedreamproperty.net';
+export const BACKEND_WP_MEDIA = 'wp-json/wp/v2/media';
+export const BACKEND_WP_POST = 'wp-json/wp/v2/posts';
+
+export const WORDPRESS_API_URL = 'https://onedreamproperty.net/graphql';
+// export const WORDPRESS_AUTH_REFRESH_TOKEN = 'wp-json/wp/v2/posts';
+// export const WORDPRESS_PREVIEW_SECRET = 'wp-json/wp/v2/posts';
+
 const config = {
   fontFamily: `Roboto, sans-serif`,
   borderRadius: 8,

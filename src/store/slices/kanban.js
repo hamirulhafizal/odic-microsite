@@ -163,7 +163,7 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function getColumns() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/kanban/columns');
       dispatch(slice.actions.getColumnsSuccess(response.data.columns));
@@ -174,7 +174,7 @@ export function getColumns() {
 }
 
 export function getColumnsOrder() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/kanban/columns-order');
       dispatch(slice.actions.getColumnsOrderSuccess(response.data.columnsOrder));
@@ -185,7 +185,7 @@ export function getColumnsOrder() {
 }
 
 export function getComments() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/kanban/comments');
       dispatch(slice.actions.getCommentsSuccess(response.data.comments));
@@ -196,7 +196,7 @@ export function getComments() {
 }
 
 export function getProfiles() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/kanban/profiles');
       dispatch(slice.actions.getProfilesSuccess(response.data.profiles));
@@ -207,7 +207,7 @@ export function getProfiles() {
 }
 
 export function getItems() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/kanban/items');
       dispatch(slice.actions.getItemsSuccess(response.data.items));
@@ -218,7 +218,7 @@ export function getItems() {
 }
 
 export function getUserStory() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/kanban/userstory');
       dispatch(slice.actions.getUserStorySuccess(response.data.userStory));
@@ -229,7 +229,7 @@ export function getUserStory() {
 }
 
 export function getUserStoryOrder() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/kanban/userstory-order');
       dispatch(slice.actions.getUserStoryOrderSuccess(response.data.userStoryOrder));
@@ -240,7 +240,7 @@ export function getUserStoryOrder() {
 }
 
 export function addColumn(column, columns, columnsOrder) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/add-column', { column, columns, columnsOrder });
       dispatch(slice.actions.addColumnSuccess(response.data));
@@ -251,7 +251,7 @@ export function addColumn(column, columns, columnsOrder) {
 }
 
 export function editColumn(column, columns) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/edit-column', { column, columns });
       dispatch(slice.actions.editColumnSuccess(response.data));
@@ -262,7 +262,7 @@ export function editColumn(column, columns) {
 }
 
 export function updateColumnOrder(columnsOrder) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/update-column-order', { columnsOrder });
       dispatch(slice.actions.updateColumnOrderSuccess(response.data));
@@ -273,7 +273,7 @@ export function updateColumnOrder(columnsOrder) {
 }
 
 export function deleteColumn(columnId, columnsOrder, columns) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/delete-column', { columnId, columnsOrder, columns });
       dispatch(slice.actions.deleteColumnSuccess(response.data));
@@ -284,7 +284,7 @@ export function deleteColumn(columnId, columnsOrder, columns) {
 }
 
 export function addItem(columnId, columns, item, items, storyId, userStory) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/add-item', { columnId, columns, item, items, storyId, userStory });
       dispatch(slice.actions.addItemSuccess(response.data));
@@ -295,7 +295,7 @@ export function addItem(columnId, columns, item, items, storyId, userStory) {
 }
 
 export function editItem(columnId, columns, item, items, storyId, userStory) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/edit-item', { items, item, userStory, storyId, columns, columnId });
       dispatch(slice.actions.editItemSuccess(response.data));
@@ -306,7 +306,7 @@ export function editItem(columnId, columns, item, items, storyId, userStory) {
 }
 
 export function updateColumnItemOrder(columns) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/update-item-order', { columns });
       dispatch(slice.actions.updateColumnItemOrderSuccess(response.data));
@@ -317,7 +317,7 @@ export function updateColumnItemOrder(columns) {
 }
 
 export function selectItem(selectedItem) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/select-item', { selectedItem });
       dispatch(slice.actions.selectItemSuccess(response.data));
@@ -328,7 +328,7 @@ export function selectItem(selectedItem) {
 }
 
 export function addItemComment(itemId, comment, items, comments) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/add-item-comment', { items, itemId, comment, comments });
       dispatch(slice.actions.addItemCommentSuccess(response.data));
@@ -339,7 +339,7 @@ export function addItemComment(itemId, comment, items, comments) {
 }
 
 export function deleteItem(itemId, items, columns, userStory) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/delete-item', { columns, itemId, userStory, items });
       dispatch(slice.actions.deleteItemSuccess(response.data));
@@ -350,7 +350,7 @@ export function deleteItem(itemId, items, columns, userStory) {
 }
 
 export function addStory(story, userStory, userStoryOrder) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/add-story', { userStory, story, userStoryOrder });
       dispatch(slice.actions.addStorySuccess(response.data));
@@ -361,7 +361,7 @@ export function addStory(story, userStory, userStoryOrder) {
 }
 
 export function editStory(story, userStory) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/edit-story', { userStory, story });
       dispatch(slice.actions.editStorySuccess(response.data));
@@ -372,7 +372,7 @@ export function editStory(story, userStory) {
 }
 
 export function updateStoryOrder(userStoryOrder) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/update-story-order', { userStoryOrder });
       dispatch(slice.actions.updateStoryOrderSuccess(response.data));
@@ -383,7 +383,7 @@ export function updateStoryOrder(userStoryOrder) {
 }
 
 export function updateStoryItemOrder(userStory) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/update-storyitem-order', { userStory });
       dispatch(slice.actions.updateStoryItemOrderSuccess(response.data));
@@ -394,7 +394,7 @@ export function updateStoryItemOrder(userStory) {
 }
 
 export function addStoryComment(storyId, comment, comments, userStory) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/add-story-comment', { userStory, storyId, comment, comments });
       dispatch(slice.actions.addStoryCommentSuccess(response.data));
@@ -405,7 +405,7 @@ export function addStoryComment(storyId, comment, comments, userStory) {
 }
 
 export function deleteStory(storyId, userStory, userStoryOrder) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/kanban/delete-story', { userStory, storyId, userStoryOrder });
       dispatch(slice.actions.deleteStorySuccess(response.data));

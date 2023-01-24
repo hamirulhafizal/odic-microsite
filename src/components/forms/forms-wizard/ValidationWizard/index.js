@@ -17,10 +17,10 @@ import slugify from 'utils/helper';
 import useAuth from 'hooks/useAuth';
 import Link from 'Link';
 import { CircularProgress } from '@mui/material';
-import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useTheme } from '@mui/material/styles';
 import { getProducts } from 'store/slices/product';
+import { useDispatch } from 'react-redux';
 
 // step options
 const steps = ['Fill Up Detail', 'Upload Image', 'Review your Listing'];
@@ -81,6 +81,7 @@ const ValidationWizard = ({ updateProperty, formFor }) => {
   const [errorIndex, setErrorIndex] = React.useState(null);
   const [editData, setEditData] = React.useState(null);
   const [isApi, setApi] = React.useState(false);
+  const dispatch = useDispatch();
 
   const theme = useTheme();
 
@@ -126,7 +127,7 @@ const ValidationWizard = ({ updateProperty, formFor }) => {
         photo_3: photo_3 ? photo_3 : '',
         photo_4: photo_4 ? photo_4 : '',
         photo_5: photo_5 ? photo_5 : '',
-        realtor: user?.inventories[0]?.realtor !== undefined ? user?.inventories[0]?.realtor : user?.user,
+        realtor: user?.user,
         ...shippingData
       };
 
@@ -218,7 +219,7 @@ const ValidationWizard = ({ updateProperty, formFor }) => {
                 close: false
               })
             );
-            dispatch(getProducts(res?.data?.user_name));
+            // dispatch(getProducts(res?.data?.user_name));
           } else {
             const resJson1 = JSON?.stringify(res);
             const resParse1 = JSON?.parse(resJson1);
@@ -287,8 +288,8 @@ const ValidationWizard = ({ updateProperty, formFor }) => {
 
             <Link
               href={`/listing/${lisitngId}`}
-              underline="hover"
-              color="default"
+              underline="always"
+              // color="default"
               variant="h6"
               sx={{
                 overflow: 'hidden',

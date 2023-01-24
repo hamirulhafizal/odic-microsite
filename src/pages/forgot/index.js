@@ -40,7 +40,7 @@ const ForgotPassword = () => {
                       </Grid>
                       <Grid item xs={12}>
                         <Typography color={theme.palette.secondary.main} variant="caption" fontSize="16px" textAlign="center">
-                          Enter your email address below and we&apos;ll send you password reset OTP.
+                          Enter your Username below and we&apos;ll send you password reset to email.
                         </Typography>
                       </Grid>
                     </Grid>

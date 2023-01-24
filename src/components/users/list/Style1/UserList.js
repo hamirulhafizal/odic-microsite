@@ -20,7 +20,7 @@ import {
 // project imports
 import Avatar from 'components/ui-component/extended/Avatar';
 import { useDispatch, useSelector } from 'store';
-import { getUsersListStyle1 } from 'store/slices/user';
+import { getUsersListStyle1Success } from 'store/slices/user';
 
 // assets
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -43,7 +43,7 @@ const UserList = () => {
   }, [usersS1]);
 
   React.useEffect(() => {
-    dispatch(getUsersListStyle1());
+    dispatch(getUsersListStyle1Success());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

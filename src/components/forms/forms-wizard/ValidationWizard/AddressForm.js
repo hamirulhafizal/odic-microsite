@@ -31,6 +31,29 @@ const category = [
   }
 ];
 
+const statusRent = [
+  {
+    value: 'Available',
+    label: 'Available'
+  },
+  {
+    value: 'Rented',
+    label: 'Rented'
+  }
+];
+
+const statusSell = [
+  {
+    value: 'Available',
+    label: 'Available'
+  },
+
+  {
+    value: 'Sold',
+    label: 'Sold'
+  }
+];
+
 const tenures = [
   {
     value: true,
@@ -283,9 +306,9 @@ const AddressForm = ({ shippingData, setShippingData, handleNext, setErrorIndex,
     otherInfo: editData?.otherInfo || '-',
     size: editData?.size || '',
     carpark: editData?.carpark || '0',
-    zipcode: editData?.zipcode || '-'
+    zipcode: editData?.zipcode || '-',
+    state: editData?.state == null ? 'Available' : editData?.state
     // propertyTitle: editData?.propertyTitle || 'Land',
-    // state: '-'
     // saleType: editData?.saleType || ''
     // floorRange: editData?.floorRange || '1'
     // rentalDeposit: editData?.rentalDeposit || '',
@@ -363,7 +386,8 @@ const AddressForm = ({ shippingData, setShippingData, handleNext, setErrorIndex,
         otherInfo,
         size,
         zipcode,
-        carpark
+        carpark,
+        state
         // propertyTitle
         // floorRange,
         // saleType
@@ -392,7 +416,8 @@ const AddressForm = ({ shippingData, setShippingData, handleNext, setErrorIndex,
         otherInfo: otherInfo,
         size: size,
         zipcode: zipcode,
-        carpark: carpark
+        carpark: carpark,
+        state: state
         // propertyTitle: propertyTitle
         // saleType: saleType
         // floorRange: floorRange
@@ -420,6 +445,19 @@ const AddressForm = ({ shippingData, setShippingData, handleNext, setErrorIndex,
               onChange={formik.handleChange}
               error={formik.touched.category && Boolean(formik.errors.category)}
               helperText={formik.touched.category && formik.errors.category}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <FormControlSelect
+              currencies={formik.values.category == 4 ? statusRent : statusSell}
+              id="state"
+              name="state"
+              captionLabel="Status"
+              value={formik.values.state}
+              onChange={formik.handleChange}
+              error={formik.touched.state && Boolean(formik.errors.state)}
+              helperText={formik.touched.state && formik.errors.state}
               fullWidth
             />
           </Grid>

@@ -96,14 +96,24 @@ const Specification = ({ product }) => {
               </TableRow>
 
               {productData?.category == 2 && (
-                <TableRow sx={{ '& td, & th': { border: 0 } }}>
-                  <TableCell component="th" scope="row">
-                    <Typography variant="caption" sx={{ fontWeight: 500 }}>
-                      Tenure
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{productData?.tenure ? 'Leasehold' : 'Freehold'}</TableCell>
-                </TableRow>
+                <>
+                  <TableRow sx={{ '& td, & th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      <Typography variant="caption" sx={{ fontWeight: 500 }}>
+                        Tenure
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{productData?.tenure ? 'Leasehold' : 'Freehold'}</TableCell>
+                  </TableRow>
+                  <TableRow sx={{ '& td, & th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      <Typography variant="caption" sx={{ fontWeight: 500 }}>
+                        Size
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{productData?.size} Sqft</TableCell>
+                  </TableRow>
+                </>
               )}
 
               <TableRow sx={{ '& td, & th': { border: 0 } }}>

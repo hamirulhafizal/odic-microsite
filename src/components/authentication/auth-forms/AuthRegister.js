@@ -35,6 +35,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { capitalizeFirstString } from 'utils/helper';
 
 // ===========================|| FIREBASE - REGISTER ||=========================== //
 
@@ -53,7 +54,7 @@ const JWTRegister = ({ ...others }) => {
   const [msgErr, setMsgErr] = React.useState('');
 
   const [level, setLevel] = React.useState();
-  const { register } = useAuth();
+  const { register, login, updateProfile } = useAuth();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -94,6 +95,14 @@ const JWTRegister = ({ ...others }) => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
+          firstName: Yup.string()
+            .max(20)
+            .matches(/^[a-zA-Z0-9@]+$/, 'First name cannot contain space and special character')
+            .required('First Name is required'),
+          lastName: Yup.string()
+            .max(20)
+            .matches(/^[a-zA-Z0-9@]+$/, 'Last name cannot contain space and special character')
+            .required('Last Name is required'),
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
@@ -101,14 +110,14 @@ const JWTRegister = ({ ...others }) => {
           setLoading(true);
 
           register(values.email, values.password, values.firstName, values.lastName).then((res) => {
-            if (res?.email && res?.email[0] == 'Email is already in use.') {
-              setErrors({ submit: 'Email is already in use.' });
+            if (res?.email && res?.email[0] == 'Email is already in use') {
+              setErrors({ submit: 'Email is already in use' });
               setSubmitting(false);
               setLoading(false);
             }
 
-            if (res?.user_name && res?.user_name[0] == 'Username is already in use.') {
-              setErrors({ submit: 'First Name dan Last Name is already in use.' });
+            if (res?.user_name && res?.user_name[0] == 'Username is already in use') {
+              setErrors({ submit: 'First name dan Last name is already in use' });
               setSubmitting(false);
               setLoading(false);
             }
@@ -119,7 +128,7 @@ const JWTRegister = ({ ...others }) => {
               dispatch(
                 openSnackbar({
                   open: true,
-                  message: 'Your registration has been successfully completed.',
+                  message: 'Your registration has been successfully completed',
                   variant: 'alert',
                   alert: {
                     color: 'success'
@@ -141,12 +150,16 @@ const JWTRegister = ({ ...others }) => {
                   margin="normal"
                   name="firstName"
                   type="text"
-                  value={values.firstName}
+                  value={capitalizeFirstString(values.firstName)}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  inputProps={{ style: { textTransform: 'capitalize' } }}
                   sx={{ ...theme.typography.customInput }}
                 />
+                {touched.firstName && errors.firstName && (
+                  <FormHelperText error id="standard-weight-helper-text--register">
+                    {errors.firstName}
+                  </FormHelperText>
+                )}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -155,16 +168,21 @@ const JWTRegister = ({ ...others }) => {
                   margin="normal"
                   name="lastName"
                   type="text"
-                  value={values.lastName}
+                  value={capitalizeFirstString(values.lastName)}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   inputProps={{ style: { textTransform: 'capitalize' } }}
                   sx={{ ...theme.typography.customInput }}
                 />
+                {touched.lastName && errors.lastName && (
+                  <FormHelperText error id="standard-weight-helper-text--register">
+                    {errors.lastName}
+                  </FormHelperText>
+                )}
               </Grid>
             </Grid>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-register">Email Address / Username</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-register">Email Address</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-register"
                 type="email"

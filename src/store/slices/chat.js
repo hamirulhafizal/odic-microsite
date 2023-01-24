@@ -46,7 +46,7 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function getUser(id) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/chat/users/id', { id });
       dispatch(slice.actions.getUserSuccess(response.data));
@@ -57,7 +57,7 @@ export function getUser(id) {
 }
 
 export function getUserChats(user) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post('/api/chat/filter', { user });
       dispatch(slice.actions.getUserChatsSuccess(response.data));
@@ -68,7 +68,7 @@ export function getUserChats(user) {
 }
 
 export function insertChat(chat) {
-  return async () => {
+  return async (dispatch) => {
     try {
       await axios.post('/api/chat/insert', chat);
     } catch (error) {
@@ -78,7 +78,7 @@ export function insertChat(chat) {
 }
 
 export function getUsers() {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get('/api/chat/users');
       dispatch(slice.actions.getUsersSuccess(response.data.users));

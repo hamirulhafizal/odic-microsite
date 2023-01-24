@@ -32,7 +32,7 @@ export const ApiProvider = ({ children }) => {
   const history = useRouter();
 
   useEffect(() => {
-    if (state.user == null) init();
+    if (state.user == null && typeof window !== 'undefined') init();
   }, [state.user]);
 
   const init = () => {
@@ -94,7 +94,8 @@ export const ApiProvider = ({ children }) => {
 
   const register = async (email, password, first_name, last_name) => {
     // todo: this flow need to be recode as it not verified\
-    const user_name = first_name + last_name;
+    const username = first_name + last_name;
+    const user_name = username.toLowerCase();
 
     const respond = await axios
       .post(`${BACKEND_PATH}/api/v1/user/register`, {
@@ -104,9 +105,10 @@ export const ApiProvider = ({ children }) => {
         password
       })
       .then((res) => {
-        login(email, password, user_name);
-        updateProfile(user_name, { firstName: first_name, lastName: last_name });
-        history.push('/login');
+        login(email, password, user_name).then((res) => {
+          updateProfile(user_name, { firstName: first_name, lastName: last_name });
+          history.push('/login');
+        });
 
         return res;
       })
@@ -133,7 +135,35 @@ export const ApiProvider = ({ children }) => {
     window.localStorage.removeItem('users');
   };
 
-  const resetPassword = (email) => console.log(email);
+  const resetPassword = async (user_name) => {
+    const respond = await axios
+      .get(`${BACKEND_PATH}/api/v1/user/reset/${user_name}`)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        // history.push('/register');
+        return err;
+      });
+    return respond;
+  };
+
+  const setPassword = async (user_name, temPass, password) => {
+    const respond = await axios
+      .post(`${BACKEND_PATH}/api/v1/user/set-password/${temPass}/${user_name}`, { password: password })
+      .then((res) => {
+        const { email } = res?.data;
+        login(email, password).then((res) => {
+          history.push('/listing');
+        });
+        return res;
+      })
+      .catch((err) => {
+        history.push('/login');
+        return err;
+      });
+    return respond;
+  };
 
   const getProfile = async (user_name) => {
     axiosInstance.defaults.headers['Authorization'] = 'Bearer ' + localStorage.getItem('access');
@@ -181,7 +211,7 @@ export const ApiProvider = ({ children }) => {
   }
 
   return (
-    <ApiContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile, getProfile }}>
+    <ApiContext.Provider value={{ ...state, login, logout, register, resetPassword, setPassword, updateProfile, getProfile }}>
       {children}
     </ApiContext.Provider>
   );
