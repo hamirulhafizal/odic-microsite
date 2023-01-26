@@ -89,7 +89,7 @@ const FooterPage = () => {
                 Term of Use
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={2}>
+            {/* <Grid item xs={12} sm={2}>
               <Typography variant="subtitle1" component="div" color="inherit">
                 SERVICES
               </Typography>
@@ -99,7 +99,7 @@ const FooterPage = () => {
               <Typography variant="subtitle2" component="div" color="inherit">
                 Property for Buy
               </Typography>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={3}>
               <Typography variant="subtitle1" component="div" color="inherit">
                 GET IN TOUCH WITH US

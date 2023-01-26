@@ -23,6 +23,8 @@ import {
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import AddLocationAltOutlinedIcon from '@mui/icons-material/AddLocationAltOutlined';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 // project imports
 import Logo from '../Logo';
@@ -102,15 +104,22 @@ const AppBar = ({ ...others }) => {
               <LogoSection />
             </Typography>
             <Stack direction="row" sx={{ display: { xs: 'none', sm: 'block' } }} spacing={2}>
-              <Button sx={{ color: 'white' }} component={Link} href="/posts">
+              {/* <Button sx={{ color: 'white' }} component={Link} href="/posts">
                 {'Post'}
-              </Button>
-
-              <Button sx={{ color: 'white' }} component={Link} onClick={user ? handleLogout : handleLogin}>
-                {user ? 'Logout' : 'Login'}
-              </Button>
+              </Button> */}
 
               <Button
+                sx={{ color: 'white' }}
+                variant="contained"
+                color="secondary"
+                endIcon={user ? <LogoutIcon /> : <LoginIcon />}
+                component={Link}
+                onClick={user ? handleLogout : handleLogin}
+              >
+                {user ? 'LOGOUT' : 'LOGIN'}
+              </Button>
+
+              {/* <Button
                 component={Link}
                 onClick={() => {
                   router.push('/listing');
@@ -122,7 +131,7 @@ const AppBar = ({ ...others }) => {
                 startIcon={<AddLocationAltOutlinedIcon />}
               >
                 Post Ads Property
-              </Button>
+              </Button> */}
             </Stack>
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
               {/* <Button
@@ -153,12 +162,12 @@ const AppBar = ({ ...others }) => {
                           <ListItemText primary={user ? 'Listing' : ''} />
                         </ListItemButton>
                       </Link>
-                      <Link style={{ textDecoration: 'none' }}>
+                      {/* <Link style={{ textDecoration: 'none' }}>
                         <ListItemButton component="a" href="/posts">
                           <ListItemIcon>{<BookOutlinedIcon />}</ListItemIcon>
                           <ListItemText primary={'Post'} />
                         </ListItemButton>
-                      </Link>
+                      </Link> */}
                       <Link style={{ textDecoration: 'none' }}>
                         <ListItemButton component="a" onClick={user ? handleLogout : handleLogin}>
                           <ListItemIcon>{user ? <IconLogout /> : <IconLogin />}</ListItemIcon>

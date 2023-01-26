@@ -73,9 +73,9 @@ const HeaderPage = () => {
                     lineHeight: 1.4
                   }}
                 >
-                  The Only Way to <br></br>Find
+                  Welcome to<br></br>
                   <Box component="span" variant="h2" color="inherit" sx={{ ml: 2, color: 'white' }}>
-                    YOUR CHOICE OF DREAM HOME
+                    ONE DREAM INVESTMENT CENTER
                   </Box>
                 </Typography>
               </motion.div>
@@ -101,8 +101,9 @@ const HeaderPage = () => {
                     lineHeight: 1.4
                   }}
                 >
-                  There are no excuses to get your own house. Everyone can own their dream house without any deposit and risk. Come & take a
-                  fast action. Don’t wait to buy property, you must buy first and wait.
+                  Are you looking to grow your wealth and secure your financial future? Look no further than ODIC. Don't miss out on the
+                  opportunity to grow your wealth and secure your financial future. Sign up for ODIC today and start taking control of your
+                  investments.
                 </Typography>
               </motion.div>
             </Grid>
@@ -125,12 +126,12 @@ const HeaderPage = () => {
                         <Button
                           sx={{ color: 'white' }}
                           component={Link}
-                          href={`/${agentLocal?.user_name}`}
+                          href={`/register`}
                           size="large"
                           variant="contained"
                           color="secondary"
                         >
-                          View Home List
+                          SIGN UP NOW
                         </Button>
                       </AnimateButton>
                     </Grid>

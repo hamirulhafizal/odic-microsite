@@ -310,10 +310,18 @@ export default function componentStyleOverrides(theme, borderRadius, outlinedFil
     MuiFormHelperText: {
       styleOverrides: {
         root: {
-          color: theme.palette.secondary.light
+          color: 'black'
         }
       }
     },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          display: 'flex'
+        }
+      }
+    },
+
     MuiButton: {
       styleOverrides: {
         root: {
