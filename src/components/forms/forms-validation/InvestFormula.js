@@ -44,7 +44,6 @@ const InvestFormula = ({ value }) => {
 
     if (value <= 10000) roi = 25;
     if (value > 1000) roi = 30;
-    console.log('roi', roi);
 
     return roi;
   };
@@ -71,7 +70,14 @@ const InvestFormula = ({ value }) => {
           }}
         >
           <Typography variant="h5">RM {numberWithCommas(value)}</Typography>
-          <Typography variant="h5">{value / 1000} Slot</Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              color: '#287F93'
+            }}
+          >
+            {value / 1000} Slot
+          </Typography>
         </Stack>
 
         <Stack
@@ -140,15 +146,16 @@ const InvestFormula = ({ value }) => {
                     </>
                   }
                 >
-                  <InfoOutlinedIcon sx={{ fontSize: '70%', p: 0, mr: 0.5 }} />
+                  <InfoOutlinedIcon sx={{ fontSize: '70%', p: 0, mr: 0.5, color: '#28933F' }} />
                 </HtmlTooltip>
               </IconButton>
             </ClickAwayListener>
             <Typography
-              variant="h3"
+              variant="h4"
               sx={{
                 position: 'relative',
-                top: '1px'
+                top: '1px',
+                color: '#28933F'
               }}
             >
               ROI {checkRoi(value)}%
@@ -165,7 +172,9 @@ const InvestFormula = ({ value }) => {
             width: 'inherit'
           }}
         >
-          <Typography variant="h5">Lock duration </Typography>
+          <Typography variant="h5" sx={{ color: '#B5A837' }}>
+            Lock duration{' '}
+          </Typography>
 
           <Typography variant="h5">14 Month</Typography>
         </Stack>

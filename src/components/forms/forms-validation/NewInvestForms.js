@@ -64,7 +64,6 @@ const NewInvestForms = () => {
           }}
         >
           <MainCard
-            // title="How much Slot would you like to invest ?"
             sx={{
               width: '100%',
               maxWidth: '300px',
@@ -84,25 +83,7 @@ const NewInvestForms = () => {
                 fullWidth
                 id="investVal"
                 name="investVal"
-                label={
-                  <>
-                    {/* <Stack flexDirection={'row'}> */}
-                    AMOUNT
-                    {/* <Typography variant="h3">{'AMOUNT'}</Typography> */}
-                    {/* <Typography
-                        variant="h4"
-                        sx={{
-                          pl: 2,
-                          // pr: 3,
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        {'Min 1 slot = RM1000'}
-                      </Typography> */}
-                    {/* </Stack> */}
-                  </>
-                }
+                label={<>AMOUNT</>}
                 type="number"
                 InputProps={{
                   startAdornment: <InputAdornment position="start">RM</InputAdornment>
