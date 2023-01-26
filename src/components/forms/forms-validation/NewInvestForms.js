@@ -24,7 +24,7 @@ import InvestFormula from './InvestFormula';
  * 'Enter your email'
  * yup.string Expected 0 arguments, but got 1 */
 const validationSchema = yup.object({
-  investVal: yup.number().min(1000, 'min 1 slot').max(1000000, 'max 1000 slot').required('Amount is required')
+  investVal: yup.number().min(1000, 'Min. 1 Slot').max(1000000, 'Max. 1000 Slot').required('Amount is required')
 });
 
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //

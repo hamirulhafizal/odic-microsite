@@ -101,9 +101,7 @@ const HeaderPage = () => {
                     lineHeight: 1.4
                   }}
                 >
-                  Are you looking to grow your wealth and secure your financial future? Look no further than ODIC. Don't miss out on the
-                  opportunity to grow your wealth and secure your financial future. Sign up for ODIC today and start taking control of your
-                  investments.
+                  {`Are you looking to grow your wealth and secure your financial future? Look no further than ODIC. Don't miss out on the opportunity to grow your wealth and secure your financial future. Sign up for ODIC today and start taking control of your investments.`}
                 </Typography>
               </motion.div>
             </Grid>
