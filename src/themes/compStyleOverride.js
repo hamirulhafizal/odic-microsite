@@ -300,6 +300,15 @@ export default function componentStyleOverrides(theme, borderRadius, outlinedFil
         }
       }
     },
+
+    MuiListItemText: {
+      styleOverrides: {
+        primary: {
+          color: 'white'
+        }
+      }
+    },
+
     MuiDialogTitle: {
       styleOverrides: {
         root: {

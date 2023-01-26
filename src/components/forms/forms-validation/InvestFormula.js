@@ -117,11 +117,18 @@ const InvestFormula = ({ value }) => {
                       <Stack
                         sx={{
                           pt: 2,
-                          color: 'white',
+
                           textAlign: 'center'
                         }}
                       >
-                        Return On Investment (ROI)
+                        <Typography
+                          variant="h5"
+                          sx={{
+                            color: 'white'
+                          }}
+                        >
+                          Return On Investment (ROI)
+                        </Typography>
                       </Stack>
 
                       <List
@@ -136,11 +143,11 @@ const InvestFormula = ({ value }) => {
                             flexDirection: 'column'
                           }}
                         >
-                          <ListItemText primary="RM10K below ROI 25%" />
+                          <ListItemText variant="span" primary="RM10K below ROI 25%" />
                           <br />
-                          <ListItemText primary="RM10-30K range ROI 27%" />
+                          <ListItemText variant="span" primary="RM10-30K range ROI 27%" />
                           <br />
-                          <ListItemText primary="RM30K above ROI 30%" />
+                          <ListItemText variant="span" primary="RM30K above ROI 30%" />
                         </ListItem>
                       </List>
                     </>

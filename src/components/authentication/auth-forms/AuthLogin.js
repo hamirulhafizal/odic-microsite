@@ -78,7 +78,7 @@ const JWTLogin = ({ loginProp, ...others }) => {
                 setStatus({ success: true, msg: 'success' });
                 setSubmitting(false);
               }
-              router.push(`/listing`);
+              router.push(`/board`);
             })
             .catch((err) => {
               const errJson = JSON.stringify(err);
