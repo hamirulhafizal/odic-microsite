@@ -15,14 +15,14 @@ const icons = {
 
 const dashboard = {
   id: 'dashboard',
-  title: <FormattedMessage id="dashboard" />,
+  title: <FormattedMessage id="Menu" />,
   type: 'group',
   children: [
     {
-      id: 'listing',
-      title: <FormattedMessage id="listing" />,
+      id: 'board',
+      title: <FormattedMessage id="Board" />,
       type: 'item',
-      url: '/listing/',
+      url: '/board/',
       icon: icons.IconListCheck,
       breadcrumbs: false
     }

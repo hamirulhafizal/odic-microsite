@@ -82,24 +82,16 @@ const BottomAppBar = () => {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
-    console.log('masuk');
-
     setOpen(newOpen);
   };
-
-  console.log('open', open);
 
   return (
     <>
       <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
         <Toolbar>
-          {/* <IconButton color="inherit" aria-label="open drawer">
-            <MenuIcon />
-          </IconButton> */}
-          <StyledFab color="secondary" aria-label="add" onClick={toggleDrawer(true)}>
-            <AddIcon />
+          <StyledFab id="ButtonAddInvest" color="secondary" aria-label="add" onClick={toggleDrawer(true)}>
+            <AddIcon sx={{ color: 'white' }} />
           </StyledFab>
-          {/* <Box sx={{ flexGrow: 1 }} /> */}
         </Toolbar>
       </AppBar>
 
