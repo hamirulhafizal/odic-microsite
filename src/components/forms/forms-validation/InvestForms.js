@@ -19,6 +19,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import InvestFormula from './InvestFormula';
+import { useRef } from 'react';
 
 /**
  * 'Enter your email'
@@ -31,6 +32,8 @@ const validationSchema = yup.object({
 
 const InvestForms = () => {
   const dispatch = useDispatch();
+
+  const refNumb = useRef(null);
 
   const formik = useFormik({
     initialValues: {
@@ -52,6 +55,9 @@ const InvestForms = () => {
     }
   });
 
+  console.log('refNumb', refNumb.current);
+  console.log('formik.values.investVal', typeof formik.values.investVal);
+
   return (
     <>
       <Stack direction={'column'}>
@@ -71,7 +77,7 @@ const InvestForms = () => {
               borderColor: 'transparent'
             }}
           >
-            <InvestFormula value={formik.values.investVal} />
+            {/* <InvestFormula value={formik.values.investVal == '' ? formik.values.investVal : 0} /> */}
           </MainCard>
         </Box>
 
@@ -79,14 +85,18 @@ const InvestForms = () => {
           <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
               <TextField
+                inputRef={refNumb}
                 focused
                 fullWidth
                 id="investVal"
                 name="investVal"
                 label={<>AMOUNT</>}
                 type="number"
-                inputProps={{
+                InputProps={{
                   startAdornment: <InputAdornment position="start">RM</InputAdornment>
+                }}
+                inputProps={{
+                  maxLength: 6
                 }}
                 InputLabelProps={{
                   shrink: true
@@ -95,7 +105,7 @@ const InvestForms = () => {
                 onChange={formik.handleChange}
                 error={formik.errors.investVal}
                 placeholder={1000}
-                helperText={ 
+                helperText={
                   formik.values.investVal >= 1000 && formik.values.investVal <= 1000000
                     ? `${formik.values.investVal / 1000} Slot`
                     : formik.errors.investVal
