@@ -89,7 +89,7 @@ const InvestFormula = ({ value }) => {
             width: 'inherit'
           }}
         >
-          <Typography variant="h3">RM {numberWithCommas(value * 0.33)}</Typography>
+          <Typography variant="h3">RM { numberWithCommas(value * 0.33)}</Typography>
           <Box
             sx={{
               display: 'flex',

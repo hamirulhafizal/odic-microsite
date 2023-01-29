@@ -476,35 +476,21 @@ const Listing = () => {
 
   return (
     <>
-      <MainCard title="Investment Board" content={false} contentSX={{ p: 0 }} sx={{ textAlign: 'center' }}>
+      <MainCard title="Investment Board" content={true} contentSX={{ p: 0 }} sx={{ textAlign: 'center' }}>
         {products?.length != 0 && (
           <CardContent>
-            <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                sx={{
-                  textAlign: `${matchDownSM ? 'start' : 'right'}`,
-
-                  display: 'flex',
-                  justifyContent: 'center'
-                }}
-              >
-                <Button
-                  onClick={() => {
-                    handleSwipe();
-                  }}
-                  variant="contained"
-                  color="secondary"
-                  sx={{ color: 'white' }}
-                  size="small"
-                  startIcon={<AddIcon sx={{ color: 'white' }} fontSize="small" />}
-                >
-                  START
-                </Button>
-              </Grid>
-            </Grid>
+            <Button
+              onClick={() => {
+                handleSwipe();
+              }}
+              variant="contained"
+              color="secondary"
+              sx={{ color: 'white' }}
+              size="small"
+              startIcon={<AddIcon sx={{ color: 'white' }} fontSize="small" />}
+            >
+              START
+            </Button>
           </CardContent>
         )}
       </MainCard>

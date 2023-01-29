@@ -35,7 +35,7 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
   const drawerBleeding = 0;
 
   return (
-    <Root>
+    <>
       <Global
         styles={{
           '.MuiDrawer-root > .MuiPaper-root': {
@@ -95,7 +95,7 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
           <NewInvestForms />
         </StyledBox>
       </SwipeableDrawer>
-    </Root>
+    </>
   );
 }
 
