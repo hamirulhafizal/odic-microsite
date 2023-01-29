@@ -65,6 +65,8 @@ import BottomAppBar from './BottomAppBar';
 import AddIcon from '@mui/icons-material/Add';
 const prodImage = '/assets/images/e-commerce';
 
+import ListIcon from '@mui/icons-material/List';
+
 // table sort
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -476,7 +478,26 @@ const Listing = () => {
 
   return (
     <>
-      <MainCard title="Investment Board" content={true} contentSX={{ p: 0 }} sx={{ textAlign: 'center' }}>
+      <MainCard
+        title={
+          <>
+            <Stack
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <ListIcon sx={{ mr: 1 }} />
+              INVESTMENT BOARD
+            </Stack>
+          </>
+        }
+        content={true}
+        contentSX={{ p: 0 }}
+        sx={{ textAlign: 'center' }}
+      >
         {products?.length != 0 && (
           <CardContent>
             <Button

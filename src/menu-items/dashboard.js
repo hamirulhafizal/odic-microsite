@@ -2,12 +2,14 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { IconDashboard, IconDeviceAnalytics, IconListCheck } from '@tabler/icons';
+import { IconDashboard, IconDeviceAnalytics, IconListCheck, IconList } from '@tabler/icons';
+import ListIcon from '@mui/icons-material/List';
 
 // constant
 const icons = {
   IconDashboard,
   IconDeviceAnalytics,
+  IconList,
   IconListCheck
 };
 
@@ -23,7 +25,7 @@ const dashboard = {
       title: <FormattedMessage id="Board" />,
       type: 'item',
       url: '/board/',
-      icon: icons.IconListCheck,
+      icon: icons.IconList,
       breadcrumbs: false
     }
   ]

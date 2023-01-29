@@ -10,7 +10,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
-import NewInvestForms from '../../components/forms/forms-validation/NewInvestForms';
+import InvestForms from '../../components/forms/forms-validation/InvestForms';
 
 const Root = styled('div')(({ theme }) => ({
   height: '100%',
@@ -56,6 +56,7 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
         ModalProps={{
           keepMounted: true
         }}
+        sx={{}}
       >
         <StyledBox
           sx={{
@@ -92,7 +93,7 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
             How much Slot would you like to invest ?
           </Typography>
           {/* <Skeleton variant="rectangular" height="100%" /> */}
-          <NewInvestForms />
+          <InvestForms />
         </StyledBox>
       </SwipeableDrawer>
     </>

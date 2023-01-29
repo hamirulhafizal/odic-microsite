@@ -35,6 +35,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoSection from 'layout/MainLayout/LogoSection';
 import useAuth from 'hooks/useAuth';
 import { useRouter } from 'next/router';
+import ListIcon from '@mui/icons-material/List';
 
 function ElevationScroll({ children, window }) {
   const theme = useTheme();
@@ -91,8 +92,8 @@ const AppBar = ({ ...others }) => {
     router.push('/login');
   };
 
-  const handleListing = () => {
-    router.push('/listing');
+  const handleboard = () => {
+    router.push('/board');
   };
 
   return (
@@ -125,9 +126,9 @@ const AppBar = ({ ...others }) => {
                   <Box sx={{ width: 'auto' }} role="presentation" onClick={drawerToggler(false)} onKeyDown={drawerToggler(false)}>
                     <List>
                       <Link style={{ textDecoration: 'none', display: `${!user && 'none'}` }}>
-                        <ListItemButton component="a" onClick={user ? handleListing : ''}>
-                          <ListItemIcon>{user ? <GridViewOutlinedIcon /> : ''}</ListItemIcon>
-                          <ListItemText primary={user ? 'Listing' : ''} />
+                        <ListItemButton component="a" onClick={user ? handleboard : ''}>
+                          <ListItemIcon>{user ? <ListIcon /> : ''}</ListItemIcon>
+                          <ListItemText primary={user ? 'Board' : ''} />
                         </ListItemButton>
                       </Link>
 

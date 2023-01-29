@@ -84,7 +84,7 @@ export const ApiProvider = ({ children }) => {
           }
         });
 
-        history.push('/listing');
+        history.push('/board');
 
         return res;
       });
@@ -130,6 +130,7 @@ export const ApiProvider = ({ children }) => {
 
     dispatch({ type: LOGOUT });
 
+    window.localStorage.removeItem('agent');
     window.localStorage.removeItem('access');
     window.localStorage.removeItem('refresh');
     window.localStorage.removeItem('users');

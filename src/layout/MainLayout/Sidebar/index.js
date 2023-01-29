@@ -69,6 +69,7 @@ const Sidebar = ({ window }) => {
             background: theme.palette.background.default,
             color: theme.palette.text.primary,
             borderRight: 'none',
+            height: '100vh',
             [theme.breakpoints.up('md')]: {
               top: '88px'
             }

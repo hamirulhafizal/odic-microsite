@@ -9,7 +9,8 @@ const slugify = (str) => {
 };
 
 const numberWithCommas = (x) => {
-  return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const b = Math.round(x);
+  return b?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 const filterByCategory = (param, objArray) => {

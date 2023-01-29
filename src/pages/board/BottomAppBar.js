@@ -87,7 +87,7 @@ const BottomAppBar = () => {
 
   return (
     <>
-      <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
+      <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0, zIndex: 1000 }}>
         <Toolbar>
           <StyledFab id="ButtonAddInvest" color="secondary" aria-label="add" onClick={toggleDrawer(true)}>
             <AddIcon sx={{ color: 'white' }} />

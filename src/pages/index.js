@@ -27,9 +27,7 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
   paddingTop: 30,
   overflowX: 'hidden',
   overflowY: 'clip',
-  height: '80%',
-  // backgroundImage: `url(${images0})`,
-  backgroundImage: `linear-gradient(180deg,rgb(255 255 255 / 75%),rgb(0 0 0 / 75%)), url(${images0})`,
+  backgroundImage: `linear-gradient(180deg,rgb(0 0 0 / 75%),rgb(0 0 0 / 75%)), url(${images0})`,
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'bottom',
@@ -64,7 +62,7 @@ const Landing = () => {
 
   return (
     <>
-      <HeaderWrapper id="home">
+      <HeaderWrapper id="home" sx={{ height: matchDownLG ? '90vh' : '80vh' }}>
         <AppBar />
         <Header />
       </HeaderWrapper>

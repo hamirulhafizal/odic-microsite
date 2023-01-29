@@ -102,13 +102,6 @@ export default function componentStyleOverrides(theme, borderRadius, outlinedFil
         }
       }
     },
-    MuiListItemText: {
-      styleOverrides: {
-        primary: {
-          color: theme.palette.text.dark
-        }
-      }
-    },
     MuiInputBase: {
       styleOverrides: {
         input: {
@@ -297,14 +290,6 @@ export default function componentStyleOverrides(theme, borderRadius, outlinedFil
         tooltip: {
           color: theme.palette.background.paper,
           background: theme.palette.text.primary
-        }
-      }
-    },
-
-    MuiListItemText: {
-      styleOverrides: {
-        primary: {
-          color: 'white'
         }
       }
     },

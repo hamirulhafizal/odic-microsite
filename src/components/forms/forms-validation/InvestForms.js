@@ -29,7 +29,7 @@ const validationSchema = yup.object({
 
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //
 
-const NewInvestForms = () => {
+const InvestForms = () => {
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -85,7 +85,7 @@ const NewInvestForms = () => {
                 name="investVal"
                 label={<>AMOUNT</>}
                 type="number"
-                InputProps={{
+                inputProps={{
                   startAdornment: <InputAdornment position="start">RM</InputAdornment>
                 }}
                 InputLabelProps={{
@@ -95,7 +95,7 @@ const NewInvestForms = () => {
                 onChange={formik.handleChange}
                 error={formik.errors.investVal}
                 placeholder={1000}
-                helperText={
+                helperText={ 
                   formik.values.investVal >= 1000 && formik.values.investVal <= 1000000
                     ? `${formik.values.investVal / 1000} Slot`
                     : formik.errors.investVal
@@ -127,4 +127,4 @@ const NewInvestForms = () => {
   );
 };
 
-export default NewInvestForms;
+export default InvestForms;

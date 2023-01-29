@@ -69,7 +69,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 const MainLayout = ({ children }) => {
   const theme = useTheme();
   const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
-
   const dispatch = useDispatch();
   const { drawerOpen } = useSelector((state) => state.menu);
   const { container } = useConfig();

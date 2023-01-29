@@ -48,9 +48,6 @@ Noop.propTypes = {
 function App({ Component, pageProps }) {
   const router = useRouter();
   const store = useStore(pageProps.initialReduxState);
-  const { userData } = useSelector((state) => state?.user);
-
-  const agent = userData?.userData[0];
 
   let Layout;
   switch (Component.Layout) {
