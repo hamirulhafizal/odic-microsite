@@ -18,21 +18,22 @@ import Paper from '@mui/material/Paper';
 
 import InvestForms from '../../components/forms/forms-validation/InvestForms';
 import BankAcc from 'components/forms/forms-validation/BankAcc';
+import AggrementForms from 'components/forms/forms-validation/AggrementForms';
 
 const steps = [
   {
-    label: 'How much Slot would you like to invest ?',
-    description: `For each ad campaign that you create, you can control how much.`,
+    label: 'How much would you like to invest ?',
+    description: `Make sure read all T&C before sign anything`,
     component: 'InvestForms'
   },
   {
-    label: 'Upload Recipt Bank Transfer',
-    description: 'An ad group contains one or more ads which target a shared set of keywords.',
+    label: 'Upload Receipt',
+    description: 'After transfer to company bank, kindlly upload the recepit by click the clip icon',
     component: 'BankAcc'
   },
   {
-    label: 'Create an ad',
-    description: `Try out different ad text to see what brings in the most customers`,
+    label: 'Approval',
+    description: `Your investment slot will be approved within 24hour working day`,
     component: 'Aggrement'
   }
 ];
@@ -132,12 +133,28 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
           <Stepper activeStep={activeStep} orientation="vertical">
             {steps.map((step, index) => (
               <Step key={step.label}>
-                <StepLabel optional={index === 2 ? <Typography variant="caption">Last step</Typography> : null}>{step.label}</StepLabel>
+                <StepLabel
+                  optional={index === 2 ? <Typography variant="caption">Last step</Typography> : null}
+                  sx={{
+                    textAlign: 'initial',
+                    '& .Mui-active': {
+                      color: 'black'
+                    }
+                  }}
+                >
+                  {step.label}
+                </StepLabel>
                 <StepContent>
-                  <Typography>{step.description}</Typography>
-                  {step.component == 'InvestForms' && <InvestForms handleNext={handleNext} />}
-                  {step.component == 'BankAcc' && <BankAcc handleNext={handleNext} />}
-                  {step.component == 'Aggrement' && <InvestForms handleNext={handleNext} />}
+                  <Typography
+                    sx={{
+                      textAlign: 'initial'
+                    }}
+                  >
+                    {step.description}
+                  </Typography>
+                  {step.component == 'InvestForms' && <InvestForms handleNext={handleNext} handleBack={handleBack} index={index} />}
+                  {step.component == 'BankAcc' && <BankAcc handleNext={handleNext} handleBack={handleBack} index={index} />}
+                  {step.component == 'Aggrement' && <AggrementForms handleNext={handleNext} handleBack={handleBack} index={index} />}
 
                   {/* <Box sx={{ mb: 2 }}>
                     <div>

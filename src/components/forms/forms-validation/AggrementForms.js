@@ -33,7 +33,7 @@ const validationSchema = yup.object({
 
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //
 
-const BankAcc = ({ handleNext, handleBack, index }) => {
+const AggrementForms = ({ handleNext, handleBack, index }) => {
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -72,7 +72,7 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
             sx={{
               width: '100%',
               maxWidth: '350px',
-              boxShadow: '1px 2px 5px -1px rgb(0 0 0 / 64%) !important',
+              boxShadow: '1px 5px 5px -1px rgb(0 0 0 / 64%) !important',
               borderColor: 'transparent'
             }}
           >
@@ -119,4 +119,4 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
   );
 };
 
-export default BankAcc;
+export default AggrementForms;

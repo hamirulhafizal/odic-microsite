@@ -30,7 +30,7 @@ const validationSchema = yup.object({
 
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //
 
-const InvestForms = ({ handleNext }) => {
+const InvestForms = ({ handleNext, handleBack, index }) => {
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -59,10 +59,10 @@ const InvestForms = ({ handleNext }) => {
       <Stack direction={'column'}>
         <Box
           sx={{
-            // pt: 2,
-            pb: 5,
+            pt: 2,
+            pb: 3,
             display: 'flex',
-            justifyContent: 'center'
+            justifyContent: 'start'
           }}
         >
           <MainCard
@@ -115,8 +115,15 @@ const InvestForms = ({ handleNext }) => {
             </Grid>
             <Grid item xs={12}>
               <Stack direction="column" justifyContent="flex-end">
-                <Box sx={{ pb: 1 }}>
-                  <FormControlLabel control={<Checkbox defaultChecked />} label={`By ticking this Box, your agreed with our T&C`} />
+                <Box sx={{ pb: 1, display: 'flex' }}>
+                  <FormControlLabel
+                    sx={{
+                      textAlign: 'initial'
+                    }}
+                    variant="caption"
+                    control={<Checkbox defaultChecked />}
+                    label={`By ticking this Box, your agreed with our T&C`}
+                  />
                 </Box>
                 <AnimateButton>
                   <Button
@@ -128,6 +135,15 @@ const InvestForms = ({ handleNext }) => {
                   >
                     NEXT
                   </Button>
+                  {/* <Button
+                    fullWidth
+                    endIcon={<ArrowForwardIcon />}
+                    variant="contained"
+                    type="submit"
+                    disabled={formik.values.investVal >= 1000 && formik.values.investVal <= 1000000 ? false : true}
+                  >
+                    NEXT
+                  </Button> */}
                 </AnimateButton>
               </Stack>
             </Grid>

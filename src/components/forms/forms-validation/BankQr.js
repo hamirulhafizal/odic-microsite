@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   ClickAwayListener,
   IconButton,
   List,
@@ -10,13 +9,10 @@ import {
   styled,
   Tooltip,
   tooltipClasses,
-  Typography,
-  Zoom
+  Typography
 } from '@mui/material';
 import React from 'react';
 
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { numberWithCommas } from 'utils/helper';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const HtmlTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(({ theme }) => ({
@@ -29,17 +25,8 @@ const HtmlTooltip = styled(({ className, ...props }) => <Tooltip {...props} clas
   }
 }));
 
-const BankQr = ({ value }) => {
-  const [open, setOpen] = React.useState(false);
+const BankQr = ({ value, children }) => {
   const [openBank, setOpenBank] = React.useState(false);
-
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
 
   const handleBankTooltipClose = () => {
     setOpenBank(false);
@@ -49,8 +36,6 @@ const BankQr = ({ value }) => {
     navigator.clipboard.writeText('25101200032810');
     setOpenBank(true);
   };
-
-  console.log('openBank', openBank);
 
   return (
     <>
@@ -73,16 +58,14 @@ const BankQr = ({ value }) => {
             width: 'inherit'
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              position: 'relative',
-              top: '1px',
-              color: '#28933F'
+          <img
+            src="assets/images/rhb-logo.png"
+            style={{
+              width: '30%',
+              height: 'auto'
             }}
-          >
-            RHB
-          </Typography>
+          />
+
           <Box
             sx={{
               display: 'flex',
@@ -112,7 +95,11 @@ const BankQr = ({ value }) => {
                 sx={{
                   backgroundColor: '#b5a837',
                   ml: 1,
-                  boxShadow: '0px 3px 1px -2px rgb(0 0 0/20%) , 0px 2px 2px 0px rgb(0 0 0/14%) , 0px 1px 5px 0px rgb(0 0 0/12%)'
+                  boxShadow: '0px 3px 1px -2px rgb(0 0 0/20%) , 0px 2px 2px 0px rgb(0 0 0/14%) , 0px 1px 5px 0px rgb(0 0 0/12%)',
+                  '&:hover': {
+                    backgroundColor: 'green',
+                    color: 'white !important'
+                  }
                 }}
                 onClick={() => {
                   handleBankTooltipOpen();
@@ -143,7 +130,7 @@ const BankQr = ({ value }) => {
                     sx={{
                       color: 'white',
                       '&:hover': {
-                        color: '#b5a837'
+                        color: 'white !important'
                       }
                     }}
                     fontSize="small"
@@ -161,7 +148,8 @@ const BankQr = ({ value }) => {
             alignItems: 'center',
             justifyContent: 'space-between',
             width: 'inherit',
-            textAlign: 'start'
+            textAlign: 'start',
+            pt: 2
           }}
         >
           <Box>
@@ -199,6 +187,8 @@ const BankQr = ({ value }) => {
               </ListItem>
             </List>
           </Box>
+
+          {children}
         </Stack>
       </Box>
     </>
