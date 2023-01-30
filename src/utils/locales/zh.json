@@ -1,7 +1,9 @@
 {
   "dashboard": "资讯主页",
 
-  "listing":"Listing",
+  "listing": "Listing",
+  "Board": "board",
+  "Menu": "menu",
 
   "default": "默认",
   "analytics": "分析工具",

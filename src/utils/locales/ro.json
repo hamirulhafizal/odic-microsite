@@ -1,7 +1,9 @@
 {
   "dashboard": "Tabloul de bord",
 
-  "listing":"Listing",
+  "listing": "Listing",
+  "Board": "board",
+  "Menu": "menu",
 
   "default": "Mod implicit",
   "analytics": "Analize",

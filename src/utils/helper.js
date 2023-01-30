@@ -10,7 +10,7 @@ const slugify = (str) => {
 
 const numberWithCommas = (x) => {
   return x
-    ?.toFixed(3)
+    ?.toFixed(2)
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };

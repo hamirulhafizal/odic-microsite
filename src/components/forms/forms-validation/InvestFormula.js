@@ -69,9 +69,9 @@ const InvestFormula = ({ value }) => {
             width: 'inherit'
           }}
         >
-          <Typography variant="h5">RM {numberWithCommas(value)}</Typography>
+          <Typography variant="h6">RM {numberWithCommas(value)}</Typography>
           <Typography
-            variant="h5"
+            variant="h6"
             sx={{
               color: '#287F93'
             }}
@@ -89,7 +89,14 @@ const InvestFormula = ({ value }) => {
             width: 'inherit'
           }}
         >
-          <Typography variant="h3">RM {numberWithCommas(value * 0.33)}</Typography>
+          <Typography
+            variant="h3"
+            sx={{
+              textAlign: 'start'
+            }}
+          >
+            RM {numberWithCommas(value * 0.33)}
+          </Typography>
           <Box
             sx={{
               display: 'flex',
@@ -140,7 +147,8 @@ const InvestFormula = ({ value }) => {
                           disablePadding
                           sx={{
                             textAlign: 'center',
-                            flexDirection: 'column'
+                            flexDirection: 'column',
+                            color: 'white'
                           }}
                         >
                           <ListItemText variant="span" primary="RM10K below ROI 25%" />
@@ -158,7 +166,7 @@ const InvestFormula = ({ value }) => {
               </IconButton>
             </ClickAwayListener>
             <Typography
-              variant="h4"
+              variant="h6"
               sx={{
                 position: 'relative',
                 top: '1px',
@@ -179,11 +187,11 @@ const InvestFormula = ({ value }) => {
             width: 'inherit'
           }}
         >
-          <Typography variant="h5" sx={{ color: '#B5A837' }}>
+          <Typography variant="h6" sx={{ color: '#B5A837' }}>
             Lock duration{' '}
           </Typography>
 
-          <Typography variant="h5">14 Month</Typography>
+          <Typography variant="h6">14 Month</Typography>
         </Stack>
       </Box>
     </>

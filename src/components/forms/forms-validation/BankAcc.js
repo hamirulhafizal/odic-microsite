@@ -20,6 +20,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import InvestFormula from './InvestFormula';
 import { useRef } from 'react';
+import BankQr from './BankQr';
 
 /**
  * 'Enter your email'
@@ -30,7 +31,7 @@ const validationSchema = yup.object({
 
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //
 
-const InvestForms = ({ handleNext }) => {
+const BankAcc = ({ handleNext }) => {
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -73,14 +74,18 @@ const InvestForms = ({ handleNext }) => {
               borderColor: 'transparent'
             }}
           >
-            <InvestFormula value={formik.values.investVal != '' ? formik.values.investVal : 0} />
+            <BankQr />
           </MainCard>
         </Box>
 
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
-              <TextField
+              <Button variant="contained" component="label">
+                Upload
+                <input hidden accept="image/*" multiple type="file" />
+              </Button>
+              {/* <TextField
                 autoFocus={true}
                 focused
                 fullWidth
@@ -111,13 +116,10 @@ const InvestForms = ({ handleNext }) => {
                 onInput={(e) => {
                   e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 8);
                 }}
-              />
+              /> */}
             </Grid>
             <Grid item xs={12}>
               <Stack direction="column" justifyContent="flex-end">
-                <Box sx={{ pb: 1 }}>
-                  <FormControlLabel control={<Checkbox defaultChecked />} label={`By ticking this Box, your agreed with our T&C`} />
-                </Box>
                 <AnimateButton>
                   <Button
                     fullWidth
@@ -138,4 +140,4 @@ const InvestForms = ({ handleNext }) => {
   );
 };
 
-export default InvestForms;
+export default BankAcc;

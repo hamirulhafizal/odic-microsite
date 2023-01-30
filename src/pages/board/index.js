@@ -490,7 +490,7 @@ const Listing = () => {
               }}
             >
               <ListIcon sx={{ mr: 1 }} />
-              INVESTMENT BOARD
+              <Typography variant="h4">INVESTMENT BOARD</Typography>
             </Stack>
           </>
         }
@@ -500,7 +500,7 @@ const Listing = () => {
       >
         {products?.length != 0 && (
           <CardContent>
-            <Button
+            {/* <Button
               onClick={() => {
                 handleSwipe();
               }}
@@ -511,7 +511,41 @@ const Listing = () => {
               startIcon={<AddIcon sx={{ color: 'white' }} fontSize="small" />}
             >
               START
-            </Button>
+            </Button> */}
+            <Stack
+              direction="column"
+              sx={{
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Typography
+                variant="h4"
+                onClick={() => {
+                  handleSwipe();
+                }}
+              >
+                Start
+              </Typography>
+              <IconButton
+                onClick={() => {
+                  handleSwipe();
+                }}
+                aria-label="delete"
+                sx={{
+                  mt: 1,
+                  maxWidth: 'max-content',
+                  backgroundColor: '#b5a837',
+                  boxShadow: '0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%)',
+                  '&:hover': {
+                    backgroundColor: '#b5a837'
+                  }
+                }}
+                size="small"
+              >
+                <AddIcon sx={{ color: 'white' }} fontSize="small" />
+              </IconButton>
+            </Stack>
           </CardContent>
         )}
       </MainCard>

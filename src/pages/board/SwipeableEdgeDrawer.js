@@ -10,7 +10,32 @@ import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+import Paper from '@mui/material/Paper';
+
 import InvestForms from '../../components/forms/forms-validation/InvestForms';
+import BankAcc from 'components/forms/forms-validation/BankAcc';
+
+const steps = [
+  {
+    label: 'How much Slot would you like to invest ?',
+    description: `For each ad campaign that you create, you can control how much.`,
+    component: 'InvestForms'
+  },
+  {
+    label: 'Upload Recipt Bank Transfer',
+    description: 'An ad group contains one or more ads which target a shared set of keywords.',
+    component: 'BankAcc'
+  },
+  {
+    label: 'Create an ad',
+    description: `Try out different ad text to see what brings in the most customers`,
+    component: 'Aggrement'
+  }
+];
 
 const Root = styled('div')(({ theme }) => ({
   height: '100%',
@@ -34,12 +59,26 @@ const Puller = styled(Box)(({ theme }) => ({
 function SwipeableEdgeDrawer({ open, handleToggle }) {
   const drawerBleeding = 0;
 
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
   return (
     <>
       <Global
         styles={{
           '.MuiDrawer-root > .MuiPaper-root': {
-            height: `calc(80% - ${drawerBleeding}px)`,
+            height: `calc(95% - ${drawerBleeding}px)`,
             overflow: 'visible',
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10
@@ -68,7 +107,8 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
             right: 0,
             left: 0,
             pt: 5,
-            textAlign: 'center'
+            textAlign: 'center',
+            zIndex: 1
           }}
         >
           <Puller />
@@ -89,11 +129,44 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
             textAlign: 'center'
           }}
         >
-          <Typography variant="h3" sx={{ color: 'text.secondary' }}>
+          <Stepper activeStep={activeStep} orientation="vertical">
+            {steps.map((step, index) => (
+              <Step key={step.label}>
+                <StepLabel optional={index === 2 ? <Typography variant="caption">Last step</Typography> : null}>{step.label}</StepLabel>
+                <StepContent>
+                  <Typography>{step.description}</Typography>
+                  {step.component == 'InvestForms' && <InvestForms handleNext={handleNext} />}
+                  {step.component == 'BankAcc' && <BankAcc handleNext={handleNext} />}
+                  {step.component == 'Aggrement' && <InvestForms handleNext={handleNext} />}
+
+                  {/* <Box sx={{ mb: 2 }}>
+                    <div>
+                      <Button variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
+                        {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                      </Button>
+                      <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                        Back
+                      </Button>
+                    </div>
+                  </Box> */}
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+          {activeStep === steps.length && (
+            <Paper square elevation={0} sx={{ p: 3 }}>
+              <Typography>All steps completed - you&apos;re finished</Typography>
+              <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                Reset
+              </Button>
+            </Paper>
+          )}
+
+          {/* <Typography variant="h3" sx={{ color: 'text.secondary' }}>
             How much Slot would you like to invest ?
-          </Typography>
+          </Typography> */}
           {/* <Skeleton variant="rectangular" height="100%" /> */}
-          <InvestForms />
+          {/* <InvestForms handleBank={handleBank} /> */}
         </StyledBox>
       </SwipeableDrawer>
     </>
