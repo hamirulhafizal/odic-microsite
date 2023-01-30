@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   ClickAwayListener,
   IconButton,
@@ -58,11 +59,26 @@ const BankQr = ({ value, children }) => {
             width: 'inherit'
           }}
         >
-          <img
+          <Typography
+            variant="h5"
+            sx={{
+              backgroundColor: 'white',
+              color: 'black',
+              fontWeight: 'bold',
+              '&:hover': {
+                backgroundColor: 'white'
+              }
+            }}
+          >
+            Bank Account No:
+          </Typography>
+          <Avatar
             src="assets/images/rhb-logo.png"
             style={{
               width: '30%',
-              height: 'auto'
+              height: 'auto',
+              borderRadius: '0px',
+              backgroundColor: 'transparent'
             }}
           />
 

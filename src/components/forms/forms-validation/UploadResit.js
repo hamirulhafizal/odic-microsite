@@ -68,17 +68,9 @@ const UploadResit = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Stack directiom="column">
-            <Typography variant="subtitle2" align="center">
-              Upload/Change Your Profile Image <br /> *Below 1MB
-            </Typography>
-            <FormHelperText sx={{ textAlign: 'center' }} error>
-              {message}
-            </FormHelperText>
-          </Stack>
-        </Grid>
-
-        <Grid item xs={12}>
+          <Typography variant="subtitle2" align="start" sx={{ pt: 2 }}>
+            *Upload image below 1MB
+          </Typography>
           <AnimateButton>
             <InputLabel htmlFor="photo">
               <Input
@@ -95,6 +87,12 @@ const UploadResit = () => {
               <Button fullWidth endIcon={<AttachFileIcon />} color="secondary" sx={{ color: 'white' }} variant="contained" component="span">
                 Upload
               </Button>
+
+              <Stack directiom="column">
+                <FormHelperText sx={{ textAlign: 'center' }} error>
+                  {photo !== undefined && message}
+                </FormHelperText>
+              </Stack>
             </InputLabel>
           </AnimateButton>
         </Grid>
@@ -107,47 +105,71 @@ const UploadResit = () => {
               alignItems: 'center',
               flexDirection: 'column',
               position: 'relative',
-              top: '-15%',
               width: 'fit-content'
             }}
           >
             {avatarPreview && (
               <>
-                <ZoomInIcon
-                  sx={{
-                    position: 'relative',
-                    top: '80px',
-                    zIndex: 10,
-                    color: 'white',
-                    left: '3px'
-                  }}
-                />
-
                 <IconButton
                   color="secondary"
-                  sx={{ width: '0px', position: 'relative', top: '18px', zIndex: 1, left: '32px' }}
                   variant="contained"
                   size="small"
                   aria-label="delete"
+                  onClick={handleClickOpen}
+                  sx={{
+                    // width: '50%',
+                    position: 'relative',
+                    top: '18px',
+                    zIndex: 1,
+                    left: '32px',
+                    width: '100px',
+                    height: '100px',
+                    backgroundSize: 'contain',
+                    borderRadius: '0px',
+                    backgroundImage: `url(${avatarPreview})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'contain',
+                    backgroundColor: 'black',
+                    backgroundPosition: 'center'
+                  }}
                 >
-                  <CancelIcon
+                  <ZoomInIcon
+                    onClick={handleClickOpen}
                     sx={{
-                      backgroundColor: 'white',
-                      borderRadius: '50%'
+                      position: 'relative',
+                      // top: '80px',
+                      zIndex: 10,
+                      color: 'black',
+                      left: '3px'
                     }}
                   />
                 </IconButton>
-                <Avatar
-                  onClick={handleClickOpen}
-                  alt={user?.nickname}
-                  src={avatarPreview}
+
+                <CancelIcon
+                  onClick={(e) => {
+                    setFieldImgValue(undefined);
+                    setAvatarPreview('');
+                  }}
                   sx={{
-                    width: 62,
-                    height: 62,
-                    borderRadius: '5%',
-                    filter: 'brightness(0.5)'
+                    backgroundColor: 'white',
+                    borderRadius: '50%',
+                    position: 'relative',
+                    top: '-45px',
+                    left: '45px'
                   }}
                 />
+
+                {/* <Avatar
+                onClick={handleClickOpen}
+                alt={user?.nickname}
+                src={avatarPreview}
+                sx={{
+                  width: 62,
+                  height: 62,
+                  borderRadius: '5%',
+                  filter: 'brightness(0.5)'
+                }}
+              /> */}
               </>
             )}
           </Box>
@@ -161,7 +183,8 @@ const UploadResit = () => {
         TransitionComponent={Transition}
         sx={{
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          backgroundColor: 'black'
         }}
       >
         <IconButton
@@ -179,15 +202,16 @@ const UploadResit = () => {
             }}
           />
         </IconButton>
-        <img
+        <Avatar
           src={avatarPreview}
           style={{
             height: 'max-content',
             width: '100%',
             position: 'relative',
-            top: '1%'
+            top: '1%',
+            borderRadius: '0px'
           }}
-        ></img>
+        />
       </Dialog>
     </>
   );

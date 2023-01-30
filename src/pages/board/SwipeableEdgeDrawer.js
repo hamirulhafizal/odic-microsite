@@ -130,7 +130,14 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
             textAlign: 'center'
           }}
         >
-          <Stepper activeStep={activeStep} orientation="vertical">
+          <Stepper
+            activeStep={activeStep}
+            orientation="vertical"
+            sx={{
+              position: 'relative',
+              top: '2%'
+            }}
+          >
             {steps.map((step, index) => (
               <Step key={step.label}>
                 <StepLabel
@@ -178,12 +185,6 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
               </Button>
             </Paper>
           )}
-
-          {/* <Typography variant="h3" sx={{ color: 'text.secondary' }}>
-            How much Slot would you like to invest ?
-          </Typography> */}
-          {/* <Skeleton variant="rectangular" height="100%" /> */}
-          {/* <InvestForms handleBank={handleBank} /> */}
         </StyledBox>
       </SwipeableDrawer>
     </>

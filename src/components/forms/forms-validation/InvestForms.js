@@ -69,7 +69,7 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
             sx={{
               width: '100%',
               maxWidth: '500px',
-              boxShadow: '1px 5px 5px -1px rgb(0 0 0 / 64%) !important',
+              boxShadow: '1px 2px 5px -1px rgb(0 0 0 / 64%) !important',
               borderColor: 'transparent'
             }}
           >
