@@ -21,8 +21,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import InvestFormula from './InvestFormula';
 import { useRef } from 'react';
 import BankQr from './BankQr';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import UploadResit from './UploadResit';
 
 /**
  * 'Enter your email'
@@ -62,8 +62,7 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
       <Stack direction={'column'}>
         <Box
           sx={{
-            pt: 2,
-            pb: 5,
+            py: 2,
             display: 'flex',
             justifyContent: 'center'
           }}
@@ -71,13 +70,13 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
           <MainCard
             sx={{
               width: '100%',
-              maxWidth: '350px',
+              maxWidth: '500px',
               boxShadow: '1px 2px 5px -1px rgb(0 0 0 / 64%) !important',
               borderColor: 'transparent'
             }}
           >
             <BankQr>
-              <form
+              {/* <form
                 onSubmit={formik.handleSubmit}
                 style={{
                   width: '100%'
@@ -87,7 +86,8 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
                   Upload
                   <input hidden accept="image/*" multiple type="file" />
                 </Button>
-              </form>
+              </form> */}
+              <UploadResit />
             </BankQr>
           </MainCard>
         </Box>

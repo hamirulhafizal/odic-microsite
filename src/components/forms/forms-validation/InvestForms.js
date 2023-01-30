@@ -68,7 +68,7 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
           <MainCard
             sx={{
               width: '100%',
-              maxWidth: '350px',
+              maxWidth: '500px',
               boxShadow: '1px 5px 5px -1px rgb(0 0 0 / 64%) !important',
               borderColor: 'transparent'
             }}
