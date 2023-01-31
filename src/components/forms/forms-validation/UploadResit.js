@@ -1,16 +1,30 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
 // material-ui
-import { Avatar, Button, FormHelperText, Grid, InputLabel, Typography, Stack, Box, IconButton, Dialog, Slide } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  Typography,
+  Stack,
+  Box,
+  IconButton,
+  Dialog,
+  Slide,
+  CircularProgress
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import useAuth from 'hooks/useAuth';
 import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import accountReducer from 'store/accountReducer';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import CloseIcon from '@mui/icons-material/Close';
 import CancelIcon from '@mui/icons-material/Cancel';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import DoneIcon from '@mui/icons-material/Done';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const Input = styled('input')({
   display: 'none'
@@ -20,14 +34,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const UploadResit = () => {
+const UploadResit = ({ handlePreviewImg }) => {
   const { updateProfile, user } = useAuth();
   const [photo, setFieldImgValue] = useState(undefined);
   const [message, setMessage] = useState('');
   const [avatarPreview, setAvatarPreview] = useState('');
-  const [state, dispatch] = useReducer(accountReducer);
+  const [isSuccess, setSuccessMessage] = useState();
 
   const [open, setOpen] = useState(false);
+  const [isSubmit, setSubmit] = useState(false);
+  const [isLoading, setLoding] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -45,59 +61,120 @@ const UploadResit = () => {
         setMessage('');
         const formData = new FormData();
         formData.append('photo', photo);
-        // const response = await updateProfile(user?.user_name, formData).then((res) => {});
+
+        if (isSubmit) {
+          await updateProfile(user?.user_name, formData)
+            .then((res) => {
+              console.log('res-->', res);
+              setLoding(false);
+              setFieldImgValue(undefined);
+              setAvatarPreview('');
+              handlePreviewImg(true);
+              setSubmit(false);
+              setSuccessMessage('UPLOAD');
+            })
+            .catch((err) => {
+              console.log('err--->', err);
+              setMessage('Something when wrong, please try again');
+              setLoding(false);
+              setFieldImgValue(undefined);
+              setAvatarPreview('');
+              handlePreviewImg(false);
+              setSubmit(false);
+            });
+        }
       }
     }
     if (photo !== undefined) {
       putDataProfile();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photo]);
+  }, [photo, isSubmit]);
 
   const preViewImage = (e) => {
     const fileReader = new FileReader();
     fileReader.onload = () => {
       if (fileReader.readyState === 2) {
         setAvatarPreview(fileReader.result);
+        // handlePreviewImg(true);
       }
     };
     fileReader.readAsDataURL(e.target.files[0]);
   };
 
+  console.log('isSubmit', isSubmit);
+
   return (
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="subtitle2" align="start" sx={{ pt: 2 }}>
-            *Upload image below 1MB
-          </Typography>
+          {!avatarPreview && isSuccess == null && (
+            <Typography variant="subtitle2" align="start" sx={{ pt: 2 }}>
+              *Upload image below 1MB
+            </Typography>
+          )}
           <AnimateButton>
             <InputLabel htmlFor="photo">
-              <Input
-                accept="image/*"
-                id="photo"
-                type="file"
-                name="photo"
-                label="photo"
-                onChange={(e) => {
-                  setFieldImgValue(e.target.files[0]);
-                  preViewImage(e);
-                }}
-              />
-              <Button fullWidth endIcon={<AttachFileIcon />} color="secondary" sx={{ color: 'white' }} variant="contained" component="span">
-                Upload
-              </Button>
+              {!avatarPreview && isSuccess == null && (
+                <>
+                  <Input
+                    accept="image/*"
+                    id="photo"
+                    type="file"
+                    name="photo"
+                    label="photo"
+                    onChange={(e) => {
+                      setFieldImgValue(e.target.files[0]);
+                      preViewImage(e);
+                    }}
+                  />
+                  <Button
+                    endIcon={<AttachFileIcon />}
+                    color="secondary"
+                    sx={{ color: 'white' }}
+                    variant="contained"
+                    size="small"
+                    component="span"
+                  >
+                    Upload
+                  </Button>
+                </>
+              )}
 
               <Stack directiom="column">
                 <FormHelperText sx={{ textAlign: 'center' }} error>
                   {photo !== undefined && message}
                 </FormHelperText>
+
+                {isSuccess && (
+                  <Button
+                    endIcon={<CheckCircleOutlineIcon />}
+                    sx={{
+                      '&.Mui-disabled': {
+                        color: 'white',
+                        backgroundColor: 'green',
+                        opacity: 0.5
+                      }
+                    }}
+                    variant="contained"
+                    size="medium"
+                    disabled
+                  >
+                    {isSuccess}
+                  </Button>
+                )}
               </Stack>
             </InputLabel>
           </AnimateButton>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            pt: '0px !important'
+          }}
+        >
           <Box
             sx={{
               display: 'flex',
@@ -117,11 +194,9 @@ const UploadResit = () => {
                   aria-label="delete"
                   onClick={handleClickOpen}
                   sx={{
-                    // width: '50%',
                     position: 'relative',
                     top: '18px',
                     zIndex: 1,
-                    left: '32px',
                     width: '100px',
                     height: '100px',
                     backgroundSize: 'contain',
@@ -130,17 +205,25 @@ const UploadResit = () => {
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'contain',
                     backgroundColor: 'black',
-                    backgroundPosition: 'center'
+                    backgroundPosition: 'center',
+                    '&:hover': {
+                      backgroundColor: 'black'
+                    }
                   }}
                 >
                   <ZoomInIcon
                     onClick={handleClickOpen}
                     sx={{
+                      p: 1,
                       position: 'relative',
-                      // top: '80px',
+                      backgroundColor: 'black',
+                      borderRadius: '50px',
                       zIndex: 10,
-                      color: 'black',
-                      left: '3px'
+                      color: 'white',
+                      left: '3px',
+                      width: '35px',
+                      height: '35px',
+                      opacity: '0.5'
                     }}
                   />
                 </IconButton>
@@ -149,30 +232,38 @@ const UploadResit = () => {
                   onClick={(e) => {
                     setFieldImgValue(undefined);
                     setAvatarPreview('');
+                    handlePreviewImg(false);
                   }}
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: '50%',
                     position: 'relative',
-                    top: '-45px',
-                    left: '45px'
+                    zIndex: 1,
+                    top: '-91px',
+                    left: '48px',
+                    color: 'red'
                   }}
                 />
-
-                {/* <Avatar
-                onClick={handleClickOpen}
-                alt={user?.nickname}
-                src={avatarPreview}
-                sx={{
-                  width: 62,
-                  height: 62,
-                  borderRadius: '5%',
-                  filter: 'brightness(0.5)'
-                }}
-              /> */}
               </>
             )}
           </Box>
+
+          {avatarPreview && (
+            <Button
+              onClick={() => {
+                setSubmit(true);
+                setLoding(true);
+              }}
+              fullwidth
+              endIcon={isLoading ? <CircularProgress size={15} sx={{ color: 'white' }} /> : <SendOutlinedIcon />}
+              color="secondary"
+              sx={{ color: 'white' }}
+              variant="contained"
+              component="span"
+            >
+              {isLoading ? 'loading' : 'submit'}
+            </Button>
+          )}
         </Grid>
       </Grid>
 
@@ -184,21 +275,28 @@ const UploadResit = () => {
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          backgroundColor: 'black'
+          '.MuiDialog-paper': {
+            backgroundColor: 'black',
+            width: '100vw',
+            display: 'flex',
+            justifyContent: 'start',
+            alignItems: 'center'
+          }
         }}
       >
         <IconButton
           color="secondary"
           sx={{ position: 'relative' }}
           variant="contained"
-          size="small"
+          size="large"
           aria-label="delete"
           onClick={handleClose}
         >
           <CancelIcon
             sx={{
               backgroundColor: 'white',
-              borderRadius: '50%'
+              borderRadius: '50%',
+              color: 'black'
             }}
           />
         </IconButton>
@@ -209,7 +307,8 @@ const UploadResit = () => {
             width: '100%',
             position: 'relative',
             top: '1%',
-            borderRadius: '0px'
+            borderRadius: '0px',
+            backgroundColor: 'black'
           }}
         />
       </Dialog>

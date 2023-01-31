@@ -1,4 +1,3 @@
-
 /* @tailwind base; */
 
 /* Write your own custom base styles here */
@@ -14,7 +13,6 @@
 /* Stop purging. */
 
 /* Your own custom utilities */
-
 
 .has-text-align-left {
   @apply text-left;
@@ -46,8 +44,8 @@
   @apply m-0;
 }
 
-figure{
-  margin: 0
+figure {
+  margin: 0;
 }
 .wp-block-image img {
   @apply max-w-full my-5 text-center w-full rounded-md h-auto;
@@ -112,9 +110,6 @@ figure{
   @apply grid grid-cols-2 gap-4;
 }
 
-
-
-
 html,
 body {
   padding: 0;
@@ -133,7 +128,7 @@ a {
 }
 
 .card {
-padding: unset;
+  padding: unset;
 }
 
 .card img {
@@ -143,4 +138,11 @@ padding: unset;
 
 .card:hover img {
   transform: scale(1.2);
+}
+
+.sigCanvas {
+  width: 90vw;
+  height: 70vh;
+  background: white;
+  border-radius: 10px;
 }

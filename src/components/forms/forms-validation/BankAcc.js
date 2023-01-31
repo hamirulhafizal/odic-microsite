@@ -19,7 +19,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import InvestFormula from './InvestFormula';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import BankQr from './BankQr';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import UploadResit from './UploadResit';
@@ -35,6 +35,12 @@ const validationSchema = yup.object({
 
 const BankAcc = ({ handleNext, handleBack, index }) => {
   const dispatch = useDispatch();
+
+  const [isImg, setImg] = useState(false);
+
+  const handlePreviewImg = (state) => {
+    setImg(state);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -76,18 +82,7 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
             }}
           >
             <BankQr>
-              {/* <form
-                onSubmit={formik.handleSubmit}
-                style={{
-                  width: '100%'
-                }}
-              >
-                <Button fullWidth variant="contained" component="label" type="submit" endIcon={<AttachFileIcon />} sx={{ mt: 2 }}>
-                  Upload
-                  <input hidden accept="image/*" multiple type="file" />
-                </Button>
-              </form> */}
-              <UploadResit />
+              <UploadResit handlePreviewImg={handlePreviewImg} />
             </BankQr>
           </MainCard>
         </Box>
@@ -106,7 +101,7 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
               </Button>
             </AnimateButton>
             <AnimateButton>
-              <Button endIcon={<ArrowForwardIcon />} variant="contained" type="submit" onClick={handleNext}>
+              <Button disabled={isImg ? false : true} endIcon={<ArrowForwardIcon />} variant="contained" type="submit" onClick={handleNext}>
                 NEXT
               </Button>
 

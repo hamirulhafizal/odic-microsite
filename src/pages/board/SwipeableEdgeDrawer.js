@@ -27,12 +27,12 @@ const steps = [
     component: 'InvestForms'
   },
   {
-    label: 'Upload Receipt',
+    label: 'Upload Bank Transfer',
     description: 'After transfer to company bank, kindlly upload the recepit by click the clip icon',
     component: 'BankAcc'
   },
   {
-    label: 'Approval',
+    label: 'Sign Aggrement',
     description: `Your investment slot will be approved within 24hour working day`,
     component: 'Aggrement'
   }

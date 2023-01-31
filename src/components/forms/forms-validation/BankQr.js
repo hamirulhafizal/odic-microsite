@@ -65,6 +65,7 @@ const BankQr = ({ value, children }) => {
               backgroundColor: 'white',
               color: 'black',
               fontWeight: 'bold',
+              pb: 1,
               '&:hover': {
                 backgroundColor: 'white'
               }
@@ -90,7 +91,7 @@ const BankQr = ({ value, children }) => {
             }}
           >
             <Typography
-              variant="h4"
+              variant="h3"
               sx={{
                 backgroundColor: 'white',
                 color: 'black',
@@ -105,7 +106,7 @@ const BankQr = ({ value, children }) => {
 
             <ClickAwayListener onClickAway={handleBankTooltipClose}>
               <IconButton
-                size="small"
+                size={"small"}
                 aria-label="delete"
                 variant="contained"
                 sx={{

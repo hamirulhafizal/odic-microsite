@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { useDispatch } from 'store';
 
 // material-ui
@@ -19,7 +20,6 @@ import LinkIcon from '@mui/icons-material/Link';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import InvestFormula from './InvestFormula';
-import { useRef } from 'react';
 
 /**
  * 'Enter your email'
@@ -32,6 +32,12 @@ const validationSchema = yup.object({
 
 const InvestForms = ({ handleNext, handleBack, index }) => {
   const dispatch = useDispatch();
+
+  const [isChecked, setCheckBox] = useState(true);
+
+  const handleCheckBox = (state) => {
+    setCheckBox(state);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -102,7 +108,7 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
                 value={formik.values.investVal}
                 onChange={formik.handleChange}
                 error={formik.errors.investVal}
-                placeholder={1000}
+                placeholder={'1000'}
                 helperText={
                   formik.values.investVal >= 1000 && formik.values.investVal <= 1000000
                     ? `${formik.values.investVal / 1000} Slot`
@@ -117,6 +123,9 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
               <Stack direction="column" justifyContent="flex-end">
                 <Box sx={{ pb: 1, display: 'flex' }}>
                   <FormControlLabel
+                    onClick={() => {
+                      handleCheckBox(!isChecked);
+                    }}
                     sx={{
                       textAlign: 'initial'
                     }}
@@ -131,7 +140,7 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
                     endIcon={<ArrowForwardIcon />}
                     variant="contained"
                     type="submit"
-                    disabled={formik.values.investVal >= 1000 && formik.values.investVal <= 1000000 ? false : true}
+                    disabled={formik.values.investVal >= 1000 && formik.values.investVal <= 1000000 && isChecked ? false : true}
                   >
                     NEXT
                   </Button>
