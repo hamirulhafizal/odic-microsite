@@ -3,6 +3,7 @@ import { useDispatch } from 'store';
 
 // material-ui
 import {
+  Avatar,
   Box,
   Button,
   Checkbox,
@@ -167,14 +168,15 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                     }}
                   />
                 </IconButton>
-                <img
-                  style={{
+                <Avatar
+                  sx={{
                     width: '100%',
                     height: 'auto',
                     backgroundColor: '#b5a83730',
                     padding: '12px',
                     borderBottomLeftRadius: '5px',
-                    borderBottomRightRadius: '5px'
+                    borderBottomRightRadius: '5px',
+                    borderRadius: '0px'
                   }}
                   alt="signature"
                   src={isSign?.trimmedDataURL}
