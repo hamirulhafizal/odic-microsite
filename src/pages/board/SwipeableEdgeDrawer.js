@@ -15,10 +15,12 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
 import Paper from '@mui/material/Paper';
+import AddIcon from '@mui/icons-material/Add';
 
 import InvestForms from '../../components/forms/forms-validation/InvestForms';
 import BankAcc from 'components/forms/forms-validation/BankAcc';
 import AggrementForms from 'components/forms/forms-validation/AggrementForms';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const steps = [
   {
@@ -59,6 +61,8 @@ const Puller = styled(Box)(({ theme }) => ({
 
 function SwipeableEdgeDrawer({ open, handleToggle }) {
   const drawerBleeding = 0;
+  const theme = useTheme();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -125,7 +129,7 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
             borderTopRightRadius: 10,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: matchDownSM ? 'start' : 'center',
             alignItems: 'center',
             textAlign: 'center'
           }}
@@ -180,8 +184,9 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
           {activeStep === steps.length && (
             <Paper square elevation={0} sx={{ p: 3 }}>
               <Typography>All steps completed - you&apos;re finished</Typography>
-              <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-                Reset
+
+              <Button onClick={handleReset} variant="contained" component="label" type="submit" endIcon={<AddIcon />} sx={{ mt: 2 }}>
+                New Slot
               </Button>
             </Paper>
           )}

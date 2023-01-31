@@ -1,7 +1,19 @@
 import { useDispatch } from 'store';
 
 // material-ui
-import { Box, Button, Checkbox, FormControlLabel, Grid, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
 
 // project imports
 import MainCard from 'components/ui-component/cards/MainCard';
@@ -34,7 +46,8 @@ const validationSchema = yup.object({
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //
 
 const BankAcc = ({ handleNext, handleBack, index }) => {
-  const dispatch = useDispatch();
+  const theme = useTheme();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [isImg, setImg] = useState(false);
 
@@ -75,8 +88,7 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
         >
           <MainCard
             sx={{
-              width: '100%',
-              maxWidth: '500px',
+              width: matchDownSM ? '100%' : '550px',
               boxShadow: '1px 2px 5px -1px rgb(0 0 0 / 64%) !important',
               borderColor: 'transparent'
             }}
@@ -101,11 +113,15 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
               </Button>
             </AnimateButton>
             <AnimateButton>
-              <Button disabled={isImg ? false : true} endIcon={<ArrowForwardIcon />} variant="contained" type="submit" onClick={handleNext}>
+              <Button
+                disabled={isImg ? false : false}
+                endIcon={<ArrowForwardIcon />}
+                variant="contained"
+                type="submit"
+                onClick={handleNext}
+              >
                 NEXT
               </Button>
-
-              {/* <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}></Button> */}
             </AnimateButton>
           </Grid>
         </Grid>

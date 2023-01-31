@@ -76,7 +76,7 @@ const BankQr = ({ value, children }) => {
           <Avatar
             src="assets/images/rhb-logo.png"
             style={{
-              width: '30%',
+              width: '50px',
               height: 'auto',
               borderRadius: '0px',
               backgroundColor: 'transparent'
@@ -106,7 +106,7 @@ const BankQr = ({ value, children }) => {
 
             <ClickAwayListener onClickAway={handleBankTooltipClose}>
               <IconButton
-                size={"small"}
+                size="small"
                 aria-label="delete"
                 variant="contained"
                 sx={{

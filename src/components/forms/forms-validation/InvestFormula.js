@@ -66,7 +66,7 @@ const InvestFormula = ({ value }) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            width: 'inherit'
+            width: '100%'
           }}
         >
           <Typography variant="h6">RM {numberWithCommas(value)}</Typography>
@@ -86,7 +86,7 @@ const InvestFormula = ({ value }) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            width: 'inherit'
+            width: '100%'
           }}
         >
           <Typography
@@ -184,7 +184,7 @@ const InvestFormula = ({ value }) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            width: 'inherit'
+            width: '100%'
           }}
         >
           <Typography variant="h6" sx={{ color: '#B5A837' }}>

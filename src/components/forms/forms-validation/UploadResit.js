@@ -65,7 +65,6 @@ const UploadResit = ({ handlePreviewImg }) => {
         if (isSubmit) {
           await updateProfile(user?.user_name, formData)
             .then((res) => {
-              console.log('res-->', res);
               setLoding(false);
               setFieldImgValue(undefined);
               setAvatarPreview('');
@@ -74,7 +73,6 @@ const UploadResit = ({ handlePreviewImg }) => {
               setSuccessMessage('UPLOAD');
             })
             .catch((err) => {
-              console.log('err--->', err);
               setMessage('Something when wrong, please try again');
               setLoding(false);
               setFieldImgValue(undefined);
@@ -96,13 +94,10 @@ const UploadResit = ({ handlePreviewImg }) => {
     fileReader.onload = () => {
       if (fileReader.readyState === 2) {
         setAvatarPreview(fileReader.result);
-        // handlePreviewImg(true);
       }
     };
     fileReader.readAsDataURL(e.target.files[0]);
   };
-
-  console.log('isSubmit', isSubmit);
 
   return (
     <>
@@ -113,21 +108,21 @@ const UploadResit = ({ handlePreviewImg }) => {
               *Upload image below 1MB
             </Typography>
           )}
-          <AnimateButton>
-            <InputLabel htmlFor="photo">
-              {!avatarPreview && isSuccess == null && (
-                <>
-                  <Input
-                    accept="image/*"
-                    id="photo"
-                    type="file"
-                    name="photo"
-                    label="photo"
-                    onChange={(e) => {
-                      setFieldImgValue(e.target.files[0]);
-                      preViewImage(e);
-                    }}
-                  />
+          <InputLabel htmlFor="photo">
+            {!avatarPreview && isSuccess == null && (
+              <>
+                <Input
+                  accept="image/*"
+                  id="photo"
+                  type="file"
+                  name="photo"
+                  label="photo"
+                  onChange={(e) => {
+                    setFieldImgValue(e.target.files[0]);
+                    preViewImage(e);
+                  }}
+                />
+                <AnimateButton>
                   <Button
                     endIcon={<AttachFileIcon />}
                     color="secondary"
@@ -138,15 +133,17 @@ const UploadResit = ({ handlePreviewImg }) => {
                   >
                     Upload
                   </Button>
-                </>
-              )}
+                </AnimateButton>
+              </>
+            )}
 
-              <Stack directiom="column">
-                <FormHelperText sx={{ textAlign: 'center' }} error>
-                  {photo !== undefined && message}
-                </FormHelperText>
+            <Stack directiom="column">
+              <FormHelperText sx={{ textAlign: 'center' }} error>
+                {photo !== undefined && message}
+              </FormHelperText>
 
-                {isSuccess && (
+              {isSuccess && (
+                <AnimateButton>
                   <Button
                     endIcon={<CheckCircleOutlineIcon />}
                     sx={{
@@ -162,10 +159,10 @@ const UploadResit = ({ handlePreviewImg }) => {
                   >
                     {isSuccess}
                   </Button>
-                )}
-              </Stack>
-            </InputLabel>
-          </AnimateButton>
+                </AnimateButton>
+              )}
+            </Stack>
+          </InputLabel>
         </Grid>
 
         <Grid

@@ -15,7 +15,9 @@ import {
   Slide,
   Stack,
   TextField,
-  Typography
+  Typography,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 
 // project imports
@@ -44,6 +46,9 @@ import ClearIcon from '@mui/icons-material/Clear';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
 import SignatureCanvas from 'react-signature-canvas';
+import AggrementPdf from './AggrementPdf';
+import { pdfFromReact } from 'generate-pdf-from-react-html';
+import DownloadIcon from '@mui/icons-material/Download';
 
 /**
  * 'Enter your email'
@@ -61,6 +66,9 @@ const Transition = forwardRef(function Transition(props, ref) {
 const AggrementForms = ({ handleNext, handleBack, index }) => {
   const dispatch = useDispatch();
   const signRef = useRef(null);
+  const theme = useTheme();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [open, setOpen] = useState(false);
   const [isSign, setSign] = useState({ trimmedDataURL: null });
 
@@ -73,17 +81,20 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
   };
 
   const handleSignClear = () => {
-    signRef.current.clear();
-    console.log('signRef-->', signRef.current);
+    signRef?.current.clear();
   };
 
   const handleSignSubmit = () => {
-    console.log('signRef-->', signRef.current);
-
     setSign({
       trimmedDataURL: signRef.current.getTrimmedCanvas().toDataURL('image/png')
     });
     handleClose();
+  };
+
+  const handleSignRemove = () => {
+    setSign({
+      trimmedDataURL: null
+    });
   };
 
   const formik = useFormik({
@@ -107,8 +118,6 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     }
   });
 
-  console.log('isSign', isSign);
-
   return (
     <>
       <Stack direction={'column'}>
@@ -117,15 +126,16 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
             pt: 2,
             pb: 5,
             display: 'flex',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            width: '100%',
+            maxWidth: '100%'
           }}
         >
           <MainCard
             sx={{
-              width: '100%',
-              maxWidth: '500px',
               boxShadow: '1px 2px 5px -1px rgb(0 0 0/64%) !important',
-              borderColor: 'transparent'
+              borderColor: 'transparent',
+              width: matchDownSM ? '100%' : '550px'
             }}
           >
             {/* <BankQr>
@@ -144,46 +154,78 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
 
             {isSign?.trimmedDataURL !== null ? (
               <>
-                <IconButton
-                  color="secondary"
+                <Stack
                   sx={{
-                    p: 0,
-                    pb: 2,
+                    width: '100%',
                     position: 'relative',
                     display: 'flex',
-                    width: '100%',
                     justifyContent: 'center',
                     alignItems: 'center'
                   }}
-                  variant="contained"
-                  size="large"
-                  aria-label="delete"
-                  // onClick={handleSignClear}
                 >
-                  <CancelIcon
+                  <AggrementPdf signImg={isSign?.trimmedDataURL} />
+
+                  <Box
                     sx={{
-                      backgroundColor: 'white',
-                      borderRadius: '50%',
-                      color: 'red'
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'end',
+                      position: 'relative',
+                      top: '12px',
+                      left: '10px',
+                      zIndex: 1
                     }}
+                  >
+                    <IconButton
+                      color="secondary"
+                      variant="contained"
+                      size="large"
+                      aria-label="delete"
+                      onClick={handleSignRemove}
+                      sx={{ p: 0, backgroundColor: 'white' }}
+                    >
+                      <CancelIcon
+                        sx={{
+                          backgroundColor: 'white',
+                          borderRadius: '50%',
+                          color: 'red'
+                        }}
+                      />
+                    </IconButton>
+                  </Box>
+
+                  <Avatar
+                    sx={{
+                      width: '100%',
+                      height: 'auto',
+                      backgroundColor: '#b5a83730',
+                      padding: '12px',
+                      borderBottomLeftRadius: '5px',
+                      borderBottomRightRadius: '5px',
+                      borderRadius: '0px'
+                    }}
+                    alt="signature"
+                    src={isSign?.trimmedDataURL}
                   />
-                </IconButton>
-                <Avatar
-                  sx={{
-                    width: '100%',
-                    height: 'auto',
-                    backgroundColor: '#b5a83730',
-                    padding: '12px',
-                    borderBottomLeftRadius: '5px',
-                    borderBottomRightRadius: '5px',
-                    borderRadius: '0px'
-                  }}
-                  alt="signature"
-                  src={isSign?.trimmedDataURL}
-                />
+
+                  <Button
+                    variant="contained"
+                    component="label"
+                    type="submit"
+                    endIcon={<DownloadIcon />}
+                    sx={{ mt: 2 }}
+                    onClick={() => {
+                      pdfFromReact('.element-to-print', 'My-file', 'p', true, false);
+                    }}
+                  >
+                    Download
+                  </Button>
+                </Stack>
               </>
             ) : (
               <>
+                <AggrementPdf signImg={null} />
+
                 <Button
                   fullWidth
                   variant="contained"
@@ -217,8 +259,6 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
               <Button endIcon={<ArrowForwardIcon />} variant="contained" type="submit" onClick={handleNext}>
                 NEXT
               </Button>
-
-              {/* <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}></Button> */}
             </AnimateButton>
           </Grid>
         </Grid>

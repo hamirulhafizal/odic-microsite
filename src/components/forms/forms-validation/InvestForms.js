@@ -2,7 +2,19 @@ import { useRef, useState } from 'react';
 import { useDispatch } from 'store';
 
 // material-ui
-import { Box, Button, Checkbox, FormControlLabel, Grid, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
 
 // project imports
 import MainCard from 'components/ui-component/cards/MainCard';
@@ -16,8 +28,8 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 // assets
-import LinkIcon from '@mui/icons-material/Link';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import InvestFormula from './InvestFormula';
 
@@ -32,6 +44,8 @@ const validationSchema = yup.object({
 
 const InvestForms = ({ handleNext, handleBack, index }) => {
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [isChecked, setCheckBox] = useState(true);
 
@@ -73,8 +87,7 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
         >
           <MainCard
             sx={{
-              width: '100%',
-              maxWidth: '500px',
+              width: matchDownSM ? '100%' : '550px',
               boxShadow: '1px 2px 5px -1px rgb(0 0 0 / 64%) !important',
               borderColor: 'transparent'
             }}
@@ -82,7 +95,6 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
             <InvestFormula value={formik.values.investVal != '' ? formik.values.investVal : 0} />
           </MainCard>
         </Box>
-
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
@@ -118,43 +130,42 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
                   e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 8);
                 }}
               />
+
+              <Box sx={{ pb: 1, display: 'flex' }}>
+                <FormControlLabel
+                  onClick={() => {
+                    handleCheckBox(!isChecked);
+                  }}
+                  sx={{
+                    textAlign: 'initial'
+                  }}
+                  variant="caption"
+                  control={<Checkbox defaultChecked />}
+                  label={`By ticking this Box, your agreed with our T&C`}
+                />
+              </Box>
             </Grid>
-            <Grid item xs={12}>
-              <Stack direction="column" justifyContent="flex-end">
-                <Box sx={{ pb: 1, display: 'flex' }}>
-                  <FormControlLabel
-                    onClick={() => {
-                      handleCheckBox(!isChecked);
-                    }}
-                    sx={{
-                      textAlign: 'initial'
-                    }}
-                    variant="caption"
-                    control={<Checkbox defaultChecked />}
-                    label={`By ticking this Box, your agreed with our T&C`}
-                  />
-                </Box>
-                <AnimateButton>
-                  <Button
-                    fullWidth
-                    endIcon={<ArrowForwardIcon />}
-                    variant="contained"
-                    type="submit"
-                    disabled={formik.values.investVal >= 1000 && formik.values.investVal <= 1000000 && isChecked ? false : true}
-                  >
-                    NEXT
-                  </Button>
-                  {/* <Button
-                    fullWidth
-                    endIcon={<ArrowForwardIcon />}
-                    variant="contained"
-                    type="submit"
-                    disabled={formik.values.investVal >= 1000 && formik.values.investVal <= 1000000 ? false : true}
-                  >
-                    NEXT
-                  </Button> */}
-                </AnimateButton>
-              </Stack>
+          </Grid>
+
+          <Grid container spacing={gridSpacing}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: 'flex',
+                justifyContent: 'end'
+              }}
+            >
+              <AnimateButton>
+                <Button
+                  endIcon={<ArrowForwardIcon />}
+                  variant="contained"
+                  type="submit"
+                  disabled={formik.values.investVal >= 1000 && formik.values.investVal <= 1000000 && isChecked ? false : true}
+                >
+                  NEXT
+                </Button>
+              </AnimateButton>
             </Grid>
           </Grid>
         </form>

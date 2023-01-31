@@ -146,3 +146,11 @@ a {
   background: white;
   border-radius: 10px;
 }
+
+.element-for-print {
+  width: 600px;
+  min-height: 840px;
+  box-shadow: 'inset 0px 4px 6px 0px';
+  width: '600px';
+  min-height: '840px';
+}
