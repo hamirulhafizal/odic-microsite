@@ -118,6 +118,8 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     }
   });
 
+  console.log('isSign?.trimmedDataURL', isSign?.trimmedDataURL);
+
   return (
     <>
       <Stack direction={'column'}>
@@ -138,20 +140,6 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
               width: matchDownSM ? '100%' : '550px'
             }}
           >
-            {/* <BankQr>
-              <form
-                onSubmit={formik.handleSubmit}
-                style={{
-                  width: '100%'
-                }}
-              >
-                <Button fullWidth variant="contained" component="label" type="submit" endIcon={<AttachFileIcon />} sx={{ mt: 2 }}>
-                  Upload
-                  <input hidden accept="image/*" multiple type="file" />
-                </Button>
-              </form>
-            </BankQr> */}
-
             {isSign?.trimmedDataURL !== null ? (
               <>
                 <Stack

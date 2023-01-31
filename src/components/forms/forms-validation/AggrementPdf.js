@@ -17,22 +17,24 @@ const AggrementPdf = ({ signImg }) => {
                 backgroundColor: 'transparent'
               }}
             />
-            <Typography variant="h2">{`Example page`}</Typography>
+            <Typography variant="h2">{`Aggrement`}</Typography>
             <Typography variant="span">
               {`Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste quia dicta itaque sunt fuga, illo ad eaque ea commodi
               temporibus perferendis provident doloribus non iusto asperiores excepturi autem facere qui!`}
             </Typography>
             {`Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste quia dicta itaque sunt fuga, illo ad eaque ea commodi temporibus
             perferendis provident doloribus non iusto asperiores excepturi autem facere qui!`}
-            <Avatar
-              src={`${signImg}`}
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '0px',
-                backgroundColor: 'transparent'
-              }}
-            />
+            {signImg && (
+              <Avatar
+                src={`${signImg}`}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '0px',
+                  backgroundColor: 'transparent'
+                }}
+              />
+            )}
           </Box>
         </div>
 
