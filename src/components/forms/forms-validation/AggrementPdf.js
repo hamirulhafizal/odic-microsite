@@ -17,7 +17,7 @@ const AggrementPdf = ({ signImg }) => {
                 backgroundColor: 'transparent'
               }}
             />
-            <Typography variant="h2">{`Aggrement`}</Typography>
+            <Typography variant="h2">{`Aggrement Investor`}</Typography>
             <Typography variant="span">
               {`Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste quia dicta itaque sunt fuga, illo ad eaque ea commodi
               temporibus perferendis provident doloribus non iusto asperiores excepturi autem facere qui!`}
