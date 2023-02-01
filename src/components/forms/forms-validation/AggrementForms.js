@@ -1,29 +1,12 @@
-import { forwardRef, useRef, useState } from 'react';
+import { forwardRef, useRef, useState, useCallback, useEffect } from 'react';
 import { useDispatch } from 'store';
 
 // material-ui
-import {
-  Avatar,
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Slide,
-  Stack,
-  TextField,
-  Typography,
-  useMediaQuery,
-  useTheme
-} from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, Dialog, Grid, IconButton, Slide, Stack, useMediaQuery, useTheme } from '@mui/material';
 
 // project imports
 import MainCard from 'components/ui-component/cards/MainCard';
 import AnimateButton from 'components/ui-component/extended/AnimateButton';
-import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 
@@ -32,12 +15,8 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 // assets
-import LinkIcon from '@mui/icons-material/Link';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-import InvestFormula from './InvestFormula';
-import BankQr from './BankQr';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -45,10 +24,11 @@ import ScreenRotationIcon from '@mui/icons-material/ScreenRotation';
 import ClearIcon from '@mui/icons-material/Clear';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
-import SignatureCanvas from 'react-signature-canvas';
-import AggrementPdf from './AggrementPdf';
-import { pdfFromReact } from 'generate-pdf-from-react-html';
 import DownloadIcon from '@mui/icons-material/Download';
+import SignatureCanvas from 'react-signature-canvas';
+
+import { useReactToPrint } from 'react-to-print';
+import ComponentToPrint from './ComponentToPrint';
 
 /**
  * 'Enter your email'
@@ -69,8 +49,16 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const componentRef = useRef();
+
   const [open, setOpen] = useState(false);
   const [isSign, setSign] = useState({ trimmedDataURL: null });
+
+  const onBeforeGetContentResolve = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [text, setText] = useState('old boring text');
+  const [isDoc, setDoc] = useState(false);
+  const [isPreview, setPreview] = useState(true);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -97,6 +85,54 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     });
   };
 
+  const handleAfterPrint = useCallback(() => {
+    console.log('`onAfterPrint` called'); // tslint:disable-line no-console\
+    setPreview(true);
+    setDoc(false);
+  }, []);
+
+  const handleBeforePrint = useCallback(() => {
+    console.log('`onBeforePrint` called'); // tslint:disable-line no-console
+  }, []);
+
+  const handleOnBeforeGetContent = useCallback(() => {
+    console.log('`onBeforeGetContent` called'); // tslint:disable-line no-console
+    setLoading(true);
+    setText('Loading new text...');
+    setDoc(true);
+    setPreview(false);
+
+    return new Promise((resolve) => {
+      onBeforeGetContentResolve.current = resolve;
+
+      setTimeout(() => {
+        setLoading(false);
+        setText('New, Updated Text!');
+        resolve();
+      }, 2000);
+    });
+  }, [setLoading, setText]);
+
+  const reactToPrintContent = useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+
+  const handlePrint = useReactToPrint({
+    content: reactToPrintContent,
+    documentTitle: '',
+    onBeforeGetContent: handleOnBeforeGetContent,
+    onBeforePrint: handleBeforePrint,
+    onAfterPrint: handleAfterPrint,
+    removeAfterPrint: true
+    // fonts
+  });
+
+  useEffect(() => {
+    if (text === 'New, Updated Text!' && typeof onBeforeGetContentResolve.current === 'function') {
+      onBeforeGetContentResolve.current();
+    }
+  }, [onBeforeGetContentResolve.current, text]);
+
   const formik = useFormik({
     initialValues: {
       investVal: 1000
@@ -118,8 +154,6 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     }
   });
 
-  console.log('isSign?.trimmedDataURL', isSign?.trimmedDataURL);
-
   return (
     <>
       <Stack direction={'column'}>
@@ -137,7 +171,10 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
             sx={{
               boxShadow: '1px 2px 5px -1px rgb(0 0 0/64%) !important',
               borderColor: 'transparent',
-              width: matchDownSM ? '100%' : '550px'
+              width: matchDownSM ? '100%' : '550px',
+              overflowX: 'scroll',
+              height: '50vh',
+              overflowY: 'scroll'
             }}
           >
             {isSign?.trimmedDataURL !== null ? (
@@ -151,69 +188,95 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                     alignItems: 'center'
                   }}
                 >
-                  <AggrementPdf signImg={isSign?.trimmedDataURL} />
-
-                  <Box
-                    sx={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'end',
-                      position: 'relative',
-                      top: '12px',
-                      left: '10px',
-                      zIndex: 1
-                    }}
-                  >
-                    <IconButton
-                      color="secondary"
-                      variant="contained"
-                      size="large"
-                      aria-label="delete"
-                      onClick={handleSignRemove}
-                      sx={{ p: 0, backgroundColor: 'white' }}
-                    >
-                      <CancelIcon
+                  <ComponentToPrint ref={componentRef} isPreview={isPreview}>
+                    {isDoc && (
+                      <Avatar
                         sx={{
+                          width: '30%',
+                          height: 'auto',
                           backgroundColor: 'white',
-                          borderRadius: '50%',
-                          color: 'red'
+                          padding: '12px'
                         }}
+                        alt="signature"
+                        src={isSign?.trimmedDataURL}
                       />
-                    </IconButton>
-                  </Box>
+                    )}
+                  </ComponentToPrint>
 
-                  <Avatar
-                    sx={{
-                      width: '100%',
-                      height: 'auto',
-                      backgroundColor: '#b5a83730',
-                      padding: '12px',
-                      borderBottomLeftRadius: '5px',
-                      borderBottomRightRadius: '5px',
-                      borderRadius: '0px'
-                    }}
-                    alt="signature"
-                    src={isSign?.trimmedDataURL}
-                  />
+                  {!isDoc && (
+                    <Box
+                      sx={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'end',
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: '30%',
+                          display: 'flex',
+                          justifyContent: 'end',
+                          position: 'relative',
+                          top: '12px',
+                          left: '10px',
+                          zIndex: 1
+                        }}
+                      >
+                        <IconButton
+                          color="secondary"
+                          variant="contained"
+                          size="large"
+                          aria-label="delete"
+                          onClick={handleSignRemove}
+                          sx={{ p: 0, backgroundColor: 'white' }}
+                        >
+                          <CancelIcon
+                            sx={{
+                              backgroundColor: 'white',
+                              borderRadius: '50%',
+                              color: 'red'
+                            }}
+                          />
+                        </IconButton>
+                      </Box>
+
+                      <Avatar
+                        sx={{
+                          width: '30%',
+                          height: 'auto',
+                          backgroundColor: 'white',
+                          padding: '12px',
+                          borderBottomLeftRadius: '5px',
+                          borderBottomRightRadius: '5px',
+                          borderRadius: '5px',
+                          border: '1px solid black'
+                        }}
+                        alt="signature"
+                        src={isSign?.trimmedDataURL}
+                      />
+                    </Box>
+                  )}
 
                   <Button
                     variant="contained"
                     component="label"
                     type="submit"
-                    endIcon={<DownloadIcon />}
+                    endIcon={
+                      loading ? <CircularProgress sx={{ color: 'white', position: 'relative', left: '10%' }} size={20} /> : <DownloadIcon />
+                    }
                     sx={{ mt: 2 }}
                     onClick={() => {
-                      pdfFromReact('.element-to-print', 'My-file', 'p', true, false);
+                      handlePrint();
                     }}
                   >
-                    Download
+                    {loading ? 'Loading...' : 'Download'}
                   </Button>
                 </Stack>
               </>
             ) : (
               <>
-                <AggrementPdf signImg={null} />
-
                 <Button
                   fullWidth
                   variant="contained"
