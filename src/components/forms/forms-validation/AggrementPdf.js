@@ -1,6 +1,5 @@
 import { Avatar, Box, Typography } from '@mui/material';
 import React from 'react';
-import { pdfFromReact } from 'generate-pdf-from-react-html';
 
 const AggrementPdf = ({ signImg }) => {
   return (
@@ -81,7 +80,6 @@ const AggrementPdf = ({ signImg }) => {
             }}
           />
         )}
-        {/* <pdfFromReact /> */}
       </div>
     </>
   );

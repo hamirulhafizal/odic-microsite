@@ -115,6 +115,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
 
   const reactToPrintContent = useCallback(() => {
     return componentRef.current;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componentRef.current]);
 
   const handlePrint = useReactToPrint({
@@ -131,6 +132,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     if (text === 'New, Updated Text!' && typeof onBeforeGetContentResolve.current === 'function') {
       onBeforeGetContentResolve.current();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onBeforeGetContentResolve.current, text]);
 
   const formik = useFormik({
@@ -189,18 +191,6 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                   }}
                 >
                   <ComponentToPrint ref={componentRef} isPreview={isPreview}>
-                    {/* {!isDoc && (
-                      <Avatar
-                        sx={{
-                          width: '100%',
-                          height: 'auto',
-                          backgroundColor: 'white',
-                          padding: '12px'
-                        }}
-                        alt="signature"
-                        src={isSign?.trimmedDataURL}
-                      />
-                    )} */}
                     {!isDoc ? (
                       <Box
                         sx={{
@@ -215,7 +205,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                       >
                         <Box
                           sx={{
-                            width: '77%',
+                            width: matchDownSM ? '77%' : '77%',
                             display: 'flex',
                             justifyContent: 'end',
                             position: 'relative',
@@ -244,7 +234,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
 
                         <Avatar
                           sx={{
-                            width: '77%',
+                            width: matchDownSM ? '77%' : '77%',
                             height: 'auto',
                             backgroundColor: 'white',
                             padding: '12px',
@@ -260,7 +250,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                     ) : (
                       <Avatar
                         sx={{
-                          width: '77%',
+                          width: matchDownSM ? '77%' : '77%',
                           height: 'auto',
                           backgroundColor: 'white',
                           padding: '12px'
@@ -295,11 +285,34 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                   component="label"
                   type="submit"
                   endIcon={<HistoryEduIcon />}
-                  sx={{ mt: 2 }}
+                  sx={{ mb: 2 }}
                   onClick={handleClickOpen}
                 >
                   Signature
                 </Button>
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      width: matchDownSM ? '77%' : '77%',
+                      height: 'auto',
+                      backgroundColor: 'white',
+                      borderRadius: '1px',
+
+                      '.MuiAvatar-img': {
+                        border: ' 1px solid black',
+                        borderRadius: '5px'
+                      }
+                    }}
+                    alt="signature"
+                    src={'assets/images/sign/prepdf1.png'}
+                  />
+                </Box>
               </>
             )}
           </MainCard>

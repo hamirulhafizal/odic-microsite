@@ -1,20 +1,24 @@
-import { Avatar, Box, Divider, List, ListItemText, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Avatar, Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import moment from 'moment';
+import useAuth from 'hooks/useAuth';
 
 const ComponentToPrint = React.forwardRef((props, ref) => {
   const { children, isPreview } = props;
   const date = new Date();
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
+  const { user } = useAuth();
+  const { firstName, lastName } = user;
 
   return (
     <>
       <div ref={ref} className="parentPage">
-        <div className={isPreview ? 'preview' : 'page'}>
+        <div className={isPreview ? 'preview' : 'page'} style={{ height: '100vh', justifyContent: 'start' }}>
           <Stack sx={{ width: '100%', textAlign: 'center' }}>
             <Typography
               variant="h3"
+              className="h3Title"
               sx={{
                 opacity: 0.5,
                 pt: 4,
@@ -33,36 +37,34 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
             }}
           >
             <br />
-            <Typography
-              variant="h3"
-              sx={{
-                textTransform: 'uppercase'
-              }}
-            >
+            <Typography variant="h3" className="h3Title">
               [ TARIKH : {moment(date).format('DD MMMM YYYY')} ]
             </Typography>
             <br />
             <br />
-            <Typography variant="h3">ANTARA</Typography>
+            <Typography variant="h3" className="h3Title">
+              ANTARA
+            </Typography>
 
-            <Typography variant="h4">
-              MUHAIZAN BIN ABU@HUSSIN <br />
+            <Typography variant="h4" className="h3Title">
+              {firstName} {lastName}
+              <br />
               [NO K/P: 750611-01-5643]
             </Typography>
             <br />
             <br />
-            <Typography variant="h3">{`[INVESTOR]`}</Typography>
+            <Typography variant="h3" className="h3Title">{`[INVESTOR]`}</Typography>
             <br />
             <br />
-            <Typography variant="h3">{`DAN`}</Typography>
+            <Typography variant="h3" className="h3Title">{`DAN`}</Typography>
             <br />
             <br />
-            <Typography variant="h4">
+            <Typography variant="h4" className="h3Title">
               OD LEGACY REALTY SDN <br /> [BHD SSM NO: 1390527M]
             </Typography>
             <br />
             <br />
-            <Typography variant="h3">{`[INVESTEE]`}</Typography>
+            <Typography variant="h3" className="h3Title">{`[INVESTEE]`}</Typography>
             <br />
           </Box>
         </div>
@@ -70,6 +72,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
         <div className={isPreview ? 'preview' : 'page'}>
           <Stack sx={{ width: '100%', textAlign: 'center' }}>
             <Typography
+              className="h3Title"
               variant="h3"
               sx={{
                 opacity: 0.5,
@@ -91,8 +94,11 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
           <br />
           <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
             <Typography variant="p">
-              <b>MUHAIZAN BIN ABU@HUSSIN (NO. K/P: 750611-01-5643)</b> yang beralamat di No 2 Jalan Haji Abu Husin Rahman, Kampung Desa
-              Pahlawan, Jalan Kluang, 86100 Ayer Hitam, Johor (selepas ini dirujuk “Pihak Pertama”);
+              <b style={{ textTransform: 'uppercase' }}>
+                {firstName} {lastName} (NO. K/P: 750611-01-5643)
+              </b>{' '}
+              yang beralamat di No 2 Jalan Haji Abu Husin Rahman, Kampung Desa Pahlawan, Jalan Kluang, 86100 Ayer Hitam, Johor (selepas ini
+              dirujuk “Pihak Pertama”);
             </Typography>
           </Stack>
           <br />
@@ -118,7 +124,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
             <Box
               sx={{
                 display: 'flex',
-                justifyContent: 'start',
+                justifyContent: 'flex-start',
                 flexDirection: 'column'
               }}
             >
@@ -172,12 +178,12 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
           </Stack>
         </div>
 
-        <div className={isPreview ? 'preview' : 'page'} style={{ paddingTop: '5%' }}>
+        <div className={isPreview ? 'preview' : 'page'} style={{ paddingTop: '5%', justifyContent: 'start' }}>
           <Stack sx={{ width: '100%' }}>
             <Box
               sx={{
                 display: 'flex',
-                justifyContent: 'start',
+                justifyContent: 'flex-start',
                 flexDirection: 'column'
               }}
             >
@@ -217,7 +223,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
           </Stack>
         </div>
 
-        <div className={isPreview ? 'preview' : 'page'} style={{ paddingTop: '5%' }}>
+        <div className={isPreview ? 'preview' : 'page'} style={{ paddingTop: '5%', justifyContent: 'start' }}>
           <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
             <Typography variant="p">
               BAGI MENYAKSIKAN PERJANJIAN INI PIHAK-PIHAK dalam perjanjian ini dengan ini menandatangani perjanjian ini pada hari dan tarikh
@@ -230,14 +236,14 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
 
           <Box
             sx={{
-              width: matchDownSM ? '100%' : '50%',
+              width: matchDownSM ? '100%' : '100%',
               display: 'flex',
 
               flexDirection: matchDownSM ? 'column' : 'none',
               alignItems: matchDownSM ? 'center' : 'none'
             }}
           >
-            <Box sx={{ width: '50%' }}>
+            <Box sx={{ width: matchDownSM ? '100%' : '50%' }}>
               <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
                 <Typography variant="p">
                   <b>Ditandatangani oleh</b>
@@ -255,7 +261,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
               </Stack>
             </Box>
 
-            <Box sx={{ width: '50%' }}>
+            <Box sx={{ width: matchDownSM ? '100%' : '50%' }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -285,13 +291,25 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
               <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
                 <Typography variant="p">……………………………………</Typography>
               </Stack>
-
-              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
-                <Typography variant="p">
-                  <b>MUHAIZAN BIN ABU@HUSSIN</b>
-                </Typography>
-              </Stack>
             </Box>
+          </Box>
+
+          <Box
+            sx={{
+              width: '70%',
+              display: 'flex',
+              flexDirection: matchDownSM ? 'column' : 'none',
+              alignItems: matchDownSM ? 'center' : 'none',
+              justifyContent: 'end'
+            }}
+          >
+            <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black', justifyContent: 'end' }}>
+              <Typography variant="p">
+                <b style={{ textTransform: 'uppercase' }}>
+                  {firstName} {lastName}
+                </b>
+              </Typography>
+            </Stack>
           </Box>
 
           <br />
@@ -299,14 +317,14 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
 
           <Box
             sx={{
-              width: matchDownSM ? '100%' : '50%',
+              width: matchDownSM ? '100%' : '100%',
               display: 'flex',
 
               flexDirection: matchDownSM ? 'column' : 'none',
               alignItems: matchDownSM ? 'center' : 'none'
             }}
           >
-            <Box sx={{ width: '50%' }}>
+            <Box sx={{ width: matchDownSM ? '100%' : '50%' }}>
               <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
                 <Typography variant="p">
                   <b>Ditandatangani oleh</b>
@@ -324,7 +342,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
               </Stack>
             </Box>
 
-            <Box sx={{ width: '50%' }}>
+            <Box sx={{ width: matchDownSM ? '100%' : '50%' }}>
               <Box
                 sx={{
                   display: 'flex',
