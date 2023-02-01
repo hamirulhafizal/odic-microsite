@@ -1,12 +1,12 @@
-import { Box, Divider, List, ListItemText, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Divider, List, ListItemText, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import moment from 'moment';
 
 const ComponentToPrint = React.forwardRef((props, ref) => {
   const { children, isPreview } = props;
   const date = new Date();
-
-  console.log('isPreview', isPreview);
+  const theme = useTheme();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <>
@@ -24,34 +24,47 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
               PERJANJIAN PELABURAN
             </Typography>
           </Stack>
-          <br />
-          <Typography
-            variant="h3"
+          <Box
             sx={{
-              textTransform: 'uppercase'
+              justifyContent: 'center',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column'
             }}
           >
-            [ TARIKH : {moment(date).format('DD MMMM YYYY')} ]
-          </Typography>
-          <br />
-          <br />
-          <Typography variant="h3">ANTARA</Typography>
-          <Typography variant="h4">{`MUHAIZAN BIN ABU@HUSSIN [NO K/P: 750611-01-5643]`}</Typography>
-          <br />
-          <br />
-          <Typography variant="h3">{`[ INVESTOR ]`}</Typography>
-          <br />
-          <br />
-          <Typography variant="h3">{`DAN`}</Typography>
-          <br />
-          <br />
-          <Typography variant="h4">
-            OD LEGACY REALTY SDN <br /> (BHD SSM NO: 1390527M)
-          </Typography>
-          <br />
-          <br />
-          <Typography variant="h3">{`[ INVESTEE  ]`}</Typography>
-          <br />
+            <br />
+            <Typography
+              variant="h3"
+              sx={{
+                textTransform: 'uppercase'
+              }}
+            >
+              [ TARIKH : {moment(date).format('DD MMMM YYYY')} ]
+            </Typography>
+            <br />
+            <br />
+            <Typography variant="h3">ANTARA</Typography>
+
+            <Typography variant="h4">
+              MUHAIZAN BIN ABU@HUSSIN <br />
+              [NO K/P: 750611-01-5643]
+            </Typography>
+            <br />
+            <br />
+            <Typography variant="h3">{`[INVESTOR]`}</Typography>
+            <br />
+            <br />
+            <Typography variant="h3">{`DAN`}</Typography>
+            <br />
+            <br />
+            <Typography variant="h4">
+              OD LEGACY REALTY SDN <br /> [BHD SSM NO: 1390527M]
+            </Typography>
+            <br />
+            <br />
+            <Typography variant="h3">{`[INVESTEE]`}</Typography>
+            <br />
+          </Box>
         </div>
 
         <div className={isPreview ? 'preview' : 'page'}>
@@ -79,7 +92,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
           <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
             <Typography variant="p">
               <b>MUHAIZAN BIN ABU@HUSSIN (NO. K/P: 750611-01-5643)</b> yang beralamat di No 2 Jalan Haji Abu Husin Rahman, Kampung Desa
-              Pahlawan , Jalan Kluang, 86100 Ayer Hitam, Johor (selepas ini dirujuk “Pihak Pertama”);
+              Pahlawan, Jalan Kluang, 86100 Ayer Hitam, Johor (selepas ini dirujuk “Pihak Pertama”);
             </Typography>
           </Stack>
           <br />
@@ -212,7 +225,160 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
             </Typography>
           </Stack>
 
-          {children}
+          <br />
+          <br />
+
+          <Box
+            sx={{
+              width: matchDownSM ? '100%' : '50%',
+              display: 'flex',
+
+              flexDirection: matchDownSM ? 'column' : 'none',
+              alignItems: matchDownSM ? 'center' : 'none'
+            }}
+          >
+            <Box sx={{ width: '50%' }}>
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">
+                  <b>Ditandatangani oleh</b>
+                </Typography>
+              </Stack>
+
+              <br />
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">Pihak pertama</Typography>
+              </Stack>
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">Di hadapan</Typography>
+              </Stack>
+            </Box>
+
+            <Box sx={{ width: '50%' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row'
+                }}
+              >
+                <Box>
+                  <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                    <Typography variant="p">]</Typography>
+                  </Stack>
+
+                  <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                    <Typography variant="p">]</Typography>
+                  </Stack>
+
+                  <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                    <Typography variant="p">]</Typography>
+                  </Stack>
+
+                  <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                    <Typography variant="p">]</Typography>
+                  </Stack>
+                </Box>
+                <Box>{children}</Box>
+              </Box>
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">……………………………………</Typography>
+              </Stack>
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">
+                  <b>MUHAIZAN BIN ABU@HUSSIN</b>
+                </Typography>
+              </Stack>
+            </Box>
+          </Box>
+
+          <br />
+          <br />
+
+          <Box
+            sx={{
+              width: matchDownSM ? '100%' : '50%',
+              display: 'flex',
+
+              flexDirection: matchDownSM ? 'column' : 'none',
+              alignItems: matchDownSM ? 'center' : 'none'
+            }}
+          >
+            <Box sx={{ width: '50%' }}>
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">
+                  <b>Ditandatangani oleh</b>
+                </Typography>
+              </Stack>
+
+              <br />
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">Pihak kedua</Typography>
+              </Stack>
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">Di hadapan</Typography>
+              </Stack>
+            </Box>
+
+            <Box sx={{ width: '50%' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row'
+                }}
+              >
+                <Box>
+                  <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                    <Typography variant="p">]</Typography>
+                  </Stack>
+
+                  <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                    <Typography variant="p">]</Typography>
+                  </Stack>
+
+                  <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                    <Typography variant="p">]</Typography>
+                  </Stack>
+
+                  <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                    <Typography variant="p">]</Typography>
+                  </Stack>
+                </Box>
+                <Box>
+                  <Avatar
+                    sx={{
+                      width: '100%',
+                      height: 'auto',
+                      backgroundColor: 'white',
+                      padding: '12px'
+                    }}
+                    alt="signature"
+                    src={'/assets/images/sign/sign1.jpg'}
+                  />
+                </Box>
+              </Box>
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">……………………………………</Typography>
+              </Stack>
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">
+                  <b>DIRECTOR / SECRETARY </b>
+                </Typography>
+              </Stack>
+
+              <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
+                <Typography variant="p">
+                  <b>(OD LEGACY REALTY SDN BHD)</b>
+                </Typography>
+              </Stack>
+            </Box>
+          </Box>
         </div>
       </div>
     </>

@@ -189,10 +189,78 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                   }}
                 >
                   <ComponentToPrint ref={componentRef} isPreview={isPreview}>
-                    {isDoc && (
+                    {/* {!isDoc && (
                       <Avatar
                         sx={{
-                          width: '30%',
+                          width: '100%',
+                          height: 'auto',
+                          backgroundColor: 'white',
+                          padding: '12px'
+                        }}
+                        alt="signature"
+                        src={isSign?.trimmedDataURL}
+                      />
+                    )} */}
+                    {!isDoc ? (
+                      <Box
+                        sx={{
+                          width: '100%',
+                          display: 'flex',
+                          justifyContent: 'end',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          position: 'relative',
+                          top: '-11%'
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: '77%',
+                            display: 'flex',
+                            justifyContent: 'end',
+                            position: 'relative',
+                            top: '12px',
+                            left: '10px',
+                            zIndex: 1
+                          }}
+                        >
+                          <IconButton
+                            color="secondary"
+                            variant="contained"
+                            size="large"
+                            aria-label="delete"
+                            onClick={handleSignRemove}
+                            sx={{ p: 0, backgroundColor: 'white' }}
+                          >
+                            <CancelIcon
+                              sx={{
+                                backgroundColor: 'white',
+                                borderRadius: '50%',
+                                color: 'red'
+                              }}
+                            />
+                          </IconButton>
+                        </Box>
+
+                        <Avatar
+                          sx={{
+                            width: '77%',
+                            height: 'auto',
+                            backgroundColor: 'white',
+                            padding: '12px',
+                            borderBottomLeftRadius: '5px',
+                            borderBottomRightRadius: '5px',
+                            borderRadius: '5px',
+                            border: '1px solid black'
+                          }}
+                          alt="signature"
+                          src={isSign?.trimmedDataURL}
+                        />
+                      </Box>
+                    ) : (
+                      <Avatar
+                        sx={{
+                          width: '77%',
                           height: 'auto',
                           backgroundColor: 'white',
                           padding: '12px'
@@ -202,62 +270,6 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                       />
                     )}
                   </ComponentToPrint>
-
-                  {!isDoc && (
-                    <Box
-                      sx={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'end',
-                        flexDirection: 'column',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          width: '30%',
-                          display: 'flex',
-                          justifyContent: 'end',
-                          position: 'relative',
-                          top: '12px',
-                          left: '10px',
-                          zIndex: 1
-                        }}
-                      >
-                        <IconButton
-                          color="secondary"
-                          variant="contained"
-                          size="large"
-                          aria-label="delete"
-                          onClick={handleSignRemove}
-                          sx={{ p: 0, backgroundColor: 'white' }}
-                        >
-                          <CancelIcon
-                            sx={{
-                              backgroundColor: 'white',
-                              borderRadius: '50%',
-                              color: 'red'
-                            }}
-                          />
-                        </IconButton>
-                      </Box>
-
-                      <Avatar
-                        sx={{
-                          width: '30%',
-                          height: 'auto',
-                          backgroundColor: 'white',
-                          padding: '12px',
-                          borderBottomLeftRadius: '5px',
-                          borderBottomRightRadius: '5px',
-                          borderRadius: '5px',
-                          border: '1px solid black'
-                        }}
-                        alt="signature"
-                        src={isSign?.trimmedDataURL}
-                      />
-                    </Box>
-                  )}
 
                   <Button
                     variant="contained"

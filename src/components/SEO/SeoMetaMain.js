@@ -7,6 +7,8 @@ const SeoMetaMain = () => {
   return (
     <>
       <Head>
+        <link href="//db.onlinewebfonts.com/c/32441506567156636049eb850b53f02a?family=Times+New+Roman" rel="stylesheet" type="text/css" />
+
         <title>{'One Dream Legacy - Most Professional Real Estate Agency'}</title>
         <link rel="icon" type="image/x-icon" href="/oneDream.ico" />
         <meta name="title" content="One Dream Legacy - Most Professional Real Estate Agency" />
