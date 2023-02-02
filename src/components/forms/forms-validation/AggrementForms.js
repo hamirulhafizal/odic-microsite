@@ -124,8 +124,24 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     onBeforeGetContent: handleOnBeforeGetContent,
     onBeforePrint: handleBeforePrint,
     onAfterPrint: handleAfterPrint,
-    removeAfterPrint: false
-    // fonts
+    removeAfterPrint: true,
+    print: async (printIframe) => {
+      const document = printIframe.contentDocument;
+
+      var opt = {
+        margin: 0.4,
+        filename: 'Aggrement-OD.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      if (document) {
+        const html = document.getElementsByTagName('html')[0];
+
+        await html2pdf().set(opt).from(html).save();
+      }
+    }
   });
 
   useEffect(() => {

@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 
 const withTM = require('next-transpile-modules')([
-  'generate-pdf-from-react-html',
-  'jspdf',
   '@fullcalendar/common',
   '@babel/preset-react',
   '@fullcalendar/common',
