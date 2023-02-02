@@ -113,13 +113,7 @@ const BankAcc = ({ handleNext, handleBack, index }) => {
               </Button>
             </AnimateButton>
             <AnimateButton>
-              <Button
-                disabled={isImg ? false : false}
-                endIcon={<ArrowForwardIcon />}
-                variant="contained"
-                type="submit"
-                onClick={handleNext}
-              >
+              <Button disabled={isImg ? false : true} endIcon={<ArrowForwardIcon />} variant="contained" type="submit" onClick={handleNext}>
                 NEXT
               </Button>
             </AnimateButton>

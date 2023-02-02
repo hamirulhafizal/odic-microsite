@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // material-ui
 import {
@@ -18,12 +18,10 @@ import {
 import { styled } from '@mui/material/styles';
 import useAuth from 'hooks/useAuth';
 import AnimateButton from 'components/ui-component/extended/AnimateButton';
-import accountReducer from 'store/accountReducer';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import DoneIcon from '@mui/icons-material/Done';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const Input = styled('input')({
@@ -258,7 +256,7 @@ const UploadResit = ({ handlePreviewImg }) => {
               variant="contained"
               component="span"
             >
-              {isLoading ? 'loading' : 'submit'}
+              {isLoading ? 'LOADING...' : 'SUBMIT'}
             </Button>
           )}
         </Grid>

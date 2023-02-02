@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   ClickAwayListener,
   IconButton,
   List,
@@ -10,8 +9,7 @@ import {
   styled,
   Tooltip,
   tooltipClasses,
-  Typography,
-  Zoom
+  Typography
 } from '@mui/material';
 import React from 'react';
 
@@ -43,7 +41,8 @@ const InvestFormula = ({ value }) => {
     let roi;
 
     if (value <= 10000) roi = 25;
-    if (value > 1000) roi = 30;
+    if (value >= 10000 && value <= 30000) roi = 27;
+    if (value > 30000) roi = 30;
 
     return roi;
   };

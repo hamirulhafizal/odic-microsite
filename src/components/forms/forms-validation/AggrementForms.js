@@ -11,7 +11,6 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 
 // third-party
-import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 // assets
@@ -23,19 +22,13 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ScreenRotationIcon from '@mui/icons-material/ScreenRotation';
 import ClearIcon from '@mui/icons-material/Clear';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import SignatureCanvas from 'react-signature-canvas';
 
 import { useReactToPrint } from 'react-to-print';
 import ComponentToPrint from './ComponentToPrint';
-
-/**
- * 'Enter your email'
- * yup.string Expected 0 arguments, but got 1 */
-const validationSchema = yup.object({
-  investVal: yup.number().min(1000, 'Min. RM1000 = 1 Slot').max(1000000, 'Max. RM1,000,000.00 = 1000 Slot').required('Amount is required')
-});
 
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //
 
@@ -56,9 +49,18 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
 
   const onBeforeGetContentResolve = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [isSubmit, setSubmit] = useState(false);
+  const [isSuccess, setSuccessMessage] = useState();
+
   const [text, setText] = useState('old boring text');
   const [isDoc, setDoc] = useState(false);
   const [isPreview, setPreview] = useState(true);
+
+  const handleSubmitAggrement = () => {
+    setLoadingSubmit(true);
+    setSubmit(true);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -83,20 +85,18 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     setSign({
       trimmedDataURL: null
     });
+    setSubmit(false);
+    setSuccessMessage();
   };
 
   const handleAfterPrint = useCallback(() => {
-    console.log('`onAfterPrint` called'); // tslint:disable-line no-console\
     setPreview(true);
     setDoc(false);
   }, []);
 
-  const handleBeforePrint = useCallback(() => {
-    console.log('`onBeforePrint` called'); // tslint:disable-line no-console
-  }, []);
+  const handleBeforePrint = useCallback(() => {}, []);
 
   const handleOnBeforeGetContent = useCallback(() => {
-    console.log('`onBeforeGetContent` called'); // tslint:disable-line no-console
     setLoading(true);
     setText('Loading new text...');
     setDoc(true);
@@ -129,7 +129,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
       const document = printIframe.contentDocument;
 
       var opt = {
-        margin: 0.4,
+        margin: 0.9,
         filename: 'Aggrement-OD.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
@@ -148,41 +148,124 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     if (text === 'New, Updated Text!' && typeof onBeforeGetContentResolve.current === 'function') {
       onBeforeGetContentResolve.current();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onBeforeGetContentResolve.current, text]);
 
-  const formik = useFormik({
-    initialValues: {
-      investVal: 1000
-    },
-    validationSchema,
-    onSubmit: () => {
-      // dispatch(
-      //   openSnackbar({
-      //     open: true,
-      //     message: 'Submit Success',
-      //     variant: 'alert',
-      //     alert: {
-      //       color: 'success'
-      //     },
-      //     close: false
+    if (isSubmit) {
+      setTimeout(() => {
+        setLoadingSubmit(false);
+        setSubmit(false);
+        setSuccessMessage('UPLOAD');
+      }, 3000);
+
+      // await updateProfile(user?.user_name, formData)
+      //   .then((res) => {
+      //     setLoadingSubmit(false);
+      //     setSubmit(false);
+      //     setSuccessMessage('UPLOAD');
       //   })
-      // );
-      handleNext();
+      //   .catch((err) => {
+      //     setLoadingSubmit(false);
+      //     setMessage('Something when wrong, please try again');
+      //     setSubmit(false);
+      //   });
     }
-  });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onBeforeGetContentResolve.current, text, isSubmit]);
+
+  // console.log('isSubmit', isSubmit);
+  // console.log('isSuccess', isSuccess);
+  // console.log('isSign?.trimmedDataURL', isSign?.trimmedDataURL !== null);
 
   return (
     <>
       <Stack direction={'column'}>
+        <Stack
+          direction="row"
+          sx={{
+            gap: 2,
+            justifyContent: 'space-between',
+            mt: 2,
+
+            justifyContent: 'space-around',
+            marginTop: '6%',
+            py: '3%',
+            boxShadow: '1px 2px 5px -1px rgb(0 0 0 /64%)',
+            borderTopLeftRadius: '5px',
+            borderTopRightRadius: '5px'
+          }}
+        >
+          {isSign?.trimmedDataURL !== null ? (
+            <>
+              <AnimateButton>
+                <Button
+                  variant="contained"
+                  component="label"
+                  type="submit"
+                  endIcon={
+                    loading ? <CircularProgress sx={{ color: 'white', position: 'relative', left: '10%' }} size={20} /> : <DownloadIcon />
+                  }
+                  onClick={() => {
+                    handlePrint();
+                  }}
+                >
+                  {loading ? 'LOADING...' : 'DOWNLOAD'}
+                </Button>
+              </AnimateButton>
+
+              {isSuccess ? (
+                <AnimateButton>
+                  <Button
+                    endIcon={<CheckCircleOutlineIcon />}
+                    sx={{
+                      '&.Mui-disabled': {
+                        color: 'white',
+                        backgroundColor: 'green',
+                        opacity: 0.5
+                      }
+                    }}
+                    variant="contained"
+                    size="medium"
+                    disabled
+                  >
+                    {isSuccess}
+                  </Button>
+                </AnimateButton>
+              ) : (
+                <>
+                  <AnimateButton>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      type="submit"
+                      endIcon={loadingSubmit ? <CircularProgress size={15} sx={{ color: 'white' }} /> : <SendOutlinedIcon />}
+                      onClick={() => {
+                        handleSubmitAggrement();
+                      }}
+                    >
+                      {loadingSubmit ? 'LOADING...' : 'SUBMIT'}
+                    </Button>
+                  </AnimateButton>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <AnimateButton>
+                <Button variant="contained" component="label" type="submit" endIcon={<HistoryEduIcon />} onClick={handleClickOpen}>
+                  SIGNATURE
+                </Button>
+              </AnimateButton>
+            </>
+          )}
+        </Stack>
+
         <Box
           sx={{
-            pt: 2,
+            pt: 0,
             pb: 5,
             display: 'flex',
             justifyContent: 'center',
-            width: '100%',
-            maxWidth: '100%'
+            width: '100%'
           }}
         >
           <MainCard
@@ -192,7 +275,12 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
               width: matchDownSM ? '100%' : '550px',
               overflowX: 'scroll',
               height: '50vh',
-              overflowY: 'scroll'
+              overflowY: 'scroll',
+              maxWidth: '100%',
+              borderTopLeftRadius: '0px',
+              borderTopRightRadius: '0px',
+              position: 'relative',
+              top: '-1px'
             }}
           >
             {isSign?.trimmedDataURL !== null ? (
@@ -221,7 +309,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                       >
                         <Box
                           sx={{
-                            width: matchDownSM ? '77%' : '77%',
+                            width: matchDownSM ? '80px' : '50%',
                             display: 'flex',
                             justifyContent: 'end',
                             position: 'relative',
@@ -250,7 +338,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
 
                         <Avatar
                           sx={{
-                            width: matchDownSM ? '77%' : '77%',
+                            width: matchDownSM ? '80px' : '77%',
                             height: 'auto',
                             backgroundColor: 'white',
                             padding: '12px',
@@ -266,7 +354,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                     ) : (
                       <Avatar
                         sx={{
-                          width: matchDownSM ? '77%' : '77%',
+                          width: matchDownSM ? '80px' : '77%',
                           height: 'auto',
                           backgroundColor: 'white',
                           padding: '12px'
@@ -276,36 +364,10 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                       />
                     )}
                   </ComponentToPrint>
-
-                  <Button
-                    variant="contained"
-                    component="label"
-                    type="submit"
-                    endIcon={
-                      loading ? <CircularProgress sx={{ color: 'white', position: 'relative', left: '10%' }} size={20} /> : <DownloadIcon />
-                    }
-                    sx={{ mt: 2 }}
-                    onClick={() => {
-                      handlePrint();
-                    }}
-                  >
-                    {loading ? 'Loading...' : 'Download'}
-                  </Button>
                 </Stack>
               </>
             ) : (
               <>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  component="label"
-                  type="submit"
-                  endIcon={<HistoryEduIcon />}
-                  sx={{ mb: 2 }}
-                  onClick={handleClickOpen}
-                >
-                  Signature
-                </Button>
                 <Box
                   sx={{
                     width: '100%',
@@ -390,52 +452,55 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
           />
         </IconButton>
         <Box>
-          {window.innerHeight > window.innerWidth ? (
-            <>
+          {window.innerHeight > window.innerWidth && (
+            <Button
+              fullWidth
+              variant="contained"
+              component="label"
+              type="submit"
+              endIcon={<ScreenRotationIcon />}
+              sx={{ pb: 3, color: 'white', backgroundColor: 'black' }}
+            >
+              For best view to Signature, rotate your Mobile !
+            </Button>
+          )}
+
+          <Stack
+            sx={{
+              flexDirection: 'row',
+              alignItems: 'end',
+              justifyContent: 'end',
+              gap: '1%',
+              pb: 1
+            }}
+          >
+            <AnimateButton>
               <Button
+                color="secondary"
                 variant="contained"
                 component="label"
                 type="submit"
-                endIcon={<ScreenRotationIcon />}
-                sx={{ mt: 5, color: 'white', backgroundColor: 'black' }}
+                endIcon={<ClearIcon />}
+                onClick={handleSignClear}
               >
-                To Signature, rotate your Mobile !
+                clear
               </Button>
-            </>
-          ) : (
-            <>
-              <SignatureCanvas ref={signRef} penColor="black" canvasProps={{ className: 'sigCanvas' }} backgroundColor="white" />
-              <Stack
-                sx={{
-                  flexDirection: 'row',
-                  alignItems: 'end',
-                  justifyContent: 'end',
-                  gap: '1%'
-                }}
+            </AnimateButton>
+            <AnimateButton>
+              <Button
+                color="secondary"
+                variant="contained"
+                component="label"
+                type="submit"
+                endIcon={<SendOutlinedIcon />}
+                onClick={handleSignSubmit}
               >
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  component="label"
-                  type="submit"
-                  endIcon={<ClearIcon />}
-                  onClick={handleSignClear}
-                >
-                  clear
-                </Button>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  component="label"
-                  type="submit"
-                  endIcon={<SendOutlinedIcon />}
-                  onClick={handleSignSubmit}
-                >
-                  Submit
-                </Button>
-              </Stack>
-            </>
-          )}
+                Submit
+              </Button>
+            </AnimateButton>
+          </Stack>
+
+          <SignatureCanvas ref={signRef} penColor="black" canvasProps={{ className: 'sigCanvas' }} backgroundColor="white" />
         </Box>
       </Dialog>
     </>

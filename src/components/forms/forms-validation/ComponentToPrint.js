@@ -236,14 +236,14 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
 
           <Box
             sx={{
-              width: matchDownSM ? '100%' : '100%',
+              width: matchDownSM && isPreview ? '100%' : '100%',
               display: 'flex',
 
-              flexDirection: matchDownSM ? 'column' : 'none',
-              alignItems: matchDownSM ? 'center' : 'none'
+              flexDirection: matchDownSM && isPreview ? 'column' : 'none',
+              alignItems: matchDownSM && isPreview ? 'center' : 'none'
             }}
           >
-            <Box sx={{ width: matchDownSM ? '100%' : '50%' }}>
+            <Box sx={{ width: matchDownSM && isPreview ? '100%' : '50%' }}>
               <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
                 <Typography variant="p">
                   <b>Ditandatangani oleh</b>
@@ -261,7 +261,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
               </Stack>
             </Box>
 
-            <Box sx={{ width: matchDownSM ? '100%' : '50%' }}>
+            <Box sx={{ width: matchDownSM && isPreview ? '100%' : '50%' }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -296,14 +296,19 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
 
           <Box
             sx={{
-              width: '70%',
+              width: matchDownSM && isPreview ? '100%' : '100%',
               display: 'flex',
-              flexDirection: matchDownSM ? 'column' : 'none',
-              alignItems: matchDownSM ? 'center' : 'none',
+              flexDirection: matchDownSM && isPreview ? 'column-reverse' : 'none',
+              alignItems: matchDownSM && isPreview ? 'center' : 'none',
               justifyContent: 'end'
             }}
           >
-            <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black', justifyContent: 'end' }}>
+            <Stack direction="row" sx={{ width: '50%', textAlign: 'justify', color: 'black', justifyContent: 'end' }}></Stack>
+
+            <Stack
+              direction="row"
+              sx={{ width: matchDownSM && isPreview ? '50%' : '100%', textAlign: 'justify', color: 'black', justifyContent: 'end' }}
+            >
               <Typography variant="p">
                 <b style={{ textTransform: 'uppercase' }}>
                   {firstName} {lastName}
@@ -317,14 +322,14 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
 
           <Box
             sx={{
-              width: matchDownSM ? '100%' : '100%',
+              width: matchDownSM && isPreview ? '100%' : '100%',
               display: 'flex',
 
-              flexDirection: matchDownSM ? 'column' : 'none',
-              alignItems: matchDownSM ? 'center' : 'none'
+              flexDirection: matchDownSM && isPreview ? 'column' : 'none',
+              alignItems: matchDownSM && isPreview ? 'center' : 'none'
             }}
           >
-            <Box sx={{ width: matchDownSM ? '100%' : '50%' }}>
+            <Box sx={{ width: matchDownSM && isPreview ? '100%' : '50%' }}>
               <Stack direction="row" sx={{ width: '100%', textAlign: 'justify', color: 'black' }}>
                 <Typography variant="p">
                   <b>Ditandatangani oleh</b>
@@ -342,7 +347,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
               </Stack>
             </Box>
 
-            <Box sx={{ width: matchDownSM ? '100%' : '50%' }}>
+            <Box sx={{ width: matchDownSM && isPreview ? '100%' : '50%' }}>
               <Box
                 sx={{
                   display: 'flex',
