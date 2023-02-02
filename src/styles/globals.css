@@ -176,6 +176,18 @@ a {
   padding: 0;
 }
 
+.stepId {
+  width: 'unset',
+}
+
+@media only screen and (max-width: 425px) {
+  .stepId {
+    width: '100%'
+  }
+}
+
+
+
 .parentPage {
   font-family: 'Times New Roman';
   color: black;

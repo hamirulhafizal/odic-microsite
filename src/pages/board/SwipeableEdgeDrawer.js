@@ -15,12 +15,14 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
 import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
 
 import InvestForms from '../../components/forms/forms-validation/InvestForms';
 import BankAcc from 'components/forms/forms-validation/BankAcc';
 import AggrementForms from 'components/forms/forms-validation/AggrementForms';
 import { useMediaQuery, useTheme } from '@mui/material';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 const steps = [
   {
@@ -139,7 +141,8 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
             orientation="vertical"
             sx={{
               position: 'relative',
-              top: '2%'
+              top: '2%',
+              width: matchDownSM ? '100%' : 'unset'
             }}
           >
             {steps.map((step, index) => (
@@ -180,16 +183,46 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
                 </StepContent>
               </Step>
             ))}
-          </Stepper>
-          {activeStep === steps.length && (
-            <Paper square elevation={0} sx={{ p: 3 }}>
-              <Typography>All steps completed - you&apos;re finished</Typography>
+            {activeStep === steps.length && (
+              <>
+                <Stack direction={'column'}>
+                  <Box
+                    sx={{
+                      pt: 2,
+                      pb: 5,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      width: '100%',
+                      maxWidth: '100%'
+                    }}
+                  >
+                    <MainCard
+                      sx={{
+                        borderColor: 'transparent',
+                        width: matchDownSM ? '100%' : '600px',
+                        height: 'auto'
+                      }}
+                    >
+                      <Paper square elevation={0} sx={{ p: 3 }}>
+                        <Typography>All steps completed - you&apos;re finished</Typography>
 
-              <Button onClick={handleReset} variant="contained" component="label" type="submit" endIcon={<AddIcon />} sx={{ mt: 2 }}>
-                New Slot
-              </Button>
-            </Paper>
-          )}
+                        <Button
+                          onClick={handleReset}
+                          variant="contained"
+                          component="label"
+                          type="submit"
+                          endIcon={<AddIcon />}
+                          sx={{ mt: 2 }}
+                        >
+                          New Slot
+                        </Button>
+                      </Paper>
+                    </MainCard>
+                  </Box>
+                </Stack>
+              </>
+            )}
+          </Stepper>
         </StyledBox>
       </SwipeableDrawer>
     </>

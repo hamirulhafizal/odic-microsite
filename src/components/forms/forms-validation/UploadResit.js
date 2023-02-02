@@ -104,7 +104,7 @@ const UploadResit = ({ handlePreviewImg }) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           {!avatarPreview && isSuccess == null && (
-            <Typography variant="subtitle2" align="start" sx={{ pt: 2 }}>
+            <Typography variant="subtitle2" align="left" sx={{ pt: 2 }}>
               *Upload image below 1MB
             </Typography>
           )}

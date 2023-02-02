@@ -107,6 +107,7 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
                 label={<>AMOUNT</>}
                 type="number"
                 pattern="[0-9]*"
+                disableunderline="true"
                 InputProps={{
                   startAdornment: <InputAdornment position="start">RM</InputAdornment>
                 }}
@@ -114,8 +115,7 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
                   maxLength: 1
                 }}
                 InputLabelProps={{
-                  shrink: true,
-                  disableUnderline: true
+                  shrink: true
                 }}
                 value={formik.values.investVal}
                 onChange={formik.handleChange}

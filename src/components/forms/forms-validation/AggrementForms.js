@@ -124,7 +124,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     onBeforeGetContent: handleOnBeforeGetContent,
     onBeforePrint: handleBeforePrint,
     onAfterPrint: handleAfterPrint,
-    removeAfterPrint: true
+    removeAfterPrint: false
     // fonts
   });
 

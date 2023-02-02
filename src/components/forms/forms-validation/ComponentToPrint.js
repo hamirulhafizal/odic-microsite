@@ -138,7 +138,7 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
                   Pihak pertama dan pihak kedua bersetuju bahawa:
                   <br />
                   <br />
-                  <ol class="c">
+                  <ol className="c">
                     <li>
                       Pihak pertama mengakujanji bahawa pihak pertama akan memberikan wang modal sebanyak Ringgit Malaysia Tiga Ratus Ribu
                       (RM300,000.00) sahaja.
