@@ -17,6 +17,7 @@ import StepContent from '@mui/material/StepContent';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
+import ListIcon from '@mui/icons-material/List';
 
 import InvestForms from '../../components/forms/forms-validation/InvestForms';
 import BankAcc from 'components/forms/forms-validation/BankAcc';
@@ -169,17 +170,6 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
                   {step.component == 'InvestForms' && <InvestForms handleNext={handleNext} handleBack={handleBack} index={index} />}
                   {step.component == 'BankAcc' && <BankAcc handleNext={handleNext} handleBack={handleBack} index={index} />}
                   {step.component == 'Aggrement' && <AggrementForms handleNext={handleNext} handleBack={handleBack} index={index} />}
-
-                  {/* <Box sx={{ mb: 2 }}>
-                    <div>
-                      <Button variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
-                        {index === steps.length - 1 ? 'Finish' : 'Continue'}
-                      </Button>
-                      <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                        Back
-                      </Button>
-                    </div>
-                  </Box> */}
                 </StepContent>
               </Step>
             ))}
@@ -205,17 +195,37 @@ function SwipeableEdgeDrawer({ open, handleToggle }) {
                     >
                       <Paper square elevation={0} sx={{ p: 3 }}>
                         <Typography>All steps completed - you&apos;re finished</Typography>
-
-                        <Button
-                          onClick={handleReset}
-                          variant="contained"
-                          component="label"
-                          type="submit"
-                          endIcon={<AddIcon />}
-                          sx={{ mt: 2 }}
+                        <Stack
+                          direction={matchDownSM ? 'column' : 'row'}
+                          sx={{
+                            gap: 2,
+                            justifyContent: 'center',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            mt: 2
+                          }}
                         >
-                          New Slot
-                        </Button>
+                          <Button
+                            onClick={handleReset}
+                            variant="contained"
+                            component="label"
+                            type="submit"
+                            startIcon={<AddIcon />}
+                            sx={{ width: matchDownSM ? '70%' : '25%' }}
+                          >
+                            New Slot
+                          </Button>
+                          <Button
+                            onClick={handleToggle(false)}
+                            variant="contained"
+                            component="label"
+                            type="submit"
+                            startIcon={<ListIcon />}
+                            sx={{ width: matchDownSM ? '70%' : '25%' }}
+                          >
+                            Status Slot
+                          </Button>
+                        </Stack>
                       </Paper>
                     </MainCard>
                   </Box>

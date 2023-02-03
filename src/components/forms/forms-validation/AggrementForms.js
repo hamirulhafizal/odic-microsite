@@ -51,7 +51,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
   const [loading, setLoading] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [isSubmit, setSubmit] = useState(false);
-  const [isSuccess, setSuccessMessage] = useState();
+  const [isSuccess, setSuccessMessage] = useState('');
 
   const [text, setText] = useState('old boring text');
   const [isDoc, setDoc] = useState(false);
@@ -91,7 +91,6 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
 
   const handleAfterPrint = useCallback(() => {
     setPreview(true);
-    setDoc(false);
   }, []);
 
   const handleBeforePrint = useCallback(() => {}, []);
@@ -152,7 +151,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
     if (isSubmit) {
       setTimeout(() => {
         setLoadingSubmit(false);
-        setSubmit(false);
+        setSubmit(true);
         setSuccessMessage('UPLOAD');
       }, 3000);
 
@@ -295,7 +294,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                   }}
                 >
                   <ComponentToPrint ref={componentRef} isPreview={isPreview}>
-                    {!isDoc ? (
+                    {!isSubmit ? (
                       <Box
                         sx={{
                           width: '100%',
@@ -410,7 +409,13 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
               </Button>
             </AnimateButton>
             <AnimateButton>
-              <Button endIcon={<ArrowForwardIcon />} variant="contained" type="submit" onClick={handleNext}>
+              <Button
+                disabled={isSuccess ? false : true}
+                endIcon={<ArrowForwardIcon />}
+                variant="contained"
+                type="submit"
+                onClick={handleNext}
+              >
                 NEXT
               </Button>
             </AnimateButton>
@@ -452,26 +457,27 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
           />
         </IconButton>
         <Box>
-          {window.innerHeight > window.innerWidth && (
+          {/* {window.innerHeight > window.innerWidth && (
             <Button
               fullWidth
-              variant="contained"
+              variant="text"
               component="label"
-              type="submit"
+              color="secondary"
               endIcon={<ScreenRotationIcon />}
               sx={{ pb: 3, color: 'white', backgroundColor: 'black' }}
             >
-              For best view to Signature, rotate your Mobile !
+              For best Signature,
+              <br /> rotate your Mobile !
             </Button>
-          )}
+          )} */}
 
           <Stack
             sx={{
               flexDirection: 'row',
               alignItems: 'end',
-              justifyContent: 'end',
+              justifyContent: matchDownSM ? 'end' : 'end',
               gap: '1%',
-              pb: 1
+              pb: 3
             }}
           >
             <AnimateButton>

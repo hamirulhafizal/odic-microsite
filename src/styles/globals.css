@@ -155,11 +155,13 @@ a {
 }
 
 .sigCanvas {
-  width: 90vw;
-  height: 60vh;
+  width: 50vw;
+  height: 30vh;
   background: white;
   border-radius: 10px;
 }
+
+
 
 .element-to-print {
   min-height: 840px;
@@ -184,6 +186,12 @@ a {
   .stepId {
     width: '100%'
   }
+
+  .sigCanvas {
+    width: 90vw;
+    height: 30vh;
+  }
+
 }
 
 

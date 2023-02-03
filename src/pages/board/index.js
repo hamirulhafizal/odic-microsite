@@ -66,6 +66,7 @@ import AddIcon from '@mui/icons-material/Add';
 const prodImage = '/assets/images/e-commerce';
 
 import ListIcon from '@mui/icons-material/List';
+import CardSlot from 'components/board/CardSlot';
 
 // table sort
 function descendingComparator(a, b, orderBy) {
@@ -476,6 +477,8 @@ const Listing = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging]);
 
+  console.log('products?.lengt', products?.lengt);
+
   return (
     <>
       <MainCard
@@ -498,20 +501,46 @@ const Listing = () => {
         contentSX={{ p: 0 }}
         sx={{ textAlign: 'center' }}
       >
-        {products?.length != 0 && (
-          <CardContent>
-            {/* <Button
-              onClick={() => {
-                handleSwipe();
-              }}
-              variant="contained"
-              color="secondary"
-              sx={{ color: 'white' }}
-              size="small"
-              startIcon={<AddIcon sx={{ color: 'white' }} fontSize="small" />}
-            >
-              START
-            </Button> */}
+        <CardContent>
+          {products?.length != 0 && (
+            <>
+              <Stack
+                direction="column"
+                sx={{
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  onClick={() => {
+                    handleSwipe();
+                  }}
+                >
+                  Start
+                </Typography>
+                <IconButton
+                  onClick={() => {
+                    handleSwipe();
+                  }}
+                  aria-label="delete"
+                  sx={{
+                    mt: 1,
+                    maxWidth: 'max-content',
+                    backgroundColor: '#b5a837',
+                    boxShadow: '0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%)',
+                    '&:hover': {
+                      backgroundColor: '#b5a837'
+                    }
+                  }}
+                  size="small"
+                >
+                  <AddIcon sx={{ color: 'white' }} fontSize="small" />
+                </IconButton>
+              </Stack>
+            </>
+          )}
+          {/* {products?.length == undefined ? (
             <Stack
               direction="column"
               sx={{
@@ -546,8 +575,20 @@ const Listing = () => {
                 <AddIcon sx={{ color: 'white' }} fontSize="small" />
               </IconButton>
             </Stack>
-          </CardContent>
-        )}
+          ) : (
+            <>
+              <Stack
+                direction="column"
+                sx={{
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <CardSlot></CardSlot>
+              </Stack>
+            </>
+          )} */}
+        </CardContent>
       </MainCard>
 
       {/* <ListingUpdate open={open} productId={productEditId} handleCloseDialog={handleCloseDialog} /> */}
