@@ -69,6 +69,7 @@ const UploadResit = ({ handlePreviewImg }) => {
               handlePreviewImg(true);
               setSubmit(false);
               setSuccessMessage('UPLOAD');
+              localStorage.setItem('resitUpload', true);
             })
             .catch((err) => {
               setMessage('Something when wrong, please try again');
@@ -255,6 +256,7 @@ const UploadResit = ({ handlePreviewImg }) => {
               sx={{ color: 'white' }}
               variant="contained"
               component="span"
+              disabled={message == 'File Size is too large, below 1MB' ? true : false}
             >
               {isLoading ? 'LOADING...' : 'SUBMIT'}
             </Button>

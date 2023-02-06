@@ -28,7 +28,7 @@ export const AWS_API = {
 export const BASE_PATH = '/';
 
 export const DASHBOARD_PATH = '/dashboard';
-export const LISTING_PATH = '/listing';
+export const LISTING_PATH = '/board';
 
 export const GOOLE_API_MAP = 'AIzaSyCw3wsa90tFvFey2uNhqaA3iIn_eLCFTv8';
 

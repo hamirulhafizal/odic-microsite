@@ -315,7 +315,7 @@ const Listing = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [search, setSearch] = React.useState('');
   const [rows, setRows] = React.useState([]);
-  const { products, product } = useSelector((state) => state.product);
+  const { products, product, slot } = useSelector((state) => state.product);
 
   const [categoryState, setCategory] = React.useState(0);
   const [locationState, setLocation] = React.useState(null);
@@ -329,6 +329,7 @@ const Listing = () => {
   const [open, setOpen] = React.useState(false);
   const [isLoading, setLoading] = React.useState(false);
   const [isMessage, setMessage] = React.useState(false);
+  const [slotState, setSlot] = React.useState({ resitUpload: null, aggrement: null, investVal: null });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -466,8 +467,18 @@ const Listing = () => {
     btnAdd.click();
   };
 
+  const handleSlot = () => {
+    const resitUpload = localStorage.getItem('resitUpload');
+    const aggrement = localStorage.getItem('aggrement');
+    const investVal = localStorage.getItem('investVal');
+
+    setSlot({ resitUpload, aggrement, investVal });
+  };
+
   React.useEffect(() => {
     fetchPrimaryPokemonData(categoryState, locationState, typeState.value, 1);
+
+    slotState?.aggrement == undefined && handleSlot();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -477,7 +488,7 @@ const Listing = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging]);
 
-  console.log('products?.lengt', products?.lengt);
+  console.log('slot-->', slot);
 
   return (
     <>
@@ -502,7 +513,7 @@ const Listing = () => {
         sx={{ textAlign: 'center' }}
       >
         <CardContent>
-          {products?.length != 0 && (
+          {/* {products?.length != 0 && (
             <>
               <Stack
                 direction="column"
@@ -539,8 +550,9 @@ const Listing = () => {
                 </IconButton>
               </Stack>
             </>
-          )}
-          {/* {products?.length == undefined ? (
+          )} */}
+
+          {/* {slot?.aggrement == undefined ? (
             <Stack
               direction="column"
               sx={{

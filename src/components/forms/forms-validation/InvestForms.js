@@ -58,18 +58,9 @@ const InvestForms = ({ handleNext, handleBack, index }) => {
       investVal: 1000
     },
     validationSchema,
-    onSubmit: () => {
-      // dispatch(
-      //   openSnackbar({
-      //     open: true,
-      //     message: 'Submit Success',
-      //     variant: 'alert',
-      //     alert: {
-      //       color: 'success'
-      //     },
-      //     close: false
-      //   })
-      // );
+    onSubmit: (values) => {
+      localStorage.setItem('investVal', values?.investVal);
+
       handleNext();
     }
   });

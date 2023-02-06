@@ -130,10 +130,12 @@ export const ApiProvider = ({ children }) => {
 
     dispatch({ type: LOGOUT });
 
-    window.localStorage.removeItem('agent');
-    window.localStorage.removeItem('access');
-    window.localStorage.removeItem('refresh');
-    window.localStorage.removeItem('users');
+    // window.localStorage.removeItem('agent');
+    // window.localStorage.removeItem('access');
+    // window.localStorage.removeItem('refresh');
+    // window.localStorage.removeItem('users');
+
+    localStorage.clear();
   };
 
   const resetPassword = async (user_name) => {
@@ -155,7 +157,7 @@ export const ApiProvider = ({ children }) => {
       .then((res) => {
         const { email } = res?.data;
         login(email, password).then((res) => {
-          history.push('/listing');
+          history.push('/board');
         });
         return res;
       })

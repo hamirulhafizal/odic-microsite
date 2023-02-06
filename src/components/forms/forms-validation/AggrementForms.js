@@ -29,6 +29,8 @@ import SignatureCanvas from 'react-signature-canvas';
 
 import { useReactToPrint } from 'react-to-print';
 import ComponentToPrint from './ComponentToPrint';
+import { dispatch } from 'store';
+import { getSlot } from 'store/slices/product';
 
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //
 
@@ -153,6 +155,25 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
         setLoadingSubmit(false);
         setSubmit(true);
         setSuccessMessage('UPLOAD');
+        const aggrement = localStorage.setItem('aggrement', true);
+        const investVal = localStorage.getItem('investVal');
+        const resitUpload = localStorage.getItem('resitUpload');
+
+        const slot1 = { aggrement: true, investVal: investVal, resitUpload: resitUpload };
+
+        dispatch(getSlot({ id: 4, name: 'Product 4', price: 400 }));
+
+        // dispatch(
+        //   openSnackbar({
+        //     open: true,
+        //     message: 'Submit Success',
+        //     variant: 'alert',
+        //     alert: {
+        //       color: 'success'
+        //     },
+        //     close: false
+        //   })
+        // );
       }, 3000);
 
       // await updateProfile(user?.user_name, formData)
@@ -187,7 +208,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
 
             justifyContent: 'space-around',
             marginTop: '6%',
-            py: '3%',
+            py: '5%',
             boxShadow: '1px 2px 5px -1px rgb(0 0 0 /64%)',
             borderTopLeftRadius: '5px',
             borderTopRightRadius: '5px'
@@ -200,6 +221,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                   variant="contained"
                   component="label"
                   type="submit"
+                  size="small"
                   endIcon={
                     loading ? <CircularProgress sx={{ color: 'white', position: 'relative', left: '10%' }} size={20} /> : <DownloadIcon />
                   }
@@ -223,7 +245,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                       }
                     }}
                     variant="contained"
-                    size="medium"
+                    size="small"
                     disabled
                   >
                     {isSuccess}
@@ -236,6 +258,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                       variant="contained"
                       component="label"
                       type="submit"
+                      size="small"
                       endIcon={loadingSubmit ? <CircularProgress size={15} sx={{ color: 'white' }} /> : <SendOutlinedIcon />}
                       onClick={() => {
                         handleSubmitAggrement();
@@ -261,7 +284,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
         <Box
           sx={{
             pt: 0,
-            pb: 5,
+            pb: 4,
             display: 'flex',
             justifyContent: 'center',
             width: '100%'
@@ -273,7 +296,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
               borderColor: 'transparent',
               width: matchDownSM ? '100%' : '550px',
               overflowX: 'scroll',
-              height: '50vh',
+              height: '34vh',
               overflowY: 'scroll',
               maxWidth: '100%',
               borderTopLeftRadius: '0px',

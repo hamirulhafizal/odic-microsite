@@ -14,7 +14,12 @@ const initialState = {
   product: null,
   relatedProducts: [],
   reviews: [],
-  addresses: []
+  addresses: [],
+  slot: [
+    { id: 1, name: 'Product 1', price: 100 },
+    { id: 2, name: 'Product 2', price: 200 },
+    { id: 3, name: 'Product 3', price: 300 }
+  ]
 };
 
 const slice = createSlice({
@@ -68,6 +73,12 @@ const slice = createSlice({
     // EDIT ADDRESS
     editAddressSuccess(state, action) {
       state.addresses = action.payload;
+    },
+
+    // GET SLOT
+    getSlot(state, action) {
+      state.slot = action.payload;
+      // state.slot.push(action.payload);
     }
   }
 });
@@ -84,7 +95,8 @@ export const {
   getProductReviewsSuccess,
   getAddressesSuccess,
   addAddressSuccess,
-  editAddressSuccess
+  editAddressSuccess,
+  getSlot
 } = slice.actions;
 
 // ----------------------------------------------------------------------ƒ
@@ -196,6 +208,17 @@ export function editAddress(address) {
     try {
       const response = await axios.post('/api/address/edit', address);
       dispatch(slice.actions.editAddressSuccess(response.data.address));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getSlotById(id) {
+  return async (dispatch) => {
+    try {
+      // const response = await axios.post('/api/address/edit', id);
+      dispatch(slice.actions.getSlot(id));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

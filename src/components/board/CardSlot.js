@@ -104,7 +104,7 @@ const CardSlot = () => {
             }}
           >
             <Typography
-              variant="h4"
+              variant="h4  "
               sx={{
                 textAlign: 'start'
               }}
