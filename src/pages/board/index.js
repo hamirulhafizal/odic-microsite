@@ -41,7 +41,7 @@ import MainCard from 'components/ui-component/cards/MainCard';
 import Avatar from 'components/ui-component/extended/Avatar';
 import Chip from 'components/ui-component/extended/Chip';
 import { useDispatch, useSelector } from 'store';
-import { getProducts } from 'store/slices/product';
+import { getProducts, getSlotData, resetAllSlot } from 'store/slices/product';
 
 // assets
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -315,7 +315,7 @@ const Listing = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [search, setSearch] = React.useState('');
   const [rows, setRows] = React.useState([]);
-  const { products, product, slot } = useSelector((state) => state.product);
+  const { slot } = useSelector((state) => state.product);
 
   const [categoryState, setCategory] = React.useState(0);
   const [locationState, setLocation] = React.useState(null);
@@ -329,7 +329,6 @@ const Listing = () => {
   const [open, setOpen] = React.useState(false);
   const [isLoading, setLoading] = React.useState(false);
   const [isMessage, setMessage] = React.useState(false);
-  const [slotState, setSlot] = React.useState({ resitUpload: null, aggrement: null, investVal: null });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -467,18 +466,14 @@ const Listing = () => {
     btnAdd.click();
   };
 
-  const handleSlot = () => {
-    const resitUpload = localStorage.getItem('resitUpload');
-    const aggrement = localStorage.getItem('aggrement');
-    const investVal = localStorage.getItem('investVal');
-
-    setSlot({ resitUpload, aggrement, investVal });
+  const handleClear = () => {
+    dispatch(resetAllSlot());
   };
 
   React.useEffect(() => {
     fetchPrimaryPokemonData(categoryState, locationState, typeState.value, 1);
 
-    slotState?.aggrement == undefined && handleSlot();
+    // slotState?.aggrement == undefined && handleSlot();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -487,8 +482,6 @@ const Listing = () => {
     dispatch(getProducts(user?.user_name));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paging]);
-
-  console.log('slot-->', slot);
 
   return (
     <>
@@ -552,7 +545,11 @@ const Listing = () => {
             </>
           )} */}
 
-          {/* {slot?.aggrement == undefined ? (
+          <Button onClick={handleClear} variant="contained" sx={{ mb: 2 }}>
+            CLEAR
+          </Button>
+
+          {slot.length == 0 ? (
             <Stack
               direction="column"
               sx={{
@@ -596,10 +593,10 @@ const Listing = () => {
                   alignItems: 'center'
                 }}
               >
-                <CardSlot></CardSlot>
+                <CardSlot />
               </Stack>
             </>
-          )} */}
+          )}
         </CardContent>
       </MainCard>
 

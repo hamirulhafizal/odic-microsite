@@ -1,39 +1,22 @@
 import React from 'react';
-import { useMediaQuery, useTheme } from '@mui/material';
 import MainCard from 'components/ui-component/cards/MainCard';
 
-import {
-  Box,
-  ClickAwayListener,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  styled,
-  Tooltip,
-  tooltipClasses,
-  Typography
-} from '@mui/material';
+import { Box, Button, IconButton, Stack, styled, Tooltip, tooltipClasses, Typography, useMediaQuery, useTheme } from '@mui/material';
 
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { numberWithCommas } from 'utils/helper';
-
-const HtmlTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: 'rgba(97, 97, 97, 0.9)',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 220,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9'
-  }
-}));
+import { useSelector } from 'store';
+import CountdownTimer from './CountdownTimer';
+import StatusProgress from './StatusProgress';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const CardSlot = () => {
   const value = 10000;
 
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const { slot } = useSelector((state) => state.product);
 
   const [open, setOpen] = React.useState(false);
 
@@ -57,158 +40,141 @@ const CardSlot = () => {
 
   return (
     <>
-      <MainCard
-        sx={{
-          width: matchDownSM ? '100%' : '550px',
-          boxShadow: '1px 2px 5px -1px rgb(0 0 0 / 64%) !important',
-          borderColor: 'transparent'
-        }}
-      >
-        <Box
-          flexDirection={'column'}
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            width: '100%',
-            justifyContent: 'space-between'
-          }}
-        >
-          <Stack
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%'
-            }}
-          >
-            <Typography variant="h6">RM {numberWithCommas(value)}</Typography>
-            <Typography
-              variant="h6"
+      {slot?.map((item, index) => {
+        return (
+          <>
+            <MainCard
+              id={index}
               sx={{
-                color: '#287F93'
+                width: matchDownSM ? '100%' : '550px',
+                boxShadow: '1px 2px 5px -1px rgb(0 0 0 / 64%) !important',
+                borderColor: 'transparent'
               }}
             >
-              {value / 1000} Slot
-            </Typography>
-          </Stack>
-
-          <Stack
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%'
-            }}
-          >
-            <Typography
-              variant="h4  "
-              sx={{
-                textAlign: 'start'
-              }}
-            >
-              RM {numberWithCommas(value * 0.33)}
-            </Typography>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              {/* <ClickAwayListener onClickAway={handleTooltipClose}>
-                <IconButton
-                  onClick={handleTooltipOpen}
+              <Box
+                flexDirection={'column'}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-evenly',
+                  alignItems: 'center',
+                  width: '100%',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Stack
                   sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'start',
+                    justifyContent: 'start',
+                    width: '100%',
                     p: 0
                   }}
                 >
-                  <HtmlTooltip
-                    arrow
-                    placement="bottom-end"
-                    disableFocusListener
-                    disableHoverListener
-                    disableTouchListener
-                    onClose={handleTooltipClose}
-                    open={open}
-                    title={
-                      <>
-                        <Stack
-                          sx={{
-                            pt: 2,
-
-                            textAlign: 'center'
-                          }}
-                        >
-                          <Typography
-                            variant="h5"
-                            sx={{
-                              color: 'white'
-                            }}
-                          >
-                            Return On Investment (ROI)
-                          </Typography>
-                        </Stack>
-
-                        <List
-                          sx={{
-                            width: 'auto'
-                          }}
-                        >
-                          <ListItem
-                            disablePadding
-                            sx={{
-                              textAlign: 'center',
-                              flexDirection: 'column',
-                              color: 'white'
-                            }}
-                          >
-                            <ListItemText variant="span" primary="RM10K below ROI 25%" />
-                            <br />
-                            <ListItemText variant="span" primary="RM10-30K range ROI 27%" />
-                            <br />
-                            <ListItemText variant="span" primary="RM30K above ROI 30%" />
-                          </ListItem>
-                        </List>
-                      </>
-                    }
+                  <Typography variant="h6">RM {numberWithCommas(+item?.investVal)}</Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: '#287F93',
+                      pl: 1
+                    }}
                   >
-                    <InfoOutlinedIcon sx={{ fontSize: '70%', p: 0, mr: 0.5, color: '#28933F' }} />
-                  </HtmlTooltip>
-                </IconButton>
-              </ClickAwayListener> */}
-              <Typography
-                variant="h6"
-                sx={{
-                  position: 'relative',
-                  top: '1px',
-                  color: '#28933F'
-                }}
-              >
-                ROI {checkRoi(value)}%
-              </Typography>
-            </Box>
-          </Stack>
+                    Invested {+item?.investVal / 1000} Slot
+                  </Typography>
+                </Stack>
 
-          <Stack
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%'
-            }}
-          >
-            <Typography variant="h6" sx={{ color: '#B5A837' }}>
-              Lock duration{' '}
-            </Typography>
+                <Stack
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Typography
+                      variant="h2"
+                      sx={{
+                        textAlign: 'start'
+                      }}
+                    >
+                      RM {numberWithCommas(+item?.investVal * 0.33)}
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        position: 'relative',
+                        top: '1px',
+                        color: '#28933F',
+                        pl: 1,
+                        pt: 1
+                      }}
+                    >
+                      ROI {checkRoi(+item?.investVal)}%
+                    </Typography>
+                  </Box>
+                </Stack>
 
-            <Typography variant="h6">14 Month</Typography>
-          </Stack>
-        </Box>
-      </MainCard>
+                <Stack
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'start',
+                      alignItems: 'start',
+                      flexFlow: 'wrap',
+                      width: '100%',
+                      pt: 3
+                    }}
+                  >
+                    <Typography variant="h5" sx={{ color: '#B5A837', pr: 2 }}>
+                      {`Dividend:`}
+                    </Typography>
+                    <CountdownTimer created_date={item?.created_date} created_time={item?.created_time} durationInMonths={14}>
+                      <StatusProgress />
+                      <Box
+                        sx={{
+                          pt: 2,
+                          width: '100%',
+                          display: 'flex',
+                          justifyContent: 'end'
+                        }}
+                      >
+                        <AnimateButton>
+                          <Button
+                            // fullWidth
+                            // disabled={isSuccess ? false : true}
+                            endIcon={'🔍'}
+                            variant="contained"
+                            type="submit"
+                            // onClick={handleNext}
+                          >
+                            APPROVAL
+                          </Button>
+                        </AnimateButton>
+                      </Box>
+                    </CountdownTimer>
+                  </Box>
+                </Stack>
+              </Box>
+            </MainCard>
+          </>
+        );
+      })}
     </>
   );
 };
