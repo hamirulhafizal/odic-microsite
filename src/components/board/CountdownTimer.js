@@ -2,30 +2,51 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Box } from '@mui/material';
 
-const CountdownTimer = ({ created_date, created_time, durationInMonths, children }) => {
-  const [timeLeft, setTimeLeft] = useState(null);
+// const Timepurejs = () => {
+//   const today = new Date();
+//   const tomorrow = new Date(today);
+//   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const endDate = moment(`${created_date + created_time}`, 'DD MMM YYYY hh:mm A').add(durationInMonths, 'months');
-      const diff = endDate.diff(moment());
-      return moment.duration(diff);
-    };
+//   const countdown = tomorrow - today;
 
-    setTimeLeft(calculateTimeLeft());
-  }, [created_date, created_time, durationInMonths]);
+//   setInterval(function () {
+//     const now = new Date();
+//     const distance = tomorrow - now;
+
+//     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+//     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+//     console.log(hours + 'h ' + minutes + 'm ');
+//   }, 1000);
+// };
+
+const CountdownTimer = ({ created_date, created_time, dividenDate, children }) => {
+  // const [timeLeft, setTimeLeft] = useState(null);
+
+  // useEffect(() => {
+  //   const calculateTimeLeft = () => {
+  //     // const endDate = moment(`${created_date + created_time}`, 'DD MMM YYYY hh:mm A').add(durationInMonths, 'months');
+  //     const diff = dividenDate.diff(moment());
+  //     return moment.duration(diff);
+  //   };
+
+  //   setTimeLeft(calculateTimeLeft());
+  // }, [dividenDate]);
 
   return (
     <>
       <Box
         direction="row"
         sx={{
-          fontSize: '12px'
+          fontSize: '12px',
+          textAlign: 'start'
         }}
       >
-        {timeLeft && (
+        {dividenDate} <br />
+        {created_time} <br />
+        {/* {timeLeft && (
           <>
-            {' '}
             <span>
               {timeLeft.years()} <span style={{ paddingRight: '5px' }}> Years :</span>
             </span>
@@ -41,13 +62,12 @@ const CountdownTimer = ({ created_date, created_time, durationInMonths, children
             <span>
               {timeLeft.minutes()} <span style={{ paddingRight: '5px' }}> Mins :</span>
             </span>
-            <span>
-              {timeLeft.seconds()} <span style={{ paddingRight: '5px' }}> Sec</span>
-            </span>
           </>
-        )}
+        )} */}
       </Box>
       {children}
+
+      {/* <Timepurejs /> */}
     </>
   );
 };

@@ -503,9 +503,9 @@ const Listing = () => {
         }
         content={true}
         contentSX={{ p: 0 }}
-        sx={{ textAlign: 'center' }}
+        sx={{ textAlign: 'center', p: 0, mb: 2 }}
       >
-        <CardContent>
+        <CardContent sx={{ p: 3 }}>
           {/* {products?.length != 0 && (
             <>
               <Stack

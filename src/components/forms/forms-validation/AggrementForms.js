@@ -161,10 +161,22 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
         const investVal = localStorage.getItem('investVal');
         const resitUpload = localStorage.getItem('resitUpload');
 
-        const todayDate = moment().format('DD MMM YYYY');
-        const todayTime = moment().format('h:mma');
+        const todayDate = moment().format('DD MMM YYYY h:mma');
+        const todayTime = moment().format('H');
 
-        const slot1 = { aggrement: true, investVal: investVal, resitUpload: resitUpload, created_date: todayDate, created_time: todayTime };
+        console.log('todayTime', todayTime);
+
+        const dividenDate = moment(todayDate).add(14, 'months').format('DD MM YYYY');
+        // const targetTime = moment(dividenDate).set({ hour: 13, minute: 0, second: 0, millisecond: 0 });
+
+        const slot1 = {
+          aggrement: true,
+          investVal: investVal,
+          resitUpload: resitUpload,
+          created_date: todayDate,
+          created_time: todayTime,
+          dividenDate: dividenDate
+        };
 
         dispatch(getSlotData(slot1));
 
@@ -301,7 +313,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
               borderColor: 'transparent',
               width: matchDownSM ? '100%' : '550px',
               overflowX: 'scroll',
-              height: '34vh',
+              height: '25vh',
               overflowY: 'scroll',
               maxWidth: '100%',
               borderTopLeftRadius: '0px',

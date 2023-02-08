@@ -33,7 +33,7 @@ const steps = [
   },
   {
     label: 'Upload Bank Transfer',
-    description: 'After transfer to company bank, kindlly upload the recepit by click the clip icon',
+    description: 'kindlly upload recepit by click the clip',
     component: 'BankAcc'
   },
   {

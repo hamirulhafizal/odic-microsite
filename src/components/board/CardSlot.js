@@ -9,6 +9,7 @@ import CountdownTimer from './CountdownTimer';
 import StatusProgress from './StatusProgress';
 import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import moment from 'moment';
 
 const CardSlot = () => {
   const value = 10000;
@@ -38,6 +39,12 @@ const CardSlot = () => {
     return roi;
   };
 
+  console.log('slot', slot);
+
+  const timeCreated = slot[0].created_date;
+  const startDate = moment(timeCreated);
+  const advanceTime = moment(startDate).add(14, 'months').format('DD MM YYYY');
+
   return (
     <>
       {slot?.map((item, index) => {
@@ -48,7 +55,8 @@ const CardSlot = () => {
               sx={{
                 width: matchDownSM ? '100%' : '550px',
                 boxShadow: '1px 2px 5px -1px rgb(0 0 0 / 64%) !important',
-                borderColor: 'transparent'
+                borderColor: 'transparent',
+                marginBottom: matchDownSM ? '10%' : '2%'
               }}
             >
               <Box
@@ -66,7 +74,7 @@ const CardSlot = () => {
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'start',
-                    justifyContent: 'start',
+                    justifyContent: matchDownSM ? 'space-between' : 'start',
                     width: '100%',
                     p: 0
                   }}
@@ -95,12 +103,13 @@ const CardSlot = () => {
                   <Box
                     sx={{
                       display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center'
+                      justifyContent: matchDownSM ? 'space-between' : 'start',
+                      alignItems: 'center',
+                      width: '100%'
                     }}
                   >
                     <Typography
-                      variant="h2"
+                      variant="h4"
                       sx={{
                         textAlign: 'start'
                       }}
@@ -113,8 +122,8 @@ const CardSlot = () => {
                         position: 'relative',
                         top: '1px',
                         color: '#28933F',
-                        pl: 1,
-                        pt: 1
+                        // pl: 1,
+                        pl: matchDownSM ? 0 : 1
                       }}
                     >
                       ROI {checkRoi(+item?.investVal)}%
@@ -142,9 +151,9 @@ const CardSlot = () => {
                     }}
                   >
                     <Typography variant="h5" sx={{ color: '#B5A837', pr: 2 }}>
-                      {`Dividend:`}
+                      {`Dividend On:`}
                     </Typography>
-                    <CountdownTimer created_date={item?.created_date} created_time={item?.created_time} durationInMonths={14}>
+                    <CountdownTimer created_date={item?.created_date} created_time={item?.created_time} dividenDate={item?.dividenDate}>
                       <StatusProgress />
                       <Box
                         sx={{
