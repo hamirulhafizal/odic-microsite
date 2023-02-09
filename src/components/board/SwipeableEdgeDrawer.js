@@ -19,7 +19,7 @@ import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
 import ListIcon from '@mui/icons-material/List';
 
-import InvestForms from '../../components/forms/forms-validation/InvestForms';
+import InvestForms from '../forms/forms-validation/InvestForms';
 import BankAcc from 'components/forms/forms-validation/BankAcc';
 import AggrementForms from 'components/forms/forms-validation/AggrementForms';
 import { useMediaQuery, useTheme } from '@mui/material';
