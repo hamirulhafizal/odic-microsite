@@ -243,7 +243,7 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
                     handlePrint();
                   }}
                 >
-                  {loading ? 'LOADING...' : 'DOWNLOAD'}
+                  {loading ? 'LOADING.. .' : 'DOWNLOAD'}
                 </Button>
               </AnimateButton>
 
