@@ -161,14 +161,10 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
         const investVal = localStorage.getItem('investVal');
         const resitUpload = localStorage.getItem('resitUpload');
 
-        // const todayDate = moment().format('DD MMM YYYY h:mma');
-        const todayDate = moment().format('DD MMM YYYY');
+        const todayDate = moment().format('DD MMM YYYY h:mma');
         const todayTime = moment().format('H');
 
-        console.log('todayTime', todayTime);
-
-        const dividenDate = moment(todayDate).add(14, 'months').format('DD MM YYYY');
-        // const targetTime = moment(dividenDate).set({ hour: 13, minute: 0, second: 0, millisecond: 0 });
+        const dividenDate = moment(todayDate).add({ years: 1, months: 2 });
 
         const slot1 = {
           aggrement: true,

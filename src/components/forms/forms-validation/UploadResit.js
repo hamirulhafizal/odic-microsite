@@ -176,91 +176,91 @@ const UploadResit = ({ handlePreviewImg }) => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              flexDirection: 'column',
+              flexDirection: 'row-reverse',
               position: 'relative',
               width: 'fit-content'
             }}
           >
             {avatarPreview && (
               <>
-                <IconButton
-                  color="secondary"
-                  variant="contained"
-                  size="small"
-                  aria-label="delete"
-                  onClick={handleClickOpen}
-                  sx={{
-                    position: 'relative',
-                    top: '18px',
-                    zIndex: 1,
-                    width: '100px',
-                    height: '100px',
-                    backgroundSize: 'contain',
-                    borderRadius: '0px',
-                    backgroundImage: `url(${avatarPreview})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'contain',
-                    backgroundColor: 'black',
-                    backgroundPosition: 'center',
-                    '&:hover': {
-                      backgroundColor: 'black'
-                    }
+                <Button
+                  onClick={() => {
+                    setSubmit(true);
+                    setLoding(true);
                   }}
+                  fullwidth
+                  endIcon={isLoading ? <CircularProgress size={15} sx={{ color: 'white' }} /> : <SendOutlinedIcon />}
+                  color="secondary"
+                  sx={{ color: 'white', ml: 2 }}
+                  variant="contained"
+                  component="span"
+                  size="small"
+                  disabled={message == 'File Size is too large, below 1MB' ? true : false}
                 >
-                  <ZoomInIcon
+                  {isLoading ? 'LOADING...' : 'SUBMIT'}
+                </Button>
+                <Stack>
+                  <IconButton
+                    color="secondary"
+                    variant="contained"
+                    size="small"
+                    aria-label="delete"
                     onClick={handleClickOpen}
                     sx={{
-                      p: 1,
                       position: 'relative',
+                      top: '18px',
+                      zIndex: 1,
+                      width: '100px',
+                      height: '100px',
+                      backgroundSize: 'contain',
+                      borderRadius: '5px',
+                      backgroundImage: `url(${avatarPreview})`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundSize: 'contain',
                       backgroundColor: 'black',
-                      borderRadius: '50px',
-                      zIndex: 10,
-                      color: 'white',
-                      left: '3px',
-                      width: '35px',
-                      height: '35px',
-                      opacity: '0.5'
+                      backgroundPosition: 'center',
+                      '&:hover': {
+                        backgroundColor: 'black'
+                      }
+                    }}
+                  >
+                    <ZoomInIcon
+                      onClick={handleClickOpen}
+                      sx={{
+                        p: 1,
+                        position: 'relative',
+                        backgroundColor: 'black',
+                        borderRadius: '50px',
+                        zIndex: 10,
+                        color: 'white',
+                        left: '3px',
+                        width: '35px',
+                        height: '35px',
+                        opacity: '0.5'
+                      }}
+                    />
+                  </IconButton>
+
+                  <CancelIcon
+                    onClick={(e) => {
+                      setFieldImgValue(undefined);
+                      setAvatarPreview('');
+                      handlePreviewImg(false);
+                    }}
+                    sx={{
+                      backgroundColor: 'white',
+                      borderRadius: '50%',
+                      position: 'relative',
+                      zIndex: 1,
+                      top: '-91px',
+                      left: '86px',
+                      color: 'red'
                     }}
                   />
-                </IconButton>
-
-                <CancelIcon
-                  onClick={(e) => {
-                    setFieldImgValue(undefined);
-                    setAvatarPreview('');
-                    handlePreviewImg(false);
-                  }}
-                  sx={{
-                    backgroundColor: 'white',
-                    borderRadius: '50%',
-                    position: 'relative',
-                    zIndex: 1,
-                    top: '-91px',
-                    left: '48px',
-                    color: 'red'
-                  }}
-                />
+                </Stack>
               </>
             )}
           </Box>
-
-          {avatarPreview && (
-            <Button
-              onClick={() => {
-                setSubmit(true);
-                setLoding(true);
-              }}
-              fullwidth
-              endIcon={isLoading ? <CircularProgress size={15} sx={{ color: 'white' }} /> : <SendOutlinedIcon />}
-              color="secondary"
-              sx={{ color: 'white' }}
-              variant="contained"
-              component="span"
-              disabled={message == 'File Size is too large, below 1MB' ? true : false}
-            >
-              {isLoading ? 'LOADING...' : 'SUBMIT'}
-            </Button>
-          )}
         </Grid>
       </Grid>
 

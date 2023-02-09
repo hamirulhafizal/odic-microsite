@@ -147,14 +147,14 @@ const CardSlot = () => {
                       alignItems: 'start',
                       flexFlow: 'wrap',
                       width: '100%',
-                      pt: 3
+                      pt: 2
                     }}
                   >
                     <Typography variant="h5" sx={{ color: '#B5A837', pr: 2 }}>
                       {`Dividend On:`}
                     </Typography>
                     <CountdownTimer created_date={item?.created_date} created_time={item?.created_time} dividenDate={item?.dividenDate}>
-                      <StatusProgress />
+                      {/* <StatusProgress /> */}
                       <Box
                         sx={{
                           pt: 2,

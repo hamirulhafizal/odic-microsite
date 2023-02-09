@@ -290,12 +290,12 @@ ol.c {
 .countdown-wrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
 .countdown-item {
-  color: #111;
+  color: black;
   font-size: 15px;
   display: flex;
   align-items: center;
@@ -305,12 +305,16 @@ ol.c {
   margin: 5px;
   padding-top: 0px;
   position: relative;
-  width: auto;
-  height: auto;
+
+
+  width: 40px;
+  height: 15px;
+  background-color: #b5a8377d;
+  border-radius: 5px;
 }
 
 .countdown-item span {
-  color: #333;
+  color: black;
   font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
