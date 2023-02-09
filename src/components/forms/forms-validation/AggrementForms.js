@@ -161,7 +161,8 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
         const investVal = localStorage.getItem('investVal');
         const resitUpload = localStorage.getItem('resitUpload');
 
-        const todayDate = moment().format('DD MMM YYYY h:mma');
+        // const todayDate = moment().format('DD MMM YYYY h:mma');
+        const todayDate = moment().format('DD MMM YYYY');
         const todayTime = moment().format('H');
 
         console.log('todayTime', todayTime);

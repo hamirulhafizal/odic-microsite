@@ -545,10 +545,6 @@ const Listing = () => {
             </>
           )} */}
 
-          <Button onClick={handleClear} variant="contained" sx={{ mb: 2 }}>
-            CLEAR
-          </Button>
-
           {slot.length == 0 ? (
             <Stack
               direction="column"
@@ -586,6 +582,9 @@ const Listing = () => {
             </Stack>
           ) : (
             <>
+              <Button onClick={handleClear} variant="contained" sx={{ mb: 2 }}>
+                CLEAR ALL
+              </Button>
               <Stack
                 direction="column"
                 sx={{

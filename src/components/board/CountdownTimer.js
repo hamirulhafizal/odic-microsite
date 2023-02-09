@@ -2,37 +2,26 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Box } from '@mui/material';
 
-// const Timepurejs = () => {
-//   const today = new Date();
-//   const tomorrow = new Date(today);
-//   tomorrow.setDate(tomorrow.getDate() + 1);
-
-//   const countdown = tomorrow - today;
-
-//   setInterval(function () {
-//     const now = new Date();
-//     const distance = tomorrow - now;
-
-//     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-//     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-//     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-//     console.log(hours + 'h ' + minutes + 'm ');
-//   }, 1000);
-// };
-
 const CountdownTimer = ({ created_date, created_time, dividenDate, children }) => {
-  // const [timeLeft, setTimeLeft] = useState(null);
+  const targetTime = moment(dividenDate);
 
-  // useEffect(() => {
-  //   const calculateTimeLeft = () => {
-  //     // const endDate = moment(`${created_date + created_time}`, 'DD MMM YYYY hh:mm A').add(durationInMonths, 'months');
-  //     const diff = dividenDate.diff(moment());
-  //     return moment.duration(diff);
-  //   };
+  console.log('targetTime', targetTime);
+  console.log('created_date', created_date);
 
-  //   setTimeLeft(calculateTimeLeft());
-  // }, [dividenDate]);
+  const [currentTime, setCurrentTime] = useState(moment());
+  const timeBetween = moment.duration(targetTime.diff(currentTime));
+
+  const totalTime = targetTime.diff(moment());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(moment());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  console.log('precentage', (currentTime / totalTime) * 100);
 
   return (
     <>
@@ -43,27 +32,57 @@ const CountdownTimer = ({ created_date, created_time, dividenDate, children }) =
           textAlign: 'start'
         }}
       >
-        {dividenDate} <br />
-        {created_time} <br />
-        {/* {timeLeft && (
-          <>
-            <span>
-              {timeLeft.years()} <span style={{ paddingRight: '5px' }}> Years :</span>
-            </span>
-            <span>
-              {timeLeft.months()} <span style={{ paddingRight: '5px' }}> Months :</span>
-            </span>
-            <span>
-              {timeLeft.days()} <span style={{ paddingRight: '5px' }}> Days :</span>
-            </span>
-            <span>
-              {timeLeft.hours()} <span style={{ paddingRight: '5px' }}> Hours :</span>
-            </span>
-            <span>
-              {timeLeft.minutes()} <span style={{ paddingRight: '5px' }}> Mins :</span>
-            </span>
-          </>
-        )} */}
+        {/* <span>
+          {timeBetween.years()} <span style={{ paddingRight: '5px' }}> Years :</span>
+        </span>
+        <span>
+          {timeBetween.months()} <span style={{ paddingRight: '5px' }}> Months :</span>
+        </span>
+
+        <span>
+          {timeBetween.days()} <span style={{ paddingRight: '5px' }}> Days :</span>
+        </span>
+        <span>
+          {timeBetween.hours()} <span style={{ paddingRight: '5px' }}> Hours :</span>
+        </span>
+        <span>
+          {timeBetween.minutes()} <span style={{ paddingRight: '5px' }}> Mins :</span>
+        </span>
+        <span>
+          {timeBetween.seconds()} <span style={{ paddingRight: '5px' }}> s</span>
+        </span> */}
+
+        <div className="countdown-wrapper">
+          <div className="countdown-item">
+            {timeBetween.years()}
+            <span>Years</span>
+          </div>
+
+          <div className="countdown-item">
+            {timeBetween.months()}
+            <span>months</span>
+          </div>
+
+          <div className="countdown-item">
+            {timeBetween.days()}
+            <span>days</span>
+          </div>
+
+          <div className="countdown-item">
+            {timeBetween.hours()}
+            <span>hours</span>
+          </div>
+
+          <div className="countdown-item">
+            {timeBetween.minutes()}
+            <span>minutes</span>
+          </div>
+
+          <div className="countdown-item">
+            {timeBetween.seconds()}
+            <span>seconds</span>
+          </div>
+        </div>
       </Box>
       {children}
 
