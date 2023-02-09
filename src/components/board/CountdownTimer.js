@@ -3,12 +3,12 @@ import moment from 'moment';
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 const CountdownTimer = ({ created_date, created_time, dividenDate, children }) => {
-  const targetTime = moment(dividenDate);
-
-  const [currentTime, setCurrentTime] = useState(moment());
-  const timeBetween = moment.duration(targetTime.diff(currentTime));
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const targetTime = moment(dividenDate);
+  const [currentTime, setCurrentTime] = useState(moment());
+  const timeBetween = moment.duration(targetTime.diff(currentTime));
 
   useEffect(() => {
     const interval = setInterval(() => {
