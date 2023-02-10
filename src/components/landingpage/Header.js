@@ -75,7 +75,7 @@ const HeaderPage = () => {
                     lineHeight: 1.4
                   }}
                 >
-                  Welcome to<br></br>
+                  Welcome To<br></br>
                   <Box component="span" variant="h2" color="inherit" sx={{ ml: 2, color: 'white' }}>
                     ONE DREAM INVESTMENT CENTER
                   </Box>
