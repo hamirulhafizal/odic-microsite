@@ -192,9 +192,9 @@ const Board = () => {
   };
 
   React.useEffect(() => {
-    fetchPrimaryPokemonData(categoryState, locationState, typeState.value, 1);
-
     slotState?.aggrement == undefined && handleSlot();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // React.useEffect(() => {
