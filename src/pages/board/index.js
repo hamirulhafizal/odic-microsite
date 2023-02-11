@@ -91,7 +91,7 @@ const Board = () => {
         contentSX={{ p: 0 }}
         sx={{ textAlign: 'center', p: 0, mb: 2 }}
       >
-        <CardContent sx={{ p: 3 }}>
+        <CardContent>
           {slot.length == 0 ? (
             <Stack
               direction="column"
