@@ -195,6 +195,7 @@ const Board = () => {
     fetchPrimaryPokemonData(categoryState, locationState, typeState.value, 1);
 
     slotState?.aggrement == undefined && handleSlot();
+  }, []);
 
   // React.useEffect(() => {
   //   fetchPrimaryPokemonData(categoryState, locationState, typeState.value, 1);
@@ -210,67 +211,27 @@ const Board = () => {
   return (
     <>
       <MainCard
-        // title={
-        //   <>
-        //     <Stack
-        //       sx={{
-        //         display: 'flex',
-        //         flexDirection: 'row',
-        //         justifyContent: 'center',
-        //         alignItems: 'center'
-        //       }}
-        //     >
-        //       <ListIcon sx={{ mr: 1 }} />
-        //       <Typography variant="h4">INVESTMENT BOARD</Typography>
-        //     </Stack>
-        //   </>
-        // }
-        title="INVESTMENT BOARD"
+        title={
+          <>
+            <Stack
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <ListIcon sx={{ mr: 1 }} />
+              <Typography variant="h4">INVESTMENT BOARD</Typography>
+            </Stack>
+          </>
+        }
         content={true}
         contentSX={{ p: 0 }}
         sx={{ textAlign: 'center', p: 0, mb: 2 }}
       >
         <CardContent>
-          {/* {products?.length != 0 && (
-            <>
-              <Stack
-                direction="column"
-                sx={{
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  onClick={() => {
-                    handleSwipe();
-                  }}
-                >
-                  Start
-                </Typography>
-                <IconButton
-                  onClick={() => {
-                    handleSwipe();
-                  }}
-                  aria-label="delete"
-                  sx={{
-                    mt: 1,
-                    maxWidth: 'max-content',
-                    backgroundColor: '#b5a837',
-                    boxShadow: '0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%)',
-                    '&:hover': {
-                      backgroundColor: '#b5a837'
-                    }
-                  }}
-                  size="small"
-                >
-                  <AddIcon sx={{ color: 'white' }} fontSize="small" />
-                </IconButton>
-              </Stack>
-            </>
-          )} */}
-
-          {/* {slot?.aggrement == undefined ? (
+          {slot?.aggrement == undefined ? (
             <Stack
               direction="column"
               sx={{
@@ -307,9 +268,9 @@ const Board = () => {
             </Stack>
           ) : (
             <>
-              {/* <Button onClick={handleClear} variant="contained" sx={{ mb: 2 }}>
+              <Button onClick={handleClear} variant="contained" sx={{ mb: 2 }}>
                 CLEAR ALL
-              </Button> */}
+              </Button>
               <Stack
                 direction="column"
                 sx={{
@@ -320,7 +281,7 @@ const Board = () => {
                 <CardSlot></CardSlot>
               </Stack>
             </>
-          )} */}
+          )}
         </CardContent>
       </MainCard>
 

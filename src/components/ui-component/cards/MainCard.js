@@ -62,7 +62,6 @@ const MainCard = React.forwardRef(
             {children}
           </CardContent>
         )}
-        {children}
       </Card>
     );
   }
