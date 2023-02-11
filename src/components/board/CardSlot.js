@@ -5,7 +5,7 @@ import { Box, Button, IconButton, Stack, styled, Tooltip, tooltipClasses, Typogr
 
 import { numberWithCommas } from 'utils/helper';
 import { useSelector } from 'store';
-import CountdownTimer from './CountdownTimer';
+// import CountdownTimer from './CountdownTimer';
 import StatusProgress from './StatusProgress';
 import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -153,8 +153,7 @@ const CardSlot = () => {
                     <Typography variant="h5" sx={{ color: '#B5A837', pr: 2 }}>
                       {`Dividend On:`}
                     </Typography>
-                    <CountdownTimer created_date={item?.created_date} created_time={item?.created_time} dividenDate={item?.dividenDate}>
-                      {/* <StatusProgress /> */}
+                    {/* <CountdownTimer created_date={item?.created_date} created_time={item?.created_time} dividenDate={item?.dividenDate}>
                       <Box
                         sx={{
                           pt: 2,
@@ -164,19 +163,12 @@ const CardSlot = () => {
                         }}
                       >
                         <AnimateButton>
-                          <Button
-                            // fullWidth
-                            // disabled={isSuccess ? false : true}
-                            endIcon={'🔍'}
-                            variant="contained"
-                            type="submit"
-                            // onClick={handleNext}
-                          >
+                          <Button endIcon={'🔍'} variant="contained" type="submit">
                             APPROVAL
                           </Button>
                         </AnimateButton>
                       </Box>
-                    </CountdownTimer>
+                    </CountdownTimer> */}
                   </Box>
                 </Stack>
               </Box>

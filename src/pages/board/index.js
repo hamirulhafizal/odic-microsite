@@ -54,9 +54,9 @@ const Board = () => {
     btnAdd.click();
   };
 
-  const handleClear = () => {
-    dispatch(resetAllSlot());
-  };
+  // const handleClear = () => {
+  //   dispatch(resetAllSlot());
+  // };
 
   // React.useEffect(() => {
   //   fetchPrimaryPokemonData(categoryState, locationState, typeState.value, 1);
@@ -127,9 +127,9 @@ const Board = () => {
             </Stack>
           ) : (
             <>
-              <Button onClick={handleClear} variant="contained" sx={{ mb: 2 }}>
+              {/* <Button onClick={handleClear} variant="contained" sx={{ mb: 2 }}>
                 CLEAR ALL
-              </Button>
+              </Button> */}
               <Stack
                 direction="column"
                 sx={{
@@ -137,7 +137,7 @@ const Board = () => {
                   alignItems: 'center'
                 }}
               >
-                <CardSlot />
+                {/* <CardSlot /> */}
               </Stack>
             </>
           )}
