@@ -42,6 +42,7 @@ const Board = () => {
   //       setRows(data);
   //       setLoading(false);
   //     });
+
   //   } catch (err) {
   //     console.log(err);
   //     setLoading(false);
@@ -70,21 +71,22 @@ const Board = () => {
   return (
     <>
       <MainCard
-        title={
-          <>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <ListIcon sx={{ mr: 1 }} />
-              <Typography variant="h4">INVESTMENT BOARD</Typography>
-            </Stack>
-          </>
-        }
+        // title={
+        //   <>
+        //     <Stack
+        //       sx={{
+        //         display: 'flex',
+        //         flexDirection: 'row',
+        //         justifyContent: 'center',
+        //         alignItems: 'center'
+        //       }}
+        //     >
+        //       <ListIcon sx={{ mr: 1 }} />
+        //       <Typography variant="h4">INVESTMENT BOARD</Typography>
+        //     </Stack>
+        //   </>
+        // }
+        title="INVESTMENT BOARD"
         content={true}
         contentSX={{ p: 0 }}
         sx={{ textAlign: 'center', p: 0, mb: 2 }}

@@ -13,7 +13,7 @@ const withTM = require('next-transpile-modules')([
 ]);
 
 const nextConfig = withTM({
-  reactStrictMode: true
+  reactStrictMode: false
 });
 
 module.exports = nextConfig;
