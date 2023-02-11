@@ -15,7 +15,11 @@ const initialState = {
   relatedProducts: [],
   reviews: [],
   addresses: [],
-  slot: []
+  slot: [
+    { id: 1, name: 'Product 1', price: 100 },
+    { id: 2, name: 'Product 2', price: 200 },
+    { id: 3, name: 'Product 3', price: 300 }
+  ]
 };
 
 const slice = createSlice({
@@ -72,13 +76,9 @@ const slice = createSlice({
     },
 
     // GET SLOT
-    getSlot: (state, action) => {
-      state.slot.push(action.payload);
-    },
-
-    // RESET CART
-    resetSlot(state) {
-      state.slot = initialState.slot;
+    getSlot(state, action) {
+      state.slot = action.payload;
+      // state.slot.push(action.payload);
     }
   }
 });
@@ -96,8 +96,7 @@ export const {
   getAddressesSuccess,
   addAddressSuccess,
   editAddressSuccess,
-  getSlot,
-  resetSlot
+  getSlot
 } = slice.actions;
 
 // ----------------------------------------------------------------------ƒ
@@ -215,22 +214,11 @@ export function editAddress(address) {
   };
 }
 
-export function getSlotData(obj) {
+export function getSlotById(id) {
   return async (dispatch) => {
     try {
       // const response = await axios.post('/api/address/edit', id);
-      dispatch(slice.actions.getSlot(obj));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-
-export function resetAllSlot() {
-  return async (dispatch) => {
-    try {
-      // const response = await axios.post('/api/address/edit', id);
-      dispatch(slice.actions.resetSlot());
+      dispatch(slice.actions.getSlot(id));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

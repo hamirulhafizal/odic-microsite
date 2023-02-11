@@ -31,8 +31,6 @@ import { useReactToPrint } from 'react-to-print';
 import ComponentToPrint from './ComponentToPrint';
 import { dispatch } from 'store';
 import { getSlot } from 'store/slices/product';
-import { getSlotData } from 'store/slices/product';
-import moment from 'moment';
 
 // ==============================|| FORM VALIDATION - LOGIN FORMIK  ||============================== //
 
@@ -161,21 +159,9 @@ const AggrementForms = ({ handleNext, handleBack, index }) => {
         const investVal = localStorage.getItem('investVal');
         const resitUpload = localStorage.getItem('resitUpload');
 
-        const todayDate = moment().format('DD MMM YYYY');
-        const todayTime = moment().format('H');
+        const slot1 = { aggrement: true, investVal: investVal, resitUpload: resitUpload };
 
-        const dividenDate = moment(todayDate).add({ years: 1, months: 2 });
-
-        const slot1 = {
-          aggrement: true,
-          investVal: investVal,
-          resitUpload: resitUpload,
-          created_date: todayDate,
-          created_time: todayTime,
-          dividenDate: dividenDate
-        };
-
-        dispatch(getSlotData(slot1));
+        dispatch(getSlot({ id: 4, name: 'Product 4', price: 400 }));
 
         // dispatch(
         //   openSnackbar({
